@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/Git/University/Learning_Coding_2/mp1-2024-1/Kutuzov_IA/task1",
-      "program": "d:/Git/University/Learning_Coding_2/mp1-2024-1/Kutuzov_IA/task1/build/Debug/outDebug",
+      "cwd": "d:/Git/University/Learning_Coding_2/mp1-2024-1/Kutuzov_IA/task1/Classes",
+      "program": "d:/Git/University/Learning_Coding_2/mp1-2024-1/Kutuzov_IA/task1/Classes/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

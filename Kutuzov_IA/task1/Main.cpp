@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-#include "Classes/TemperatureConverter.h"
+#include "TemperatureConverter.h"
 
 int main()
 {
@@ -20,8 +20,7 @@ int main()
             std::cout << TempConv.GetTemperature() << "   " << TempConv.GetTemperature(F) << "   " << TempConv.GetTemperature(K) << "   " << TempConv.GetTemperature(R);
         }
 
-        else if (fabs(UserInput - 9999.f) < 0.1f)
-            Running = false;
+        Running = false;
     }
 
     return 0;

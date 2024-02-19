@@ -3,14 +3,14 @@
 
 
 // Constructor
-CTemperatureConverter::CTemperatureConverter(double InTemp = 0.f, TemperatureFormat Format = C)
+CTemperatureConverter::CTemperatureConverter(double InTemp, TemperatureFormat Format)
 {
     CelsiusTemp = ConvertTemperature(InTemp, Format);
 }
 
 // Methods
 // Converts temperature from in format to out format
-double CTemperatureConverter::ConvertTemperature(double InTemp, TemperatureFormat InFormat, TemperatureFormat OutFormat = C)
+double CTemperatureConverter::ConvertTemperature(double InTemp, TemperatureFormat InFormat, TemperatureFormat OutFormat)
 {
     if (InFormat == C) 
         switch (OutFormat)
@@ -28,10 +28,12 @@ double CTemperatureConverter::ConvertTemperature(double InTemp, TemperatureForma
         case K: return ConvertTemperature(InTemp - 273.15f, C, OutFormat);
         case R: return ConvertTemperature(InTemp / 1.8f - 273.15f, C, OutFormat);
         }
+
+    return 0.f;
 }
 
 // Returns current temperature in the given format
-double CTemperatureConverter::GetTemperature(TemperatureFormat Format = C)
+double CTemperatureConverter::GetTemperature(TemperatureFormat Format)
 {
     return ConvertTemperature(CelsiusTemp, C, Format);
 }
