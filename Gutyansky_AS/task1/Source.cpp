@@ -30,5 +30,6 @@ int main() {
   converter.Print(std::wcout, TemperatureUnit::NEWTON);
   std::wcout << std::endl;
 
+  system("pause");
   return 0;
 }
