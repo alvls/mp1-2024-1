@@ -11,16 +11,18 @@ int main()
     while (Running)
     {
         double UserInput;
-        std::cout << "Input Temperature: ";
+        std::cout << std::endl << "Input Temperature: ";
         std::cin >> UserInput;
+        std::cin.clear();
 
         if (-1000.f <= UserInput &&  UserInput <= 1000.f)
         {
             TempConv.SetTemperature(UserInput);
-            std::cout << TempConv.GetTemperature() << "   " << TempConv.GetTemperature(F) << "   " << TempConv.GetTemperature(K) << "   " << TempConv.GetTemperature(R);
+            TempConv.PrintCurrentTemperature();
         }
 
-        Running = false;
+        std::cout << std::endl << "Contiune? (0, 1): ";
+        std::cin >> Running;
     }
 
     return 0;
