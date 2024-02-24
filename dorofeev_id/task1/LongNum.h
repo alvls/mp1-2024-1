@@ -1,6 +1,5 @@
-#include <iostream>
 #pragma once
-
+#include <iostream>
 
 class LongNum
 {
@@ -21,14 +20,5 @@ public:
 	LongNum& operator/=(const LongNum& other);
 	LongNum& operator%=(const LongNum& other);    
 
-	friend std::ostream& operator<<(std::ostream& os, const LongNum& num) 
-	{
-		if (num.sign) 
-		{
-			os << "-";
-		}
-		os << num.module;
-		return os;
-	}
-
+	friend std::ostream& operator<<(std::ostream& os, const LongNum& num);
 };

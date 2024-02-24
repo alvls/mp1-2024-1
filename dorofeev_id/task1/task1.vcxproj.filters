@@ -17,9 +17,15 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LongNumv2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LongNum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LongNumv2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

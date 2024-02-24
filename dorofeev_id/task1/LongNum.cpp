@@ -185,4 +185,14 @@ LongNum& LongNum::operator%=(const LongNum& other)
     return *this;
 }
 
+std::ostream& operator<<(std::ostream& os, const LongNum& num)
+{
+    if (num.sign)
+    {
+        os << "-";
+    }
+    os << num.module;
+    return os;
+}
+
 
