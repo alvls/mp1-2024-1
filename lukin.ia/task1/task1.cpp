@@ -60,7 +60,7 @@ public:
 	void count_difference(int hours_d, int minutes_d, int seconds_d)
 	{
 		int total_ = Total(hours_d, minutes_d, seconds_d);
-		int total = hours * 3600 + minutes * 60 + seconds;
+		int total = Total(hours, minutes, seconds);
 		int difference = abs(total - total_);
 		int hoursd = difference / 3600;
 		int minutesd = (difference - hoursd * 3600) / 60;
@@ -71,7 +71,7 @@ public:
 	void shift_time_up(int hours_su, int minutes_su, int seconds_su)
 	{
 		int total_ = Total(hours_su, minutes_su, seconds_su);
-		int total = hours * 3600 + minutes * 60 + seconds;
+		int total = Total(hours,minutes,seconds);
 		int result = total + total_;
 		int hourss = result / 3600;
 		int minutess = (result - hourss * 3600) / 60;
