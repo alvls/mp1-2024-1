@@ -10,19 +10,32 @@ int main()
 
     while (Running)
     {
-        double UserInput;
+        std::string UserInput;
         std::cout << std::endl << "Input Temperature: ";
         std::cin >> UserInput;
-        std::cin.clear();
 
-        if (-1000.f <= UserInput &&  UserInput <= 1000.f)
+        bool IsNumber = true;
+        for (int i = 0; i < UserInput.length(); i++)
+            if ( !( std::isdigit( UserInput.c_str()[i] ) || UserInput.c_str()[i] == '.' ) )
+            {
+                IsNumber = false;
+                break;
+            }
+
+        if (IsNumber)
         {
-            TempConv.SetTemperature(UserInput);
+            double InputTemperature = std::stod(UserInput);
+
+            TempConv.SetTemperature(InputTemperature);
             TempConv.PrintCurrentTemperature();
         }
 
+        else
+            std::cout << "Temperature value is incorrect";
+
         std::cout << std::endl << "Contiune? (0, 1): ";
         std::cin >> Running;
+        std::cin.clear();
     }
 
     return 0;
