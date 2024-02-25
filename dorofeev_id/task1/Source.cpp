@@ -5,8 +5,8 @@ using namespace std;
 
 int main()
 {
-	LongNumv2 a(123456);
-	LongNumv2 b(987654);
+	LongNumv2 a(123456789);
+	LongNumv2 b(987654321);
 	LongNumv2 c;
 
 	c = a;
@@ -19,8 +19,8 @@ int main()
 	a = a - b;
 	cout << c << " - " << b << " = " << a << endl;
 
-	a = 123456;
-	b = 987654;
+	a = 12345678999;
+	b = 987654321;
 	c = a;
 	a = a * b;
 	cout << c << " * " << b << " = " << a << endl;
