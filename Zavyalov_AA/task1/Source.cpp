@@ -16,7 +16,13 @@ public:
 		hours_ = hours, minutes_ = minutes, seconds_ = seconds;
 	}
 	void timeDifference(int subhours, int subminutes, int subseconds, int &dsthours, int &dstminutes, int &dstseconds) {
-		int difference = abs(hours * 3600 + minutes * 60 + seconds - subhours * 3600 - subminutes * 60 - subseconds);
+		int time = hours * 3600 + minutes * 60 + seconds;
+		int subtime = subhours * 3600 + subminutes * 60 + subseconds;
+		int mintime = min(time, subtime), maxtime = max(time, subtime);
+		int difference1 = maxtime - mintime;
+		int difference2 = mintime + 3600 * 24 - maxtime;
+		int difference = min(difference1, difference2);
+
 		dsthours = difference / 3600, dstminutes = (difference % 3600) / 60, dstseconds = difference % 60;
 	}
 	void shiftTime(int shifthours, int shiftminutes, int shiftseconds, bool add = 1) {
@@ -50,6 +56,8 @@ int main() {
 
 	t.shiftTime(23, 19, 30);
 	t.timeDifference(6, 41, 59, hours2, minutes2, seconds2);
+	cout << hours2 << ":" << minutes2 << ":" << seconds2 << endl;
+	t.timeDifference(11, 19, 29, hours2, minutes2, seconds2);
 	cout << hours2 << ":" << minutes2 << ":" << seconds2 << endl;
 
 	cout << "t1 initial time: "; t1.print();
