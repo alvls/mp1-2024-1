@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 typedef enum {C, F, K, R} TemperatureFormat;
 
 class CTemperatureConverter
@@ -20,4 +22,9 @@ public:
     // Sets temperature in the given format
     void SetTemperature(double InTemp, TemperatureFormat Format = C);
 
+    // Returns the name of the requested format
+    std::string GetFormatName(TemperatureFormat Format);
+
+    // Outputs current temperature in all available formats to the console
+    void PrintCurrentTemperature();
 };

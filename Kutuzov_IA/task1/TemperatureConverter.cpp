@@ -1,5 +1,6 @@
 #include "TemperatureConverter.h"
 #include <iostream>
+#include <string>
 
 
 // Constructor
@@ -12,6 +13,7 @@ CTemperatureConverter::CTemperatureConverter(double InTemp, TemperatureFormat Fo
 // Converts temperature from in format to out format
 double CTemperatureConverter::ConvertTemperature(double InTemp, TemperatureFormat InFormat, TemperatureFormat OutFormat)
 {
+    // 1) If the input format is Celsius then to the conversion
     if (InFormat == C) 
         switch (OutFormat)
         {
@@ -21,6 +23,7 @@ double CTemperatureConverter::ConvertTemperature(double InTemp, TemperatureForma
         case R: return (InTemp + 273.15f) * 1.8f;
         }
 
+    // 2) In any other case convert the temperature to Celsius and delegate the conversion to stage 1)
     else
         switch (InFormat)
         {
@@ -42,4 +45,19 @@ double CTemperatureConverter::GetTemperature(TemperatureFormat Format)
 void CTemperatureConverter::SetTemperature(double InTemp, TemperatureFormat Format)
 {
     CelsiusTemp = ConvertTemperature(InTemp, Format);
+}
+
+// Returns the name of the requested format
+std::string CTemperatureConverter::GetFormatName(TemperatureFormat Format)
+{
+    std::string Names[4] = {"Celsius", "Fahrenheit", "Kelvin", "Rankine"};
+    return Names[Format];
+}
+
+
+// Outputs current temperature in all available formats to the console
+void CTemperatureConverter::PrintCurrentTemperature()
+{
+    for (int i = 0; i <= R; i++)
+        std::cout << GetFormatName(TemperatureFormat(i)) << ": " << GetTemperature(TemperatureFormat(i)) << std::endl;
 }
