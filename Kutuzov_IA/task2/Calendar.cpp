@@ -1,5 +1,6 @@
 #include "Calendar.h"
 
+// TDate methods
  TDate::TDate(int InYear = 0, int InMonth = 0, int InDay = 0)
  {
     Year = InYear;
@@ -13,11 +14,14 @@
  }
 
 
+
+
+// Calendar methods
+// Constructor
 CCalendar::CCalendar()
 {
     EventDates = new TDate[MaxEvents];
     Events = new std::string[MaxEvents];
-
 }
 
 // Set event to date
@@ -36,6 +40,32 @@ void CCalendar::SetEvent(TDate Date, std::string Event)
     EventDates[i] = Date;
     Events[i] = Event;
 }
+
+// Removes an event by it's name or date
+void CCalendar::RemoveEvent(std::string Event)
+{
+    for (int i = 0; i < MaxEvents; i++)
+        if (Events[i] == Event)
+        {
+            EventDates[i] = TDate();
+            return;
+        }
+    
+    std::cout << "No such event!";
+}
+
+void CCalendar::RemoveEvent(TDate Date)
+{
+    for (int i = 0; i < MaxEvents; i++)
+        if (EventDates[i] == Date)
+        {
+            EventDates[i] = TDate();
+            return;
+        }
+    
+    std::cout << "No event planned for this date!";
+}
+
 
 // Get event data
 TDate CCalendar::GetDate(std::string Event)
@@ -86,5 +116,5 @@ void CCalendar::PrintEvents()
 {
     for (int i = 0; i < MaxEvents; i++)
         if ( !( EventDates[i] == TDate() ) )
-            std::cout << std::endl << EventDates[i].Year << EventDates[i].Month << EventDates[i].Day;
+            std::cout << std::endl << EventDates[i].Day << "." << EventDates[i].Month << "." << EventDates[i].Year << " : " << Events[i];
 }

@@ -1,21 +1,21 @@
 # pragma once
 #include <iostream>
-#include <map>
 #include <string>
 
+// Date date type
 struct TDate
 {
-    int Year, Month, Day;
+    int Year, Month, Day; // Main Data
 
-    TDate(int InYear = 0, int InMonth = 0, int InDay = 0);
-    
-    bool operator== (const TDate& DateArg);
+    TDate(int InYear = 0, int InMonth = 0, int InDay = 0); // Constructor
+
+    bool operator== (const TDate& DateArg); // == operator overload
 };
 
+
+// Calendar class
 class CCalendar
 {
-    //std::map<TDate, std::string> Events;
-
     TDate* EventDates;
     std::string* Events;
 
@@ -26,6 +26,10 @@ public:
 
     // Set event to date
     void SetEvent(TDate Date, std::string Event);
+
+    // Removes an event by it's name or date
+    void RemoveEvent(std::string Event);
+    void RemoveEvent(TDate Date);
 
     // Get event data
     TDate GetDate(std::string Event);
