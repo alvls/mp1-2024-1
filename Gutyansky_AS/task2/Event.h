@@ -11,11 +11,6 @@ public:
   Event(const std::string& name, const Date& date) :
     mName(name), mDate(date) {}
 
-  std::ostream& operator<<(std::ostream& out) const {
-    out << mName << ' ' << mDate;
-    return out;
-  }
-
   const Date& Date() const {
     return mDate;
   }
@@ -24,4 +19,5 @@ public:
     return mName;
   }
 
+  friend std::ostream& operator<<(std::ostream& out, const Event& ev);
 };

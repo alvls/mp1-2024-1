@@ -1,40 +1,63 @@
 #pragma once
-#include <iosfwd>
+#include <iostream>
 
 class Date {
 private:
-  unsigned int mDay;
-  unsigned int mMonth;
-  unsigned int mYear;
+  int mDay;
+  int mMonth;
+  int mYear;
 public:
   Date() : mDay(1), mMonth(1), mYear(1) {}
-  Date(unsigned int day, unsigned int month, unsigned int year) :
+  Date(int day, int month, int year) :
     mDay(day), mMonth(month), mYear(year) {}
 
-  bool operator==(const Date& other) const {
-    return mDay == other.mDay && mMonth == other.mMonth && mDay == other.mYear;
+  int GetDay() const {
+    return mDay;
   }
 
-  std::ostream& operator<<(std::ostream& out) const {
-    out << mDay << '/' << mMonth << '/' << mYear;
-    return out;
+  int GetMonth() const {
+    return mMonth;
   }
+
+  int GetYear() const {
+    return mYear;
+  }
+
+  bool operator<(const Date& other) const;
+  bool operator<=(const Date& other) const;
+  bool operator>(const Date& other) const;
+  bool operator>=(const Date& other) const;
+
+  bool operator!=(const Date& other) const {
+    return mDay != other.mDay || mMonth != other.mMonth || mYear != other.mYear;
+  }
+
+  bool operator==(const Date& other) const {
+    return mDay == other.mDay && mMonth == other.mMonth && mYear == other.mYear;
+  }
+  
+
+  friend std::ostream& operator<<(std::ostream& out, const Date& date);
 
   bool IsValid() const {
     return mDay >= 1 && mMonth >= 1 && mYear >= 1 &&
-      mDay <= NumberOfDaysInMonth() && mMonth <= 12 && mYear <= 2100;
+      mDay <= NumberOfDaysInMonth(mMonth, mYear) && mMonth <= 12 && mYear <= 2100;
   }
 
-  unsigned int NumberOfDaysInMonth() const {
-    if (mMonth == 2) {
-      if ((mYear % 4 == 0 && mYear % 100 != 0) || (mYear % 400 == 0)) {
+  static bool IsLeapYear(int year) {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+  }
+
+  static int NumberOfDaysInMonth(int month, int year) {
+    if (month == 2) {
+      if (IsLeapYear(year)) {
         return 29;
       }
       else {
         return 28;
       }
     }
-    else if (mMonth % 2 == 0) {
+    else if (month % 2 == 0) {
       return 30;
     }
     else {
