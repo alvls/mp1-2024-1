@@ -2,7 +2,8 @@
 
 int main()
 {
-    try {
+    try 
+    {
         Vector v1(3);
         v1.setComponent(5, 1);
         v1.setComponent(1, 2);
@@ -23,7 +24,8 @@ int main()
 
         std::cout << "Scalar product of v1 and v2: " << Vector::dotProduct(v1, v2) << std::endl;
     }
-    catch (const std::exception& e) {
+    catch (const std::exception& e) 
+    {
         std::cerr << "Error: " << e.what() << std::endl;
     }
 
