@@ -14,7 +14,7 @@ public:
 			matr[i] = new long long[dimension];
 		}
 	}
-	Matrix(const Matrix& m) {
+	Matrix(Matrix& const m) {
 		dimension = m.dimension;
 		matr = new long long* [dimension];
 		for (int i = 0; i < dimension; i++) {
@@ -76,7 +76,7 @@ public:
 		}
 		return ans;
 	}
-	Matrix operator+(const Matrix& m1) {
+	Matrix operator+(Matrix& const m1) {
 		Matrix mres(dimension);
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
@@ -92,9 +92,6 @@ public:
 			}
 			cout << endl;
 		}
-	}
-	void aaa() {
-		cout << dimension;
 	}
 	~Matrix() {
 		for (int i = 0; i < dimension; i++) {
