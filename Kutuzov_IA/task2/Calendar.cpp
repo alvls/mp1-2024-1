@@ -236,7 +236,7 @@ bool CCalendar::IsDateValid(TDate& InDate)
 // Prints out all of the events
 void CCalendar::PrintEvents()
 {
-    std::cout << std::endl << "CALENDAR EVENTS:" << std::endl;
+    std::cout << std::endl << "============================================================" << std::endl << "CALENDAR EVENTS:" << std::endl;
     for (int i = 0; i < MaxEvents; i++)
         if ( !( EventDates[i] == TDate() ) )
             std::cout << std::endl << EventDates[i].Day << "." << EventDates[i].Month << "." << EventDates[i].Year << " : " << Events[i];

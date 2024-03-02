@@ -73,23 +73,28 @@ TDate ReceiveDateInput(CCalendar* Calendar,  bool CheckValid)
 
         for (int i = 0; i < 3; i++)
         {
-            std::cout << "Input " << Parts[i] << ": ";
-            std::cin >> InDatePart;
-            if (IsNumber(InDatePart))
-                switch (i)
-                {
-                case 0: Date.Year = std::stoi(InDatePart);
-                    break;
+            do
+            {
+                std::cout << "Input " << Parts[i] << ": ";
+                std::cin >> InDatePart;
+
+                if (!IsNumber(InDatePart))
+                    std::cout << std::endl << "Not a number!" << std::endl;
+
+            } while(!IsNumber(InDatePart));
+
+
+            switch (i)
+            {
+            case 0: Date.Year = std::stoi(InDatePart);
+                break;
                     
-                case 1: Date.Month = std::stoi(InDatePart);
-                    break;
+            case 1: Date.Month = std::stoi(InDatePart);
+                break;
 
-                case 2: Date.Day = std::stoi(InDatePart);
-                    break;
-                }
-            else
-                std::cout << std::endl << "Not a number!" << std::endl;
-
+            case 2: Date.Day = std::stoi(InDatePart);
+                break;
+            }
         }
 
         if (!Calendar->IsDateValid(Date) && CheckValid)
@@ -105,7 +110,7 @@ bool IsNumber(std::string InString)
 {
     bool Result = true;
     for (int i = 0; i < InString.length(); i++)
-        if ( !( std::isdigit( InString.c_str()[i] ) ) )
+        if ( !( std::isdigit(InString.c_str()[i]) || InString.c_str()[i] == '-' ) )
         {
             Result = false;
             break;
