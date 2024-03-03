@@ -25,7 +25,7 @@ public:
 #endif
 	}
 
-	Dynamic(Dynamic&& other) noexcept { //перемещения //пришлось узнать про r-values и <type>&& reference
+	Dynamic(Dynamic&& other) { //перемещения //пришлось узнать про r-values и <type>&& reference
 		msize = other.msize;
 		mdata = other.mdata;
 		other.msize = 0;
@@ -110,9 +110,17 @@ public:
 		}
 	}
 
-	bool isSorted() {//"упорядочен" интерпретировано как отсортирован по возрастанию (неубыванию)
+	bool isSorted(bool order) {
+		if (order) {
+			for (size_t i = 1; i < msize; i++) {
+				if (mdata[i] < mdata[i - 1]) {
+					return 0;
+				}
+			}
+			return 1;
+		}
 		for (size_t i = 1; i < msize; i++) {
-			if (mdata[i] < mdata[i-1]) {
+			if (mdata[i] > mdata[i - 1]) {
 				return 0;
 			}
 		}
@@ -139,30 +147,42 @@ public:
 };
 
 int main() {
+	cout << "a\n";
 	Dynamic a(10);
 	a.nullify();
-	a.set(0, 42);
-	a.set(2, 999);
-	a.set(8, -0.5);
-	a[9] = 3;
+	a.set(1, 999);
+	a.set(3, 225);
+	a.set(8, 888);
+	a[9] = -0.5;
 	a.print();
-	cout << a.get(a.findmin())<<endl;
+	cout << a.get(a.findmin())<<endl<<"resize\n";
 
-	/*a.resize(3);
-	a[1] = 111;
+	a.resize(11);
+	a[10] = 111;
 	a.print();
-	cout << a.isSorted();
-	cout << endl;*/
+	cout << "get element 10: " << a.get(10) << endl;
+	cout << endl<<endl<<endl;
 
-	/*Dynamic* d = new Dynamic(5);
+
+	cout << "d = new Dynamic(6)\n";
+	Dynamic* d = new Dynamic(6);
+	d->initWith(0.5);
 	cout << "d size " << d->size()<<endl;
 	d->set(4, 444.5);
 	(*d)[0] = 0.0101;
 	d->print();
-	delete d;*/
+	delete d;
+	cout << endl << endl;
 
+
+	cout << "Subarray c (from a)\n";
 	Dynamic c = a.createSubarray();
 	c.print();
+	cout << "Is c sorted? : " << c.isSorted(0)<<endl<<endl;
+
+	cout << "e copy of c\n";
+	Dynamic e(c);
+	e.print();
 	
 	system("pause");
 }
