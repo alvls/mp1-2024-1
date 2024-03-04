@@ -18,6 +18,15 @@ public:
     mEventCount = 0;
   }
 
+  Calendar(const Calendar& c) {
+    mEvents = new Event[EVENT_CAPACITY];
+    mEventCount = c.mEventCount;
+
+    for (size_t i = 0; i < mEventCount; i++) {
+      mEvents[i] = c.mEvents[i];
+    }
+  }
+
   ~Calendar() {
     delete[] mEvents;
   }
