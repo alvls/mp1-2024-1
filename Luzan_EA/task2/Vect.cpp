@@ -5,13 +5,19 @@ using namespace std;
 vect::vect(unsigned size_) {
     // size - unsigned, so we dont need to check if size_ > 0
     size = size_;
-    if (size == 0) { cout << "Error, empty vector is created\n"; }
+    if (size == 0) { 
+        cout << "Warning! Empty vector is created\n"; 
+    }
+    if (size > 20) { 
+        cout << "Warning! Size must be less than 21, size reduced to 20\n"; 
+        size = 20; 
+    }
     coords = new double[size] {0};
 }
 
 vect::vect(const vect& v) {
     size = v.size;
-    if (size == 0) { cout << "Error, empty vector is created\n"; }
+    if (size == 0) { cout << "Warning! Empty vector is created\n"; }
     coords = new double[size] {0};
     for (unsigned i = 0; i < size; i++) {
         coords[i] = v.coords[i];
@@ -19,7 +25,7 @@ vect::vect(const vect& v) {
 }
 
 vect::~vect() {
-    delete[] coords;
+    delete [] coords;
 }
 
 unsigned vect::getSize() {
@@ -78,6 +84,41 @@ vect vect::operator+ (vect v2) {
     return v;
 }
 
+vect vect::operator+= (vect v2) {
+    if (size != v2.size) {
+        cout << "Error, different sizes\n";
+        return *this;
+    }
+    for (unsigned i = 0; i < size; i++) {
+        coords[i] += v2.coords[i];
+    }
+    return *this;
+}
+
+vect vect::operator-= (vect v2) {
+    if (size != v2.size) {
+        cout << "Error, different sizes\n";
+        return *this;
+    }
+    for (unsigned i = 0; i < size; i++) {
+        coords[i] -= v2.coords[i];
+    }
+    return *this;
+}
+
+vect vect::operator- (vect v2) {
+    if (size != v2.size) {
+        cout << "Error, different sizes\n";
+        return *this;
+    }
+    vect v(size);
+    for (unsigned i = 0; i < size; i++) {
+        v.coords[i] = coords[i] - v2.coords[i];
+    }
+    return v;
+}
+
+/*
 vect vect::operator* (vect v2) {
     if (size != v2.size) {
         cout << "Error, different sizes\n";
@@ -88,6 +129,19 @@ vect vect::operator* (vect v2) {
         v.coords[i] = coords[i] * v2.coords[i];
     }
     return v;
+}
+*/
+
+vect vect::operator*= (vect v2) {
+    if (size != v2.size) {
+        cout << "Error, different sizes\n";
+        return *this;
+    }
+
+    for (unsigned i = 0; i < size; i++) {
+        coords[i] *= v2.coords[i];
+    }
+    return *this;
 }
 
 vect vect::operator* (double k) {
@@ -100,6 +154,16 @@ vect vect::operator* (double k) {
 
 void vect::printVect() {
     for (unsigned i = 0; i < size; i++) {
-        cout << "Координата" << i << "  " << coords[i] << endl;
+        cout << "Coordinate_" << i << "  " << coords[i] << endl;
     }
+}
+
+vect operator* (vect v_l, vect v_r) {
+    vect v(v_l);
+    if (v_l.getSize() != v_r.getSize()) {
+        cout << "Error, different sizes\n";
+        return v;
+    }
+    v *= v_r;
+    return v;
 }

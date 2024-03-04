@@ -1,5 +1,5 @@
 #include "Vect.h"
-// возращать указатель на координату?
+
 using namespace std;
 
 int main() {
@@ -15,7 +15,7 @@ int main() {
     v2.setCoord(-10, 2);
    // v2.setCoord(10, 3);
 
-    cout << "second coordination is " << v2.getCoord(1) << endl;
+    cout << "v2 second coordination is " << v2.getCoord(1) << endl;
     cout << "v2 len is " << v2.getLen() << endl;
     cout << "\n\n";
 

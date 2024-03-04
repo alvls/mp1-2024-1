@@ -28,10 +28,20 @@ public:
 
     vect operator+ (vect v2);
 
-    vect operator* (vect v2);
+    vect vect::operator+= (vect v2);
+
+    vect vect::operator-= (vect v2);
+
+    vect vect::operator*= (vect v2);
+
+    vect operator- (vect v2);
+
+    //vect operator* (vect v2);
 
     vect operator* (double k);
 
     void printVect();
 
 };
+
+vect operator* (vect v_l, vect v_r);
