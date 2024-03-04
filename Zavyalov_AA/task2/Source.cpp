@@ -14,7 +14,7 @@ public:
 			matr[i] = new long long[dimension];
 		}
 	}
-	Matrix(Matrix& const m) {
+	Matrix(const Matrix&  m) {
 		dimension = m.dimension;
 		matr = new long long* [dimension];
 		for (int i = 0; i < dimension; i++) {
@@ -76,7 +76,7 @@ public:
 		}
 		return ans;
 	}
-	Matrix operator+(Matrix& const m1) {
+	Matrix operator+(const Matrix&  m1) {
 		Matrix mres(dimension);
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
@@ -84,6 +84,25 @@ public:
 			}
 		}
 		return mres;
+	}
+	Matrix& operator=(const Matrix& m1) {
+		dimension = m1.dimension;
+		matr = new long long* [dimension];
+		for (int i = 0; i < dimension; i++) {
+			matr[i] = new long long[dimension];
+			for (int j = 0; j < dimension; j++) {
+				matr[i][j] = m1.matr[i][j];
+			}
+		}
+		return *this;
+	}
+	Matrix& operator+=(const Matrix& m1) {
+		for (int i = 0; i < dimension; i++) {
+			for (int j = 0; j < dimension; j++) {
+				matr[i][j] += m1.matr[i][j];
+			}
+		}
+		return *this;
 	}
 	void print() {
 		for (int i = 0; i < dimension; i++) {
