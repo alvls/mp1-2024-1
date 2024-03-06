@@ -11,7 +11,7 @@ private:
 	int** m;
 
 public:
-	Matrix(int size_ = 0) { // конструктор дл€ матрицы котора€ задаЄтс€ размером
+	Matrix(int size_ = 2) { // конструктор дл€ матрицы котора€ задаЄтс€ размером
 		size = size_;
 		m = new int* [size];
 		for (int i = 0; i < size; i++)

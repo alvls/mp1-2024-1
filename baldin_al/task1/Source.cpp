@@ -4,24 +4,25 @@
 
 using namespace std;
 
+typedef unsigned int ui;
+
 class Time
 {
 private:
-	int hrs;
-	int min;
-	int sec;
+	ui hrs;
+	ui min;
+	ui sec;
 
-	int Is_Ok(int h, int m, int s)
+	int Is_Ok(ui h, ui m, ui s)
 	{
-		return (h < 0 || h > 23 || m < 0 || m > 59 || s < 0 || s > 59);
+		return (h > 23 || m > 59 || s > 59);
 	}
 
 public:
-	Time(int hrs_ = 0, int min_ = 0, int sec_ = 0)
+	Time(ui hrs_ = 0, ui min_ = 0, ui sec_ = 0)
 	{
 		if (Is_Ok(hrs_, min_, sec_))
 		{
-			cout << "Invalid time format. Time was automatically set to 00:00:00" << '\n';
 			hrs = 0;
 			min = 0;
 			sec = 0;
@@ -34,10 +35,14 @@ public:
 		}
 	}
 
-	void setTime(int h, int m, int s)
+	void setTime(ui h, ui m, ui s)
 	{
 		if (Is_Ok(h, m, s))
-			cout << "Invalid time format. This time cannot be set" << '\n';
+		{
+			hrs = 0;
+			min = 0;
+			sec = 0;
+		}
 		else
 		{
 			hrs = h;
@@ -46,7 +51,16 @@ public:
 		}
 	}
 
-	void getTime()
+	Time getTime()
+	{
+		Time t;
+		t.hrs = hrs;
+		t.min = min;
+		t.sec = sec;
+		return t;
+	}
+
+	void print()
 	{
 		string t;
 		if (hrs < 10)
@@ -64,76 +78,56 @@ public:
 		cout << t << '\n';
 	}
 
-	void getDiff(const Time& t)
+	Time getDiff(const Time& t)
 	{
-		int s1 = (hrs * 3600 + min * 60 + sec);
-		int s2 = (t.hrs * 3600 + t.min * 60 + t.sec);
-		int d = std::min(abs(s1 - s2), 24 * 3600 - abs(s1 - s2));
-		int h = d / 3600;
-		int m = (d - h * 3600) / 60;
-		int s = d - h * 3600 - m * 60;
-		cout << "The difference between the times is " << h << " hour(s) " << m << " minute(s) and " << s << " second(s) " << '\n';
+		ui s1 = (hrs * 3600 + min * 60 + sec);
+		ui s2 = (t.hrs * 3600 + t.min * 60 + t.sec);
+		ui d = std::min(abs((int)(s1 - s2)), 24 * 3600 - abs((int)(s1 - s2)));
+		ui h = d / 3600;
+		ui m = (d - h * 3600) / 60;
+		ui s = d - h * 3600 - m * 60;
+		return Time(h, m, s);
 	}
 
-	void shiftTime(int h, int m, int s)
+	void shiftTime(ui h, ui m, ui s, bool sign = 1)
 	{
-		sec += s;
-		while (sec > 59 || sec < 0)
+		int shift = (h % 24) * 3600 + m * 60 + s;
+		int t;
+		if (sign)
 		{
-			if (sec < 0)
-			{
-				sec += 60;
-				min--;
-			}
-			else
-			{
-				sec -= 60;
-				min++;
-			}
+			t = hrs * 3600 + min * 60 + sec + shift;
 		}
-		min += m;
-		while (min > 59 || min < 0)
+		else
 		{
-			if (min < 0)
-			{
-				min += 60;
-				hrs--;
-			}
-			else
-			{
-				min -= 60;
-				hrs++;
-			}
+			t = hrs * 3600 + min * 60 + sec - shift;
+			if (t < 0)
+				t += 24 * 3600;
 		}
-		hrs += h;
-		while (hrs > 23 || hrs < 0)
-		{
-			if (hrs < 0)
-				hrs += 24;
-			else
-				hrs -= 24;
-		}
+		hrs = (t / 3600) % 24;
+		min = t % 3600 / 60;
+		sec = t % 60;
 	}
-
 };
 
 int main()
 {
-	//пример
-	Time t1, t2, t3(24, 10, 23), t4;
+	//examples
+	Time t1, t2, t3(24, 10, 23);
 
-	t3.getTime();
-	t4.setTime(17, 23, -1);
+	Time t4 = t3.getTime();
+	t4.print();
 	t1.setTime(1, 2, 3);
-	t1.getTime();
+	t1.print();
 	t2.setTime(12, 57, 39);
-	t2.getTime();
-	t1.getDiff(t2);
+	t2.print();
+	Time diff1 = t1.getDiff(t2); 
+	diff1.print();
 	t1.shiftTime(25, 74, 120);
-	t1.getTime();
-	t2.shiftTime(-13, -36, -43);
-	t2.getTime();
-	t2.getDiff(t1);
+	t1.print();
+	t2.shiftTime(13, 36, 43, 0);
+	t2.print();
+	Time diff2 = t2.getDiff(t1);
+	diff2.print();
 
 	system("pause");
 }
