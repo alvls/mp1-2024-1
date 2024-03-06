@@ -5,9 +5,9 @@ using namespace std;
 class Matrix
 {
 	int** matr;
-	int size = 0;
+	unsigned int size;
 public:
-	Matrix(int size_)
+	Matrix(unsigned int size_)
 	{
 		if (size_ < 2 || size_ > 8)
 			size = 2;
@@ -93,10 +93,7 @@ public:
 		Matrix result(*this);
 		for (int i = 0; i < size; i++)
 			for (int j = 0; j < size; j++)
-				result.matr[i][j] = 0;
-		for (int i = 0; i < size; i++)
-			for (int j = 0; j < size; j++)
-				result.matr[i][j] = this->matr[i][j] + term.matr[i][j];
+				result.matr[i][j] = result.matr[i][j] + term.matr[i][j];
 		return result;
 	}
 	Matrix operator+(const Matrix& term)
@@ -108,10 +105,7 @@ public:
 		Matrix result(*this);
 		for (int i = 0; i < size; i++)
 			for (int j = 0; j < size; j++)
-				result.matr[i][j] = 0;
-		for (int i = 0; i < size; i++)
-			for (int j = 0; j < size; j++)
-				result.matr[i][j] = matr[i][j] + term.matr[i][j];
+				result.matr[i][j] = result.matr[i][j] + term.matr[i][j];
 		return result;
 	}
 	Matrix& operator=(const Matrix& term)
