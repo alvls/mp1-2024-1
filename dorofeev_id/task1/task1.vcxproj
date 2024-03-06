@@ -18,6 +18,15 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="LongNum.cpp" />
+    <ClCompile Include="LongNumv2.cpp" />
+    <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LongNum.h" />
+    <ClInclude Include="LongNumv2.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{48737641-6FD7-46BE-B3B0-4493B6C282AD}</ProjectGuid>
