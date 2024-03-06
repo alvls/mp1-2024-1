@@ -12,7 +12,7 @@ LongNumv2::LongNumv2(int n)
     p2 = parts[0];
 }
 
-LongNumv2::LongNumv2(int n1, int n2, bool s) : sign(s), p1(n1), p2(n2) {}
+LongNumv2::LongNumv2(unsigned int n1, unsigned int n2, bool s) : sign(s), p1(n1), p2(n2) {}
 
 // Operators
 LongNumv2& LongNumv2::operator=(const LongNumv2& other) 
