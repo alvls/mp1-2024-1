@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-	LongNumv2 a(123456, 78901651, true);
+	LongNumv2 a(123456, 7890, true);
 	LongNumv2 b(987654321);
 	LongNumv2 c;
 

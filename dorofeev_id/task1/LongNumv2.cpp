@@ -12,7 +12,13 @@ LongNumv2::LongNumv2(int n)
     p2 = parts[0];
 }
 
-LongNumv2::LongNumv2(unsigned int n1, unsigned int n2, bool s) : sign(s), p1(n1), p2(n2) {}
+LongNumv2::LongNumv2(unsigned long int n1, unsigned long int n2, bool s)
+{
+    sign = s;
+    p1 = n1;
+    p2 = n2;
+}
+
 
 // Operators
 LongNumv2& LongNumv2::operator=(const LongNumv2& other) 
@@ -74,15 +80,17 @@ bool LongNumv2::operator==(const LongNumv2& other) const
 
 std::ostream& operator<<(std::ostream& os, const LongNumv2& num) 
 {
-    unsigned long long value = (static_cast<unsigned long long>(num.p1) << 32) | num.p2;
-
     if (!num.sign)
         os << "-";
 
-    os << value;
+    if (num.p1 != 0)
+        std::cout << num.p1;
+
+    std::cout << num.p2;
 
     return os;
 }
+
 
 LongNumv2 LongNumv2::_add(const LongNumv2& other) const 
 {

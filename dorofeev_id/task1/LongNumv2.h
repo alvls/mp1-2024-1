@@ -10,7 +10,7 @@ public:
     // Constructors
     LongNumv2();
     LongNumv2(int n);
-    LongNumv2(unsigned int n1, unsigned int n2, bool sign);
+    LongNumv2(unsigned long int n1, unsigned long int n2, bool sign);
 
     // Operators
     LongNumv2& operator=(const LongNumv2& other);
