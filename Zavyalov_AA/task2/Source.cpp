@@ -4,10 +4,10 @@
 using namespace std;
 
 class Matrix {
-	int dimension = 0;
+	int dimension;
 	long long** matr;
 public:
-	Matrix(int dimension_ = 0) {
+	Matrix(int dimension_) {
 		dimension = dimension_;
 		matr = new long long* [dimension];
 		for (int i = 0; i < dimension; i++) {
@@ -24,6 +24,7 @@ public:
 			}
 		}
 	}
+	Matrix() {};
 	void setDimension(int dim) {
 		if (2 <= dim && dim <= 8) {
 			matr = new long long* [dim];
@@ -32,31 +33,12 @@ public:
 				matr[i] = new long long[dim];
 			}
 		}
-		else {
-			cout << "Dimension must be in range from 2 to 8." << endl;
-		}
 	}
 	int getDimension() {
-		if (dimension != 0)
-			return dimension;
-		else
-		{
-			cout << "The dimension has not been set for this matrix yet." << endl;
-			return -1;
-		}
+		return dimension;
 	}
 	void setElement(int x, int y, int element) {
-		if (dimension > 0 && 0 <= x && x < dimension && 0 <= y && y < dimension) {
-			matr[x][y] = element;
-		}
-		else {
-			if (dimension == 0) {
-				cout << "First you need to set the dimension of the matrix." << endl;
-			}
-			else {
-				cout << "Coordinates of element must be in range from 0 to (dimension - 1)." << endl;
-			}
-		}
+		matr[x][y] = element;
 	}
 	long long getElement(int x, int y) {
 		return matr[x][y];
@@ -160,6 +142,7 @@ int main() {
 	cout << "m3 is a result of summing m1 and m2 \nm3:" << endl;
 	m3.print();
 	cout << "Is m3 diagonally dominant: " << m3.diagdom() << endl;
+	Matrix s;
 	system("pause");
 	return 0;
 }
