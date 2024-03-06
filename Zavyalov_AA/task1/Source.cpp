@@ -4,35 +4,42 @@
 using namespace std;
 
 class Time {
-	int hours, minutes, seconds;
+	unsigned int hours, minutes, seconds;
 public:
-	Time(int hours_ = 0, int minutes_ = 0, int seconds_ = 0) {
+	Time(unsigned int hours_ = 0, unsigned int minutes_ = 0, unsigned int seconds_ = 0) {
 		hours = hours_, minutes = minutes_, seconds = seconds_;
 	}
-	void setTime(int hours_, int minutes_, int seconds_) {
+	void setTime(unsigned int hours_, unsigned int minutes_, unsigned int seconds_) {
 		hours = hours_, minutes = minutes_, seconds = seconds_;
 	}
-	void getTime(int& hours_, int& minutes_, int& seconds_) {
-		hours_ = hours, minutes_ = minutes, seconds_ = seconds;
+	Time getTime() {
+		Time t;
+		t.hours = hours, t.minutes = minutes, t.seconds = seconds;
+		return t;
 	}
-	void timeDifference(int subhours, int subminutes, int subseconds, int &dsthours, int &dstminutes, int &dstseconds) {
-		int time = hours * 3600 + minutes * 60 + seconds;
-		int subtime = subhours * 3600 + subminutes * 60 + subseconds;
-		int mintime = min(time, subtime), maxtime = max(time, subtime);
-		int difference1 = maxtime - mintime;
-		int difference2 = mintime + 3600 * 24 - maxtime;
-		int difference = min(difference1, difference2);
+	Time timeDifference(unsigned int subhours, unsigned int subminutes, unsigned int subseconds) {
+		Time t;
+		unsigned int time = hours * 3600 + minutes * 60 + seconds;
+		unsigned int subtime = subhours * 3600 + subminutes * 60 + subseconds;
+		unsigned int mintime = min(time, subtime), maxtime = max(time, subtime);
+		unsigned int difference1 = maxtime - mintime;
+		unsigned int difference2 = mintime + 3600 * 24 - maxtime;
+		unsigned int difference = min(difference1, difference2);
 
-		dsthours = difference / 3600, dstminutes = (difference % 3600) / 60, dstseconds = difference % 60;
+		unsigned int dsthours = difference / 3600, dstminutes = (difference % 3600) / 60, dstseconds = difference % 60;
+		t.hours = dsthours;
+		t.minutes = dstminutes;
+		t.seconds = dstseconds;
+		return t;
 	}
-	void shiftTime(int shifthours, int shiftminutes, int shiftseconds, bool add = 1) {
-		int shift = (shifthours % 24) * 3600 + shiftminutes * 60 + shiftseconds;
-		int finaltime;
+	void shiftTime(unsigned int shifthours, unsigned int shiftminutes, unsigned int shiftseconds, bool add = 1) {
+		unsigned int shift = (shifthours % 24) * 3600 + shiftminutes * 60 + shiftseconds;
+		unsigned int finaltime;
 		if (add) {
-			finaltime = abs(hours * 3600 + minutes * 60 + seconds + shift);
+			finaltime = hours * 3600 + minutes * 60 + seconds + shift;
 		}
 		else {
-			finaltime = abs(hours * 3600 + minutes * 60 + seconds - shift);
+			finaltime = abs((int)(hours * 3600 + minutes * 60 + seconds) - (int)shift);
 		}
 		hours = (finaltime / 3600) % 24, minutes = finaltime % 3600 / 60, seconds = finaltime % 60;
 	}
@@ -45,27 +52,16 @@ int main() {
 	// examples of methods' usage, initializaton values must be in range from 00:00:00 to 23:59:59
 	Time t, t1(13, 37, 25);
 
-	int hours1, minutes1, seconds1;
-	t.getTime(hours1, minutes1, seconds1);
-	cout << hours1 << ":" << minutes1 << ":" << seconds1 << endl;
-	t.print();
+	Time gt = t1.getTime();
+	gt.print();
 
 	int hours2, minutes2, seconds2;
-	t.timeDifference(12, 50, 20, hours2, minutes2, seconds2);
-	cout << hours2 << ":" << minutes2 << ":" << seconds2 << endl;
+	Time dif = t.timeDifference(12, 50, 20);
+	dif.print();
 
-	t.shiftTime(23, 19, 30);
-	t.timeDifference(6, 41, 59, hours2, minutes2, seconds2);
-	cout << hours2 << ":" << minutes2 << ":" << seconds2 << endl;
-	t.timeDifference(11, 19, 29, hours2, minutes2, seconds2);
-	cout << hours2 << ":" << minutes2 << ":" << seconds2 << endl;
-
-	cout << "t1 initial time: "; t1.print();
-	t1.setTime(10, 33, 20);
-	t1.timeDifference(12, 36, 24, hours2, minutes2, seconds2);
-	cout << hours2 << ":" << minutes2 << ":" << seconds2 << endl;
-
-	t.shiftTime(15, 21, 28, 0);
+	t.shiftTime(12, 45, 54);
+	t.print();
+	t.shiftTime(12, 45, 54);
 	t.print();
 	system("pause");
 	return 0;
