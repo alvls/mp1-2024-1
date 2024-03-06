@@ -6,20 +6,18 @@ using namespace std;
 
 class Polynomial
 {
-    int degree;
+    unsigned int degree;
     double *coefficients;
 public:
-    Polynomial()
+    Polynomial(int deg)
     {
-        degree = 0;
-        coefficients = new double[13];
-        for (int i = 0; i < 13; i++)
-            coefficients[i] = 0.0;
+        degree = deg;
+        coefficients = new double[degree + 1];
     }
 
-    ~Polynomial() {}
+    ~Polynomial() { delete[] coefficients; }
 
-    void setDegree(int deg)
+    void setDegree(unsigned int deg)
     {
         degree = deg;
     }
@@ -48,13 +46,11 @@ public:
         return result;
     }
 
-    Polynomial derivative()
+    void derivative()
     {
-        Polynomial derivativePolynomial;
-        derivativePolynomial.degree = degree - 1;
-        for (int i = 1; i <= degree; i++)
-            derivativePolynomial.coefficients[i - 1] = i * coefficients[i];
-        return derivativePolynomial;
+        degree--;
+        for (int i = 0; i <= degree; i++)
+            coefficients[i] = (i + 1) * coefficients[i + 1];
     }
 
     void print()
@@ -75,22 +71,22 @@ int main()
     do
     {
         system("cls");
-        Polynomial p;
         setlocale(LC_ALL, "rus");
-        int degree, flag;
+        unsigned int degree;
+        int flag;
         do
         {
             flag = 0;
             cout << "Введите степень полинома от 0 до 12: ";
             cin >> degree;
-            if (degree < 0 || degree > 12)
+            if (degree > 12)
             {
                 flag = 1;
                 system("cls");
                 cout << "Неверня степень полинома!" << endl;
             }
         } while (flag);
-        p.setDegree(degree);
+        Polynomial p(degree);
         double coefficients[13];
         for (int i = 0; i <= degree; i++)
         {
@@ -104,9 +100,14 @@ int main()
         cout << "Введите значение x: ";
         cin >> x;
         cout << "Значение полинома в точке x = " << x << ": " << p.evaluate(x) << endl;
-        Polynomial derivative = p.derivative();
-        cout << "Производная полинома: ";
-        derivative.print();
+        if (degree == 0)
+            cout << "Производная полинома: 0";
+        else
+        {
+            p.derivative();
+            cout << "Производная полинома: ";
+            p.print();
+        }
         cout << endl << "Чтобы перезапустить программу введите 1: ";
         cin >> r;
     } while (r == 1);
