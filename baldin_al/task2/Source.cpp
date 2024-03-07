@@ -46,12 +46,11 @@ public:
 		}
 	}
 
-	void setSize(int size_ = 0) // задать размер матрицы
+	void setSize(int size_) // задать размер матрицы
 	{
-		size = size_;
-		if (size < 2 || size > 8)
-			cout << "The dimension of matrix should be from 2 to 8" << '\n';
-		else {
+		if (2 <= size_ && size_ <= 8)
+		{
+			size = size_;
 			m = new int* [size];
 			for (int i = 0; i < size; i++)
 				m[i] = new int[size];
@@ -63,15 +62,10 @@ public:
 	void setElement(int row, int col, int value) { // задать элемент матрицы по индексам
 		if (row >= 0 && row < size && col >= 0 && col < size)
 			m[row][col] = value;
-		else
-			cout << "Invalid indexes" << '\n';
 	}
 
 	int getElement(int row, int col) { // узнать элемент по индексам
-		if (row >= 0 && row < size && col >= 0 && col < size)
 			return m[row][col];
-		cout << "Invalid indexes" << ' ';
-		return -1;
 	}
 
 	void print() { // вывести матрицу
@@ -118,21 +112,15 @@ public:
 	}
 
 	bool isDiagPr() { // проверка на диагональное преобладание
-		if (size == 0) {
-			cout << "Matrix hasn't initialized yet" << ' ';
-			return 0;
-		}
-		else {
-			long long sum = 0;
-			for (int i = 0; i < size; i++)
-				for (int j = 0; j < size; j++)
-					if (i != j)
-						sum += abs(m[i][j]);
-			for (int i = 0; i < size; i++)
-				if (abs(m[i][i]) < sum)
-					return 0;
-			return 1;
-		}
+		long long sum = 0;
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
+				if (i != j)
+					sum += abs(m[i][j]);
+		for (int i = 0; i < size; i++)
+			if (abs(m[i][i]) < sum)
+				return 0;
+		return 1;
 	}
 
 	long long determinant(int size_) { // детерминант матрицы через разложение первой строки
