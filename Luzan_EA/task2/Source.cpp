@@ -24,12 +24,12 @@ int main() {
     v.printVect();
     cout << "\n\n";
 
-    cout << "v = v1 * v2\n";
-    v = v1 * v2;
-    v.printVect();
+    cout << "(scalar) v1 * v2\n";
+    double tmp = v1 * v2;
+    cout << tmp << endl;
     cout << "\n\n";
 
-    cout << "v * const\n";
+    cout << "v * const (=3)\n";
     v = v1 * 3;
     v.printVect();
     cout << "\n\n";

@@ -118,30 +118,16 @@ vect vect::operator- (vect v2) {
     return v;
 }
 
-/*
-vect vect::operator* (vect v2) {
+double vect::operator* (vect v2) {
     if (size != v2.size) {
-        cout << "Error, different sizes\n";
-        return *this;
+        //Error, different sizes
+        return NULL;
     }
-    vect v(size);
+    double sclr = 0;
     for (unsigned i = 0; i < size; i++) {
-        v.coords[i] = coords[i] * v2.coords[i];
+        sclr += coords[i] * v2.coords[i];
     }
-    return v;
-}
-*/
-
-vect vect::operator*= (vect v2) {
-    if (size != v2.size) {
-        cout << "Error, different sizes\n";
-        return *this;
-    }
-
-    for (unsigned i = 0; i < size; i++) {
-        coords[i] *= v2.coords[i];
-    }
-    return *this;
+    return sclr;
 }
 
 vect vect::operator* (double k) {
@@ -156,14 +142,4 @@ void vect::printVect() {
     for (unsigned i = 0; i < size; i++) {
         cout << "Coordinate_" << i << "  " << coords[i] << endl;
     }
-}
-
-vect operator* (vect v_l, vect v_r) {
-    vect v(v_l);
-    if (v_l.getSize() != v_r.getSize()) {
-        cout << "Error, different sizes\n";
-        return v;
-    }
-    v *= v_r;
-    return v;
 }
