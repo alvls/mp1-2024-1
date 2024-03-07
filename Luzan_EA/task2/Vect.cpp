@@ -5,11 +5,10 @@ using namespace std;
 vect::vect(unsigned size_) {
     // size - unsigned, so we dont need to check if size_ > 0
     size = size_;
-    if (size == 0) { 
-        cout << "Warning! Empty vector is created\n"; 
+    if (size < 2) { // Error
+        size = 2; 
     }
-    if (size > 20) { 
-        cout << "Warning! Size must be less than 21, size reduced to 20\n"; 
+    if (size > 20) { // Error
         size = 20; 
     }
     coords = new double[size] {0};
@@ -17,7 +16,6 @@ vect::vect(unsigned size_) {
 
 vect::vect(const vect& v) {
     size = v.size;
-    if (size == 0) { cout << "Warning! Empty vector is created\n"; }
     coords = new double[size] {0};
     for (unsigned i = 0; i < size; i++) {
         coords[i] = v.coords[i];
@@ -33,8 +31,7 @@ unsigned vect::getSize() {
 }
 
 bool vect::setCoord(double coord, unsigned pos) {
-    if ((pos >= size) || (pos < 0)) {
-        cout << "Error! No such position in vector\n";
+    if ((pos >= size) || (pos < 0)) { // Error
         return false;
     }
     coords[pos] = coord;
@@ -43,8 +40,7 @@ bool vect::setCoord(double coord, unsigned pos) {
 
 
 double vect::getCoord(unsigned pos) {
-    if ((pos >= size) || (pos < 0)) {
-        cout << "Error! No such position in vector\n";
+    if ((pos >= size) || (pos < 0)) { // Error
         return NULL;
     }
     return coords[pos];
@@ -60,8 +56,7 @@ double vect::getLen() {
 }
 
 vect& vect::operator= (vect v) {
-    if (size != v.size) {
-        cout << "Error, different sizes\n";
+    if (size != v.size) { // Error
         return *this;
     }
     size = v.size;
@@ -73,8 +68,7 @@ vect& vect::operator= (vect v) {
 }
 
 vect vect::operator+ (vect v2) {
-    if (size != v2.size) {
-        cout << "Error, different sizes\n";
+    if (size != v2.size) { // Error
         return *this;
     }
     vect v(size);
@@ -85,8 +79,7 @@ vect vect::operator+ (vect v2) {
 }
 
 vect vect::operator+= (vect v2) {
-    if (size != v2.size) {
-        cout << "Error, different sizes\n";
+    if (size != v2.size) { // Error
         return *this;
     }
     for (unsigned i = 0; i < size; i++) {
@@ -96,8 +89,7 @@ vect vect::operator+= (vect v2) {
 }
 
 vect vect::operator-= (vect v2) {
-    if (size != v2.size) {
-        cout << "Error, different sizes\n";
+    if (size != v2.size) { // Error
         return *this;
     }
     for (unsigned i = 0; i < size; i++) {
@@ -107,8 +99,7 @@ vect vect::operator-= (vect v2) {
 }
 
 vect vect::operator- (vect v2) {
-    if (size != v2.size) {
-        cout << "Error, different sizes\n";
+    if (size != v2.size) { // Error
         return *this;
     }
     vect v(size);
@@ -119,8 +110,7 @@ vect vect::operator- (vect v2) {
 }
 
 double vect::operator* (vect v2) {
-    if (size != v2.size) {
-        //Error, different sizes
+    if (size != v2.size) { // Error
         return NULL;
     }
     double sclr = 0;
