@@ -62,7 +62,7 @@ double CTabulator::GetPointValue(int Point)
 // Tabulation itself
 void CTabulator::Tabulate()
 {
-    TabulatedPoints.empty();
+    TabulatedPoints.clear();
 
     for (int p = 0; p < NumPoints; p++)
         TabulatedPoints.push_back(GetFunction_ptr()(GetPointValue(p)));
