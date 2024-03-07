@@ -208,5 +208,6 @@ long  main() {
 	tmp.printLN();
 	tmp.testPrint();
 
+	system("pause");
 	return 0;
 }
