@@ -5,7 +5,7 @@
 using namespace std;
 class polinom
 {
-	int degree;
+	unsigned degree;
 	double* coef;
 	string name;
 public:
@@ -25,15 +25,25 @@ public:
 		delete[] coef;
 	}
 	void Set_degree(int degree_)
-	{
+	{	
+		if (degree_ == degree)
+			return;
+		double* new_coef = new double[degree_ + 1];
+		for (int i = 0; i <= degree_; i++)
+		{
+			new_coef[i] = coef[i];
+		}
 		degree = degree_;
+
+		delete[] coef;
+		coef = new_coef;
 	}
 	int Get_degree()
 	{
 		return degree;
 	}
 	void Set_coef(int number, double coef_)
-	{
+	{	
 		*(coef + number) = coef_;
 		for (int i = degree; i >= 0; i--)
 		{
@@ -133,6 +143,9 @@ int main()
 	A.Set_coef(3, -100.6);
 	A.Set_coef(4, 45);
 
+	A.Set_degree(5);
+
+	A.Set_coef(5, 1);
 	A.Print();
 	A.Derivative();
 	A.Print();
