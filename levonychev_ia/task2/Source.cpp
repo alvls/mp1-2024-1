@@ -15,7 +15,7 @@ public:
 		coef = new double;
 		*coef = 0;
 	}
-	polinom(int degree_)
+	polinom(unsigned degree_)
 	{
 		degree = degree_;
 		coef = new double[degree + 1];
@@ -24,7 +24,7 @@ public:
 	{
 		delete[] coef;
 	}
-	void Set_degree(int degree_)
+	void Set_degree(unsigned degree_)
 	{	
 		if (degree_ == degree)
 			return;
@@ -38,7 +38,7 @@ public:
 		delete[] coef;
 		coef = new_coef;
 	}
-	int Get_degree()
+	unsigned Get_degree()
 	{
 		return degree;
 	}
