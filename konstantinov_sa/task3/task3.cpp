@@ -1,9 +1,9 @@
-#include<iostream>
+п»ї#include<iostream>
 #include<string>
 #include <fstream>
 using namespace std;
 
-//Элемент связанного списка
+//Р­Р»РµРјРµРЅС‚ СЃРІСЏР·Р°РЅРЅРѕРіРѕ СЃРїРёСЃРєР°
 class Wpair {
 public:
 	string key;
@@ -19,7 +19,7 @@ public:
 
 };
 
-//В основе словаря связяанный список
+//Р’ РѕСЃРЅРѕРІРµ СЃР»РѕРІР°СЂСЏ СЃРІСЏР·СЏР°РЅРЅС‹Р№ СЃРїРёСЃРѕРє
 class Dict {
 private:
 	Wpair* start;
@@ -67,7 +67,7 @@ public:
 		end = nullptr;
 	}
 	
-	//Добавление в начало, допускает дубликаты.
+	//Р”РѕР±Р°РІР»РµРЅРёРµ РІ РЅР°С‡Р°Р»Рѕ, РґРѕРїСѓСЃРєР°РµС‚ РґСѓР±Р»РёРєР°С‚С‹.
 	void add(const string& key,const string& value) {
 		Wpair* newp = new Wpair(key, value);
 		newp->nextp = start;
@@ -76,7 +76,7 @@ public:
 	}
 
 
-	//Потенциально более медленное добавление в конец, так как иногда потребуется найти конец. Используется для загрузки из файла
+	//РџРѕС‚РµРЅС†РёР°Р»СЊРЅРѕ Р±РѕР»РµРµ РјРµРґР»РµРЅРЅРѕРµ РґРѕР±Р°РІР»РµРЅРёРµ РІ РєРѕРЅРµС†, С‚Р°Рє РєР°Рє РёРЅРѕРіРґР° РїРѕС‚СЂРµР±СѓРµС‚СЃСЏ РЅР°Р№С‚Рё РєРѕРЅРµС†. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ Р·Р°РіСЂСѓР·РєРё РёР· С„Р°Р№Р»Р°
 	void append(const string& key, const string& value) {
 		if (end == nullptr) {
 			if (start == nullptr) {
@@ -99,13 +99,13 @@ public:
 		end = newp;
 	}
 
-	//заменить текущие варианты перевода на новый (один)
+	//Р·Р°РјРµРЅРёС‚СЊ С‚РµРєСѓС‰РёРµ РІР°СЂРёР°РЅС‚С‹ РїРµСЂРµРІРѕРґР° РЅР° РЅРѕРІС‹Р№ (РѕРґРёРЅ)
 	void replace(const string& key, const string& value) {
 		Wpair* f = findWp(key);
 		if (f)
 			f->value = value;
 	}
-	//добавление в начало, не создающее дубликат (перезапись в случае дубликата)
+	//РґРѕР±Р°РІР»РµРЅРёРµ РІ РЅР°С‡Р°Р»Рѕ, РЅРµ СЃРѕР·РґР°СЋС‰РµРµ РґСѓР±Р»РёРєР°С‚ (РїРµСЂРµР·Р°РїРёСЃСЊ РІ СЃР»СѓС‡Р°Рµ РґСѓР±Р»РёРєР°С‚Р°)
 	void addOrReplace(const string& key, const string& value) {
 		Wpair* f = findWp(key);
 		if (f)
@@ -114,7 +114,7 @@ public:
 			add(key, value);
 	}
 
-	//дополнить ещё одним вариантом перевода (каждая новая строка - новый вариант)
+	//РґРѕРїРѕР»РЅРёС‚СЊ РµС‰С‘ РѕРґРЅРёРј РІР°СЂРёР°РЅС‚РѕРј РїРµСЂРµРІРѕРґР° (РєР°Р¶РґР°СЏ РЅРѕРІР°СЏ СЃС‚СЂРѕРєР° - РЅРѕРІС‹Р№ РІР°СЂРёР°РЅС‚)
 	void complete(const string& key, const string& addition) {
 		Wpair* f = findWp(key);
 		if (f)
@@ -172,7 +172,7 @@ public:
 			p = p->nextp;
 		}
 	}
-	//сохраняет словарь в файл
+	//СЃРѕС…СЂР°РЅСЏРµС‚ СЃР»РѕРІР°СЂСЊ РІ С„Р°Р№Р»
 	void save(const string filename) {
 		ofstream file;
 		file.open(filename, ofstream::out | ofstream::trunc);
@@ -186,7 +186,7 @@ public:
 			file.close();
 		}	
 	}
-	//загружает (добавляет) в словарь содержимое из файла, не очищает
+	//Р·Р°РіСЂСѓР¶Р°РµС‚ (РґРѕР±Р°РІР»СЏРµС‚) РІ СЃР»РѕРІР°СЂСЊ СЃРѕРґРµСЂР¶РёРјРѕРµ РёР· С„Р°Р№Р»Р°, РЅРµ РѕС‡РёС‰Р°РµС‚
 	void load(const string filename) {
 		ifstream file(filename);
 		string s;
@@ -222,20 +222,20 @@ int main() {
 	setlocale(LC_ALL, "rus");
 
 	Dict d;
-	d.add("qeue","очередь");
-	d.complete("qeue", "хвост");
-	d.add("cat", "кот");
-	d.add("impostor", "самозванец");
-	d.complete("impostor", "мошенник");
-	d.add("nuclear", "ядрёный");
+	d.add("qeue","РѕС‡РµСЂРµРґСЊ");
+	d.complete("qeue", "С…РІРѕСЃС‚");
+	d.add("cat", "РєРѕС‚");
+	d.add("impostor", "СЃР°РјРѕР·РІР°РЅРµС†");
+	d.complete("impostor", "РјРѕС€РµРЅРЅРёРє");
+	d.add("nuclear", "СЏРґСЂС‘РЅС‹Р№");
 
 	d.print();
-	cout << "Исправим nuclear\n";
-	d.replace("nuclear", "ядерный");
-	cout << "Ищем\n";
+	cout << "РСЃРїСЂР°РІРёРј nuclear\n";
+	d.replace("nuclear", "СЏРґРµСЂРЅС‹Р№");
+	cout << "РС‰РµРј\n";
 	string f = "nuclear";
 	cout << f << " - " << d.get(f)<<endl;
-	cout << "Слов всего: " << d.count() << endl<<"удалим impostor и сохраним. Загрузим другой словарь\n";
+	cout << "РЎР»РѕРІ РІСЃРµРіРѕ: " << d.count() << endl<<"СѓРґР°Р»РёРј impostor Рё СЃРѕС…СЂР°РЅРёРј. Р—Р°РіСЂСѓР·РёРј РґСЂСѓРіРѕР№ СЃР»РѕРІР°СЂСЊ\n";
 
 	d.remove("impostor");
 
@@ -245,7 +245,7 @@ int main() {
 	d.load("premade.txt");
 	d.print();
 
-	cout << "Вернём сохранённый\n";
+	cout << "Р’РµСЂРЅС‘Рј СЃРѕС…СЂР°РЅС‘РЅРЅС‹Р№\n";
 	d.clear();
 	d.load("ddd.txt");
 	d.print();

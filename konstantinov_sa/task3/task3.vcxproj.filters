@@ -15,4 +15,8 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="ddd.txt" />
+    <Text Include="premade.txt" />
+  </ItemGroup>
 </Project>
