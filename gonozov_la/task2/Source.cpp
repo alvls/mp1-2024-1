@@ -6,10 +6,8 @@ class Din_array {
 	size_t sz;
 	double* array;
 	Din_array(size_t sz_, double* pr_array) {
-		sz = sz_ / 2;
-		array = new double[sz];
-		for (size_t index{}; index < sz; index++)
-			array[index] = pr_array[index * 2 + 1];
+		sz = sz_;
+		array = pr_array;
 	}
 public:
 	Din_array(double default_, size_t sz_) {
@@ -41,7 +39,11 @@ public:
 		return true;
 	}
 	Din_array create_subarray() {
-		return Din_array(sz, array);
+		size_t ssz = sz / 2;
+		double* subarray = new double[ssz];
+		for (size_t index = 0; index < ssz; index++)
+			subarray[index] = array[index * 2 + 1];
+		return Din_array(ssz, subarray);
 	}
 	void output_a() {
 		cout << "Размер массива:" << sz <<endl;
