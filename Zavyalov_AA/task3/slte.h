@@ -1,13 +1,15 @@
 #pragma once
+#include <limits>
 #include <Windows.h>
 #include <string>
 #include <iostream>
+
 using namespace std;
 
 class slte { // single-line text editor
 	unsigned int size; // size of input field
 	COORD position; // coordinates of input field
-	string input_value;
+	string input_value; // user input
 	
 public:
 	slte(int size_, COORD position_ = {0, 0}) {
@@ -35,13 +37,10 @@ public:
 	}
 	void setInput() {
 		char* buffer = new char[size+1];
-		cin.get(buffer, size+1); // обрезать если слишком большая строка TODO ну допилить надо
+		cin.get(buffer, size+1);
 		input_value = buffer;
-		cin.ignore();
+		cin.ignore((numeric_limits<streamsize>::max)(), '\n');
 		delete[] buffer;
-		/*if (input_value.length() > size) {
-			input_value = input_value.substr(0, size);
-		}*/
 	}
 	string getInput() {
 		return input_value;

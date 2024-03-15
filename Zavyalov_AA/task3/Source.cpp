@@ -5,13 +5,17 @@ int main() {
 	e.locate();
 	e.setInput();
 	string ans = e.getInput();
-	cout << "ans1: \'" << ans << "\'";
+	COORD crd = e.getPosition();
+	cout << "input field coordinates: " << crd.X << "," << crd.Y << "; input value: \'" << ans << "\'";
 
-	e.setPosition(5, 7);
+	e.setPosition(50, 7);
 	e.locate();
+
+	e.setSize(11);
 	e.setInput();
+	int sz = e.getSize();
 	ans = e.getInput();
-	cout << "ans2: \'" << ans << "\'";
+	cout << "input field length: " << sz << "; input value: \'" << ans << "\'" << endl;
 	system("pause");
 	return 0;
 }
