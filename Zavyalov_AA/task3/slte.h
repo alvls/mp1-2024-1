@@ -12,10 +12,9 @@ class slte { // single-line text editor
 	string input_value; // user input
 	
 public:
-	slte(int size_, COORD position_ = {0, 0}) {
+	slte(int size_ = 0, COORD position_ = {0, 0}) {
 		size = size_, position = position_;
 	}
-	slte() {};
 	void setSize(unsigned int size_) {
 		size = size_;
 	}
