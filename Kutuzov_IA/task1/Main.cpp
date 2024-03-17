@@ -16,7 +16,7 @@ int main()
 
         bool IsNumber = true;
         for (int i = 0; i < UserInput.length(); i++)
-            if ( !( std::isdigit( UserInput.c_str()[i] ) || UserInput.c_str()[i] == '.' ) )
+            if ( !( std::isdigit( UserInput.c_str()[i] ) || UserInput.c_str()[i] == '.' || UserInput.c_str()[i] == '-'))
             {
                 IsNumber = false;
                 break;
