@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <cmath>
+#define NUM_FUNCTIONS 8
 
 typedef double (*Function) (double);
 
@@ -13,10 +15,15 @@ class CTabulator
     bool bHasTabulated = false;
     std::vector<double> TabulatedPoints;
 
+    Function AvailableFunctions[NUM_FUNCTIONS] = { &std::sin, &std::cos, &std::tan, &std::asin, &std::acos, &std::atan, &std::log, &std::abs};
+
 public:
     // Constructor / Destructor
     CTabulator(int In_FuncID = 0, int In_NumPoints = 3, double In_Min = 0.0, double In_Max = 1.0);
     ~CTabulator();
+
+    // Same signature as the constructor, allows to reinitialise the class
+    void ReInit(int In_FuncID = 0, int In_NumPoints = 3, double In_Min = 0.0, double In_Max = 1.0);
 
     // Selects current function by its ID
     void SetFunction(int In_FuncID);
@@ -41,6 +48,10 @@ public:
 
     // Printing and saving result
     bool HasTabulated();
-    bool PrintResultTabulate();
+    bool PrintTabulationResult();
     bool SaveResultToFile(std::string Path);
+
+    // Loading from file
+    void LoadResultFromFile(std::string Path);
+
 };

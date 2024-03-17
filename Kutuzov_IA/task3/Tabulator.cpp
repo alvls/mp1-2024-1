@@ -1,12 +1,12 @@
 #include "Tabulator.h"
-#include <cmath>
 #include <iostream>
+#include <fstream>
 
-#define NUM_FUNCTIONS 4
+
 
 
 // Constructor / Destructor
-CTabulator::CTabulator(int In_FuncID = 0, int In_NumPoints = 3, double In_Min = 0.0, double In_Max = 1.0)
+CTabulator::CTabulator(int In_FuncID, int In_NumPoints, double In_Min, double In_Max)
 {
     FuncID = In_FuncID;
     NumPoints = In_NumPoints;
@@ -15,7 +15,24 @@ CTabulator::CTabulator(int In_FuncID = 0, int In_NumPoints = 3, double In_Min = 
 
 }
 
-CTabulator::~CTabulator() {}
+CTabulator::~CTabulator() 
+{
+    // idk, but its in the task, so...
+}
+
+
+// Same signature as the constructor, allows to reinitialise the class
+void CTabulator::ReInit(int In_FuncID, int In_NumPoints, double In_Min, double In_Max)
+{
+    bHasTabulated = false;
+    TabulatedPoints.clear();
+
+    FuncID = In_FuncID;
+    NumPoints = In_NumPoints;
+    Min = In_Min;
+    Max = In_Max;
+}
+
 
 // Selects current function by its ID
 void CTabulator::SetFunction(int In_FuncID) { FuncID = In_FuncID; bHasTabulated = false; }
@@ -23,22 +40,19 @@ void CTabulator::SetFunction(int In_FuncID) { FuncID = In_FuncID; bHasTabulated 
 // Returns pointer to the current function
 Function CTabulator::GetFunction_ptr()
 {
-    Function AvailableFunctions[NUM_FUNCTIONS] = {&std::sin, &std::cos, &std::log, &std::abs};
-
     if (FuncID < NUM_FUNCTIONS)
         return AvailableFunctions[FuncID];
 
     else
-    {
-        std::cout << std::endl << "Invalid Functin ID, using default function std::sin" << std::endl;
-        return AvailableFunctions[0];
-    }
+        throw(std::exception("Invalid function ID"));
 }
+
 
 // Set / Get number of tabulation points
 void CTabulator::SetNumPoints(int In_NumPoints) { NumPoints = In_NumPoints; bHasTabulated = false;}
 
 int CTabulator::GetNumPoints() { return NumPoints; }
+
 
 // Set / Get range of tabulation
 void CTabulator::SetRange(double In_Min, double In_Max)
@@ -51,6 +65,7 @@ void CTabulator::SetRange(double In_Min, double In_Max)
 
 double CTabulator::GetRangeMin() { return Min; }
 double CTabulator::GetRangeMax() { return Max; }
+
 
 // Returns x value in a certain point (based on range and num points)
 double CTabulator::GetPointValue(int Point)
@@ -70,14 +85,70 @@ void CTabulator::Tabulate()
     bHasTabulated = true;
 }
 
+
 // Printing and saving result
-bool CTabulator::HasTabulated() { return HasTabulated; }
-bool CTabulator::PrintResultTabulate()
+bool CTabulator::HasTabulated() { return bHasTabulated; }
+bool CTabulator::PrintTabulationResult()
 {
-    
+    if (HasTabulated())
+    {
+        std::cout << std::endl << "Function ID: " << FuncID << "; Range: " << Min << " - " << Max << "; Number of points: " << NumPoints << std::endl;
+
+        for (size_t i = 0; i < TabulatedPoints.size(); i++)
+        {
+            std::cout << i + 1 << " : x = " << GetPointValue(i) << " : f(x) = " << TabulatedPoints[i] << std::endl;
+        }
+    }
+
+    return HasTabulated();
 }
 
 bool CTabulator::SaveResultToFile(std::string Path)
 {
+    std::ofstream file(Path);
 
+    if (HasTabulated())
+    {
+        file << FuncID << std::endl << Min << std::endl << Max << std::endl << NumPoints << std::endl;
+
+        for (size_t i = 0; i < TabulatedPoints.size(); i++)
+        {
+            file << TabulatedPoints[i] << std::endl;
+        }
+    }
+
+    file.close();
+
+    return HasTabulated();
+}
+
+
+// Loading from file
+void CTabulator::LoadResultFromFile(std::string Path)
+{
+    std::ifstream file(Path);
+
+    if (!file.is_open())
+    {
+        file.close();
+        throw(std::exception("No such file!"));
+    }
+
+    int InFuncID;
+    int InNumPoints;
+    double InMin, InMax;
+
+    file >> InFuncID >> InMin >> InMax >> InNumPoints;
+    ReInit(InFuncID, InNumPoints, InMin, InMax);
+
+    for (int i = 0; i < InNumPoints; i++)
+    {
+        double PointValue;
+        file >> PointValue;
+        TabulatedPoints.push_back(PointValue);
+    }
+
+    file.close();
+
+    bHasTabulated = true;
 }
