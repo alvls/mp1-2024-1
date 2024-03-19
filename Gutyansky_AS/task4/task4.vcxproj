@@ -83,6 +83,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -111,6 +114,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DateUtils.cpp" />
+    <ClCompile Include="Pedometer.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="StepsRecord.cpp" />
+    <ClCompile Include="StepsRecord.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DateUtils.hpp" />
+    <ClInclude Include="Pedometer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
