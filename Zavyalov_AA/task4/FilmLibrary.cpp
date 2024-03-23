@@ -1,20 +1,35 @@
 #include "FilmLibrary.h"
 
-struct tDate {
-	unsigned int day;
-	unsigned int month;
-	unsigned int year;
-};
-
-struct Film
-{
-	string title;
-	string director;
-	string screenwriter;
-	string composer;
-	tDate date;
-	unsigned long long fees;
-};
+//struct tDate {
+//	unsigned int day;
+//	unsigned int month;
+//	unsigned int year;
+//	tDate(unsigned int day_, unsigned int month_, unsigned int year_) {
+//		day = day_;
+//		month = month_;
+//		year = year_;
+//	}
+//	tDate() {};
+//};
+//
+//struct Film
+//{
+//	string title;
+//	string director;
+//	string screenwriter;
+//	string composer;
+//	tDate date;
+//	unsigned long long fees;
+//	Film(string title_, string director_, string screenwriter_, string composer_, tDate date_, unsigned long long fees_) {
+//		title = title_;
+//		director= director_;
+//		screenwriter = screenwriter_;
+//		composer = composer_;
+//		date= date_;
+//		fees = fees_;
+//	}
+//	Film() {};
+//};
 
 bool film_cmpbytitle(Film f1, Film f2) {
 	if (f1.title == f2.title) {
