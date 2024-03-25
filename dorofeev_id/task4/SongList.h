@@ -99,7 +99,17 @@ private:
 		return gotbyartist;
 	}
 
+	int getSongsQuantity()
+	{
+		return songs.size();
+	}
 
+	 void deleteSong(const std::string& title, const std::string& artist) 
+	 {
+        songs.erase(std::remove_if(songs.begin(), songs.end(), [&](const Song& song) { return song.title == title && song.artist == artist; }), songs.end());
+     }
+
+	 //
 
 private:
 	void _modMenu(Song song)
