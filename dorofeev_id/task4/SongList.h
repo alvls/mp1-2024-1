@@ -27,37 +27,82 @@ class SongList
 private:
 	std::vector<Song> songs;
 
-	void addsong(Song song)
+	void addSong(Song song)
 	{
 		songs.push_back(song);
 		std::sort(songs.begin(), songs.end(), [](const Song& a, const Song& b) {return a.title < b.title; });
 	}
 
-	void modifysong(const std::string& title, const std::string& artist)
+	void modifySong(const std::string& title, const std::string& artist)
 	{
-		Song* it;
+		std::vector<Song>::iterator it;
 		try
 		{
-			it = findsong(title, artist);
+			it = findSong(title, artist);
 		}
 		catch (const std::string& e)
 		{
 			std::cerr << "Error: " << e << std::endl;
 		}
-		_modmenu(*it);
+		_modMenu(*it);
 	}
 	
-	Song* findsong(const std::string& title, const std::string& artist)
+	std::vector<Song>::iterator findSong(const std::string& title, const std::string& artist)
 	{
 		auto it = std::find_if(songs.begin(), songs.end(), [&](const Song& song) {return song.title == title && song.artist == artist; });
 		if (it == songs.end())
 		{
-			throw(std::string )
+			throw std::string("Song can`t be found");
+		}
+		else
+		{
+			return it;
 		}
 	}
 
+	std::vector<Song> getAllByPoet(const std::string& poet)
+	{
+		std::vector<Song> gotbypoet;
+		for (auto x : songs)
+		{
+			if (x.poet == poet)
+				gotbypoet.push_back(x);
+		}
+		std::sort(gotbypoet.begin(), gotbypoet.end(), [](const Song& a, const Song& b) {return a.title < b.title; });
+
+		return gotbypoet;
+	}
+
+	std::vector<Song> getAllByComposer(const std::string& composer)
+	{
+		std::vector<Song> gotbycomposer;
+		for (auto x : songs)
+		{
+			if (x.composer == composer)
+				gotbycomposer.push_back(x);
+		}
+		std::sort(gotbycomposer.begin(), gotbycomposer.end(), [](const Song& a, const Song& b) {return a.title < b.title; });
+
+		return gotbycomposer;
+	}
+
+	std::vector<Song> getAllByArtist(const std::string& artist)
+	{
+		std::vector<Song> gotbyartist;
+		for (auto x : songs)
+		{
+			if (x.artist == artist)
+				gotbyartist.push_back(x);
+		}
+		std::sort(gotbyartist.begin(), gotbyartist.end(), [](const Song& a, const Song& b) {return a.title < b.title; });
+
+		return gotbyartist;
+	}
+
+
+
 private:
-	void _modmenu(Song song)
+	void _modMenu(Song song)
 	{
 		return;
 	}
