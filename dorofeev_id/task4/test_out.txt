@@ -1,0 +1,19 @@
+Title: lax
+Artist: poettt
+Composer: cmpsr
+Poet: sngr
+Release date: 1.12.2101
+-------------------------------------------------------
+Title: lol
+Artist: singer
+Composer: comp1
+Poet: poe1
+Release date: 12.12.2055
+Album: 11
+-------------------------------------------------------
+Title: zzz
+Artist: poettt
+Composer: cmpsr
+Poet: sngr
+Release date: 1.12.2101
+-------------------------------------------------------
