@@ -24,5 +24,5 @@ int main()
         std::cout << "Number of the last selected item: " << menu.getLastSelected() << std::endl;
     }
 
-    return 0;
+    return 0; //croak
 }

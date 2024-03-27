@@ -1,0 +1,14 @@
+Title: lol
+Artist: singer
+Composer: comp1
+Poet: poe1
+Release date: 12.12.2055
+Album: 11
+-------------------------------------------------------
+Title: lol1
+Artist: singer2
+Composer: comp2
+Poet: poe3
+Release date: 12.12.2056
+Album: 12
+-------------------------------------------------------
