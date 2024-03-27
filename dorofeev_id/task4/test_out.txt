@@ -8,7 +8,7 @@ Title: lol
 Artist: singer
 Composer: comp1
 Poet: poe1
-Release date: 12.12.2055
+Release date: 5.12.1977
 Album: 11
 -------------------------------------------------------
 Title: zzz

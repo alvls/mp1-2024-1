@@ -43,5 +43,5 @@ public:
 	 //осталось:_modMenu
 
 private:
-	void _mod(Song song, const std::string& key, const std::string& newInf);
+	void _mod(Song& song, const std::string& key, const std::string& newInf);
 };

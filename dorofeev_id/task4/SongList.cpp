@@ -8,16 +8,15 @@ void SongList::addSong(Song song)
 
 void SongList::modifySong(const std::string& title, const std::string& artist, const std::string& key, const std::string newInf)
 {
-	std::vector<Song>::iterator it;
 	try
 	{
-		it = findSong(title, artist);
+		auto it = findSong(title, artist);
+		_mod(*it, key, newInf);
 	}
 	catch (const std::string& e)
 	{
 		std::cerr << "Error: " << e << std::endl;
 	}
-	_mod(*it, key, newInf);
 }
 
 std::vector<Song>::iterator SongList::findSong(const std::string& title, const std::string& artist)
@@ -158,22 +157,24 @@ void SongList::readFromFile(const std::string& filename)
 	file.close();
 }
 
-void SongList::_mod(Song song, const std::string& key, const std::string& newInf)
+void SongList::_mod(Song& song, const std::string& key, const std::string& newInf)
 {
-	if (key == "Title: ")
+	if (key == "Title:")
 		song.title = newInf;
-	else if (key == "Artist: ")
+	else if (key == "Artist:")
 		song.artist = newInf;
-	else if (key == "Composer: ")
+	else if (key == "Composer:")
 		song.composer = newInf;
-	else if (key == "Poet: ")
+	else if (key == "Poet:")
 		song.poet = newInf;
-	else if (key == "Release_date:")
+	else if (key == "Release")
 	{
 		std::istringstream dateIss(newInf);
 		char dot;
 		dateIss >> song.releaseDate.day >> dot >> song.releaseDate.month >> dot >> song.releaseDate.year;
 	}
-	else if (key == "Album: ")
+	else if (key == "Album:")
 		song.album = newInf;
+	else
+		throw std::string("Invalid key");
 }

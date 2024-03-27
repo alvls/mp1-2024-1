@@ -13,11 +13,12 @@ int main()
 		list1.addSong({ "zzz", "sngr", "cmpsr", "poettt", "", {01, 12, 2101 } });
 		std::vector<Song>::iterator fnd = list1.findSong("lol", "singer");
 		list1.deleteSong("lol1", "singer2");
+		list1.modifySong("lol", "singer", "Release", "05.12.1977");
 		list1.saveToFile("test_out.txt");
 	}
 	catch (const std::string& e)
 	{
-		std::cerr << e << std::endl;
+		std::cerr << "Error: " << e << std::endl;
 	}
 	system("pause");
 	return 0;
