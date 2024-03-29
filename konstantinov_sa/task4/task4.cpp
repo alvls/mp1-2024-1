@@ -158,17 +158,13 @@ class Thermo {
 private:
     map <Datetime, float> tlog;//в прошлой лабораторной я уже реализовал класс с логикой добавления, поиска элементов, перезаписью дубликатов, поэтому думаю, что имею право использовать map
     Datetime start;
-    //Datetime end;
 public:
 
     Thermo(Datetime start_ = Datetime()) {
         start = start_;
-        //end = start;
-        //end.year += 1;
     }
 
     void erase(Datetime e) {
-        //auto& it = tlog
         tlog.erase(e);
     }
 
@@ -207,9 +203,59 @@ public:
         return tlog[date];
     }
 
-    const static enum class scope { day, month, year, alltime, monthmornings, monthnights };
-    float getAvgTempIn(scope s, Datetime dt) {
+    static const enum class scope { day, month, alltime, monthdays, monthnights };
+
+    float getAvgTempIn(scope sc, Datetime dt) {
+
+        Datetime st = dt;
+        st.hour = 0;
+        Datetime ed;
         
+            switch (sc) {
+            case scope::day:
+                ed = st.shifted(0, 1);
+                break;
+            case scope::month:
+                st.day = 0;
+                ed = st.shifted(0, 0, 1);
+                break;
+            default:
+            case scope::alltime:
+                st = start;
+                ed = start.shifted(0, 0, 0, 1);
+            }
+
+            auto sit = tlog.lower_bound(st);
+            auto eit = tlog.lower_bound(ed); 
+            float s = 0.0;
+            int c = 0;
+            if (sc < scope::monthdays) {
+                for (auto i = sit;i != eit;i++) {
+                    s += i->second;
+                    c++;
+                }
+            }
+            else {
+                if (sc == scope::monthnights) {
+                    for (auto i = sit;i != eit;i++) {
+                        Datetime e = i->first;
+                        if ((e.hour < 6) || (e.hour >= 18)) {
+                            s += i->second;
+                            c++;
+                        } 
+                    }
+                }
+                else {
+                    for (auto i = sit;i != eit;i++) {
+                        Datetime e = i->first;
+                        if ((e.hour>=6) && (e.hour < 18)) {
+                            s += i->second;
+                            c++;
+                        }
+                    }
+                }                
+            }
+            return s / c;
     }
 
     void add(Datetime date, float temp) {
@@ -220,6 +266,20 @@ public:
                 throw string("out of one year range");
         }else
             throw string("invalid date");
+    }
+
+    void InputSeria(Datetime serst, int samples) {//Ручной ввод серии последовательных измерений каждый час начиная с указанного часа
+        if ((serst.hour + samples > 24) || !(serst.isValid())) {
+            cout << "Invalid date or duration";
+            return;
+        }
+        int i = 0;
+        float t;
+        while (i < samples) {
+            cin >> t;
+            tlog[serst.shifted(i)] = t;
+            i++;
+        }
     }
 
     void print() {
@@ -267,19 +327,21 @@ public:
 };
 
 
-
 int main() {
 	setlocale(LC_ALL, "rus");
     Datetime start(1, 3, 1, 2006);
     Thermo th(start);
     th.printPeriod();
+
+    
     Datetime dt(4, 5, 6, 2006);
     th.add(dt, 10.5);
     th.add(dt.shifted(1), 20.2);
-    th.add(dt.shifted(-2, 1), 30.7);
+    th.add(dt.shifted(18), 33.88);
+    th.add(dt.shifted(5, 1), 30.7);
     th.add(start.shifted(1, 1, 11, 0), 999.9);
     th.add(start.shifted(2, 2, 10, 0), 888.9);
-
+    cout << "Попытка добавть несуществующую дату приводит к исключению\n";
     try {
         th.add(start.shifted(2, 2, 12, 0), 888.9);
     }
@@ -293,13 +355,22 @@ int main() {
     cout << "__________________\n";
     
     //th.erase(dt, dt.shifted(2));
+    cout << "Изменим дату отсчёта, измерения за пределами года автоматически стираются. Заменим результат первого измерения\n";
     th.changePeriod(start.shifted(0,0,8,-1));
     th.add(dt, 11.1111);
     th.printPeriod();
     th.print();
     cout << "__________________\n";
+    cout << "Загрузим предыдущий набор из файла\n";
     th.load("log1.txt");
     th.printPeriod();
     th.print();
+    th.clear();
+
+    cout << "Введите серию из 4 измерений, вывод средней температуры за день\n";
+    th.InputSeria(dt, 4);
+    th.printPeriod();
+    th.print();
+    cout << th.getAvgTempIn(th.scope::day, dt) << endl;
 	//system("pause");
 }
