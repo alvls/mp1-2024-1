@@ -138,8 +138,11 @@ void FilmLibrary::addFilm(const Film& src) {
 void FilmLibrary::changeFilm(const Film& src, const Film& dst) {
 	for (unsigned int i = 0; i < sz; i++) {
 		if (films[i] == src) {
-			films[i] = src;
+			films_by_fees.erase(src);
+			films_by_fees.insert(dst);
+			films[i] = dst;
 			sort(films.begin(), films.end());
+			
 			return;
 		}
 	}
