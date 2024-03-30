@@ -3,18 +3,47 @@
 
 int main() {
 	setlocale(LC_ALL, "ru");
-	/*string title;
-	string director;
-	string screenwriter;
-	string composer;
-	tDate date;
-	unsigned long long fees;*/
-	tDate g(1, 1, 1);
-	Film f("джек воробей", "дирик", "скринрайтер", "композер", g, 123);
-	std::cout << f.composer;
-	FilmLibrary fl;
-	fl.addFilm(f);
+    vector<Film> testFilms = {
+    Film("Звездные войны: Эпизод IV - Новая надежда", "Джордж Лукас", "Джордж Лукас", "Джон Уильямс", tDate(25, 5, 1977), 775400000),
+    Film("Побег из Шоушенка", "Фрэнк Дарабонт", "Фрэнк Дарабонт", "Томми Ньюмарк", tDate(10, 9, 1994), 288400000),
+    Film("Крёстный отец", "Фрэнсис Форд Коппола", "Марио Пьюзо, Фрэнсис Форд Коппола", "Нино Рота", tDate(14, 3, 1972), 245066411),
+    Film("Властелин колец: Братство кольца", "Питер Джексон", "Фрэн Синтра, Филиппа Бойенс, Питер Джексон", "Говард Шор", tDate(10, 12, 2001), 887500000),
+    Film("Титаник", "Джеймс Кэмерон", "Джеймс Кэмерон", "Джеймс Хорнер", tDate(1, 11, 1997), 2187463944),
+    Film("Звёздные войны: Эпизод V - Империя наносит ответный удар", "Ирвин Кершнер", "Лоуренс Кэздан, Лоуренс Кэздан, Лоуренс Кэздан", "Джон Уильямс", tDate(20, 5, 1980), 538400000),
+    Film("Интерстеллар", "Кристофер Нолан", "Джонатан Нолан, Кристофер Нолан", "Ханс Циммер", tDate(26, 10, 2014), 677400000),
+    Film("Криминальное чтиво", "Квентин Тарантино", "Квентин Тарантино", "Эннио Морриконе", tDate(10, 5, 1994), 214100000),
+    Film("Властелин колец: Возвращение короля", "Питер Джексон", "Фрэн Синтра, Филиппа Бойенс, Питер Джексон", "Говард Шор", tDate(1, 12, 2003), 1146000000),
+    Film("Список Шиндлера", "Стивен Спилберг", "Стивен Заиллиан", "Джон Уильямс", tDate(4, 2, 1994), 322100000)
+    };
 
+	FilmLibrary fl2;
+    fl2.load("test.txt");
+    cout << fl2.size() << endl;
+    cout << fl2.findFilm("Побег из Шоушенка", 1994).fees << endl;
+    fl2.deleteFilm(Film("Интерстеллар", "Кристофер Нолан", "Джонатан Нолан, Кристофер Нолан", "Ханс Циммер", tDate(26, 10, 2014), 677400000));
+    cout << fl2.size() << endl;
+    fl2.addFilm(Film("Парк Юрского периода", "Стивен Спилберг", "Майкл Крайтон", "Джон Уильямс", tDate(11, 6, 1993), 1020000000));
+    cout << fl2.size() << endl;
+    vector<Film> spilberg = fl2.filmsByDirector("Стивен Спилберг");
+    for (auto x : spilberg) {
+        cout << x.title << " : " << x.fees << endl;
+    }
+    vector<Film> year1994 = fl2.filmsByYear(1994);
+    cout << "1994:" << endl;
+    for (auto x : year1994) {
+        cout << x.title << " : " << x.fees << endl;
+    }
+    vector<Film> byfees = fl2.topFeesFilms(5);
+    cout << "by fees:\n";
+    for (auto x : byfees) {
+        cout << x.title << " : " << x.fees << endl;
+    }
+    vector<Film> byfees1994 = fl2.topFeesFilmsByYear(5, 1994);
+    cout << "by fees and year 1994:\n";
+    for (auto x : byfees1994) {
+        cout << x.title << " : " << x.fees << endl;
+    }
+    //fl2.save("test.txt");
 	system("pause");
 	return 0;
 }
