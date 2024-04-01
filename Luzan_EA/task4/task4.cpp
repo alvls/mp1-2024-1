@@ -162,16 +162,16 @@ public:
 	
 	bool addSongNoId(TSong obj) {
 		//в ID можно писать что угодно
-		size_t tmp_size = this->singersIDList.size();
+		size_t tmp_size = singersIDList.size();
 
-		if (this->findSong(obj.songName, obj.singerName) > 0) {
+		if (findSong(obj.songName, obj.singerName) > 0) {
 			return false; //Error: dublicate song
 		}
 
 		size_t ID = -1;
 		for (size_t i = 1; i < tmp_size; i++) 
-			if (obj.singerName == this->singersIDList[i].Name)
-				ID = this->singersIDList[i].ID;
+			if (obj.singerName == singersIDList[i].Name)
+				ID = singersIDList[i].ID;
 
 		
 		if (ID == -1) {
@@ -181,7 +181,7 @@ public:
 		}
 		obj.singerID = ID;
 		list.push_back(obj);
-		this->sort_();
+		sort_();
 		return true;
 	}
 
@@ -190,16 +190,16 @@ public:
 
 		TSong new_song(songName, albumName, singerName, poetName, kompName, day, month, year);
 		
-		return this->addSongNoId(new_song);
+		return addSongNoId(new_song);
 	}
 
 	size_t findSong(const string sngNm, const string sngrNm) {
 		size_t sngrID = 0;
-		size_t tmp_size = this->singersIDList.size();
+		size_t tmp_size = singersIDList.size();
 
 		for (size_t i = 1; i < tmp_size; i++) {
-			if (sngrNm == this->singersIDList[i].Name) {
-				sngrID = this->singersIDList[i].ID;
+			if (sngrNm == singersIDList[i].Name) {
+				sngrID = singersIDList[i].ID;
 				break;
 			}
 		}
@@ -209,10 +209,10 @@ public:
 				return 0; // Error
 			}
 
-		tmp_size = this->list.size();
+		tmp_size = list.size();
 		for (size_t i = 1; i < tmp_size; i++) 
-			if (sngrID == this->list[i].singerID) 
-				if (sngNm == this->list[i].songName) 
+			if (sngrID == list[i].singerID) 
+				if (sngNm == list[i].songName) 
 					return i;
 
 		//cout << "NO SUCH SONG\n";
@@ -240,11 +240,11 @@ public:
 		//if new singer check
 		if (( edited_song.singerName == list[songNum].singerName) || 
 			(edited_song.singerID != list[songNum].singerID) ) { 
-			size_t tmp_size = this->singersIDList.size();
+			size_t tmp_size = singersIDList.size();
 			size_t ID = -1;
 			for (size_t i = 0; i < tmp_size; i++)
-				if (edited_song.singerName == this->singersIDList[i].Name)
-					ID = this->singersIDList[i].ID;
+				if (edited_song.singerName == singersIDList[i].Name)
+					ID = singersIDList[i].ID;
 
 			if (ID == -1) {
 				ID = singersIDList.size();
@@ -271,8 +271,8 @@ public:
 		size_t tmp = singersIDList.size();
 		size_t tmpID = -1;
 		for (size_t i = 0; i < tmp; i++) {
-			if (singer == this->singersIDList[i].Name) 
-				tmpID = this->singersIDList[i].ID;
+			if (singer == singersIDList[i].Name) 
+				tmpID = singersIDList[i].ID;
 		}
 		if (tmpID == -1)
 			return false;
@@ -310,7 +310,7 @@ public:
 		if (!fout.is_open())
 			return false;
 
-		size_t lib_size = this->getSize();
+		size_t lib_size = getSize();
 		for (int i = 1; i < lib_size + 1; i++) {
 			fout << list[i].songName << " # " << list[i].albumName << " # " << list[i].singerName
 				<< " # " << list[i].poetName << " # " << list[i].kompName << " # " << list[i].day
@@ -397,7 +397,7 @@ public:
 			song.year = tmp; 
 			i += 3;
 
-			this->addSongNoId(song);
+			addSongNoId(song);
 		}
 
 		fin.close();
