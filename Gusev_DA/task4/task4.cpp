@@ -152,7 +152,7 @@ void printMenu() {
 
 int main() {
     FloorScales scales;
-    string filename = "observations.txt";
+    string filename = "observations.txt"; // Считывание и сохраниение и/из файла observations.txt
 
     while (true) {
         clearScreen();
@@ -167,7 +167,7 @@ int main() {
 
         switch (choice) {
         case 1: {
-            cout << "Enter initial date (dd-mm-yyyy): ";
+            cout << "Enter initial date (dd-mm-yyyy): "; // Формат ввода даты (dd-mm-yyyy) т.е. 17-08-2005
             cin >> date;
             scales.setInitialDate(date);
             break;
@@ -253,7 +253,7 @@ int main() {
             break;
         }
         case 0: {
-            return 0;  // Exit the program
+            return 0; 
         }
         default: {
             cout << "Invalid option selected." << endl;
