@@ -19,7 +19,7 @@ struct Song
 	std::string title;
 	std::string poet;
 	std::string composer;
-	std::string artist; //исполнитель
+	std::string artist; //РёСЃРїРѕР»РЅРёС‚РµР»СЊ
 	std::string album;
 	Date releaseDate;
 };
@@ -40,7 +40,6 @@ public:
 	void deleteSong(const std::string& title, const std::string& artist);
 	void saveToFile(const std::string& filename);
 	void readFromFile(const std::string& filename);
-	 //осталось:_modMenu
 
 private:
 	void _mod(Song& song, const std::string& key, const std::string& newInf);
