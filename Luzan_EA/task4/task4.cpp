@@ -5,21 +5,12 @@
 #include <vector> 
 #include <locale> 
 
-/* пояснения:
+/*
 *	писать id исплонителя нужно только при раблте с методами с припиской Fast
 *   остальеные так или иначе сами выставляют id
-*   нет проверки на существование песни в либе при добавлении
 */
 
 using namespace std;
-
-// IDsinger == i //в массие имён
-// sort
-// unsined -> size_t
-// char* -> string
-// album == NULL
-// конструктор по умолчанию для TSong - ЗАЧЕМ?
-// add переписать с void, чтоб можно было во вне передать сообщение о дублировании 
 
 class TSong {
 public:
@@ -31,10 +22,8 @@ public:
 	unsigned singerID;
 
 	string poetName;
-	//unsigned poetID;
 
 	string kompName;
-	//unsigned kompID;
 
 	string day; 
 	string month; 
@@ -202,27 +191,6 @@ public:
 		TSong new_song(songName, albumName, singerName, poetName, kompName, day, month, year);
 		
 		return this->addSongNoId(new_song);
-
-		/*
-		if (this->findSong(songName, singerName) > 0) {
-			return false; //Error: dublicate song
-		}
-		unsigned tmp_size = this->singersIDList.size();
-		unsigned ID = -1;
-		for (unsigned i = 0; i < tmp_size; i++)
-			if (new_song.singerName == this->singersIDList[i].Name)
-				ID = this->singersIDList[i].ID;
-		if (ID == -1) {
-			ID = singersIDList.size();
-			Tpair tmp_obj(new_song.singerName, ID);
-			singersIDList.push_back(tmp_obj);
-		}
-		new_song.singerID = ID;
-
-		this->list.push_back(new_song);
-		this->sort_();
-		return true;
-		*/
 	}
 
 	unsigned findSong(const string sngNm, const string sngrNm) {
@@ -252,6 +220,10 @@ public:
 		
 	}
 	
+	TSong getSong(unsigned songNum) {
+		return list[songNum];
+	}
+
 	bool editSongFast(unsigned songNum, const TSong& edited_song) {
 		// !doesnt check if new author exist in the list
 		if (songNum < 0)
@@ -353,6 +325,13 @@ public:
 		ifstream fin(path);
 		string line; 
 		
+		list.clear();
+		singersIDList.clear();
+		TSong tmp("\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n");
+		list.push_back(tmp);
+		Tpair tmp_("\n", 0);
+		singersIDList.push_back(tmp_);
+
 		if (!fin.is_open())
 			return false;
 		
@@ -361,16 +340,12 @@ public:
 			TSong song;
 			string tmp = "";
 			unsigned i = 0;
-			//cout << line  << endl;
 			while ( (line[i] != ' ') || (line[i + 1] != '#') || (line[i + 2] != ' ') ) {
 				tmp += line[i];
 				i++;
 			}
 			song.songName = tmp; 
 			 i+=3;
-			//cout << "	lol1 " << tmp << endl;
-			//cout << "	lol2 " <<  (list[2].songName) << endl; 
-			//cout << "	lol3 " << (list[2].songName == tmp) << endl;
 			tmp = "";
 
 			while ((line[i] != ' ') || (line[i + 1] != '#') || (line[i + 2] != ' ')) {
@@ -441,7 +416,7 @@ int main() {
 	lib.addSong("Песня3", "42", "Певец1", "Поэт22", "Композитор3", "11", "12", "2023");
 	lib.addSong("Песня4", "42", "Певец3", "Поэт22", "Композитор1", "11", "12", "2023");
 	lib.addSong("Песня4", "42", "Певец3", "Поэт22", "Композитор1", "11", "12", "2023");
-	cout << lib.findSong("Песня3", "Певец1");
+	cout << lib.findSong("Песня3", "Певец1") << " ---- " << lib.getSong(lib.findSong("Песня3", "Певец1")).kompName;
 	
 	//lib.printBySinger("Певец3");
 	//cout << "\n-------------------------------------------\n";
@@ -449,7 +424,7 @@ int main() {
 	//cout << lib.getSize() << endl;
 
 	string path = "lib.txt";
-	lib.libExport(path);
+	lib.libImport(path);
 	cout << "\n-------------------------------------------\n";
 	lib.printLib();
 
