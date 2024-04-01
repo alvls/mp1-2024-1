@@ -19,7 +19,7 @@ public:
 	string albumName;
 
 	string singerName;
-	unsigned singerID;
+	size_t singerID;
 
 	string poetName;
 
@@ -98,11 +98,11 @@ public:
 class  Tpair {
 public:
 	string Name;
-	unsigned ID;
+	size_t ID;
 
 	Tpair() = default;
 
-	Tpair(const string Name_, const unsigned ID_) {
+	Tpair(const string Name_, const size_t ID_) {
 		Name = Name_;
 		ID = ID_;
 	}
@@ -123,7 +123,7 @@ private:
 	vector <Tpair> singersIDList;
 
 	void sort_() {
-		unsigned i = list.size() - 1;
+		size_t i = list.size() - 1;
 		while (list[i].songName < list[i - 1].songName) {
 			TSong tmp;
 			tmp = list[i - 1];
@@ -162,14 +162,14 @@ public:
 	
 	bool addSongNoId(TSong obj) {
 		//в ID можно писать что угодно
-		unsigned tmp_size = this->singersIDList.size();
+		size_t tmp_size = this->singersIDList.size();
 
 		if (this->findSong(obj.songName, obj.singerName) > 0) {
 			return false; //Error: dublicate song
 		}
 
-		unsigned ID = -1;
-		for (unsigned i = 1; i < tmp_size; i++) 
+		size_t ID = -1;
+		for (size_t i = 1; i < tmp_size; i++) 
 			if (obj.singerName == this->singersIDList[i].Name)
 				ID = this->singersIDList[i].ID;
 
@@ -193,11 +193,11 @@ public:
 		return this->addSongNoId(new_song);
 	}
 
-	unsigned findSong(const string sngNm, const string sngrNm) {
-		unsigned sngrID = 0;
-		unsigned tmp_size = this->singersIDList.size();
+	size_t findSong(const string sngNm, const string sngrNm) {
+		size_t sngrID = 0;
+		size_t tmp_size = this->singersIDList.size();
 
-		for (unsigned i = 1; i < tmp_size; i++) {
+		for (size_t i = 1; i < tmp_size; i++) {
 			if (sngrNm == this->singersIDList[i].Name) {
 				sngrID = this->singersIDList[i].ID;
 				break;
@@ -210,7 +210,7 @@ public:
 			}
 
 		tmp_size = this->list.size();
-		for (unsigned i = 1; i < tmp_size; i++) 
+		for (size_t i = 1; i < tmp_size; i++) 
 			if (sngrID == this->list[i].singerID) 
 				if (sngNm == this->list[i].songName) 
 					return i;
@@ -220,11 +220,11 @@ public:
 		
 	}
 	
-	TSong getSong(unsigned songNum) {
+	TSong getSong(size_t songNum) {
 		return list[songNum];
 	}
 
-	bool editSongFast(unsigned songNum, const TSong& edited_song) {
+	bool editSongFast(size_t songNum, const TSong& edited_song) {
 		// !doesnt check if new author exist in the list
 		if (songNum < 0)
 			return false;
@@ -233,16 +233,16 @@ public:
 		return true;
 	}
 	
-	bool editSong(unsigned songNum, const TSong& edited_song) {
+	bool editSong(size_t songNum, const TSong& edited_song) {
 		if (songNum < 0)
 			return false;
 
 		//if new singer check
 		if (( edited_song.singerName == list[songNum].singerName) || 
 			(edited_song.singerID != list[songNum].singerID) ) { 
-			unsigned tmp_size = this->singersIDList.size();
-			unsigned ID = -1;
-			for (unsigned i = 0; i < tmp_size; i++)
+			size_t tmp_size = this->singersIDList.size();
+			size_t ID = -1;
+			for (size_t i = 0; i < tmp_size; i++)
 				if (edited_song.singerName == this->singersIDList[i].Name)
 					ID = this->singersIDList[i].ID;
 
@@ -268,9 +268,9 @@ public:
 	}
 
 	bool printBySinger(const string singer) {
-		unsigned tmp = singersIDList.size();
-		unsigned tmpID = -1;
-		for (unsigned i = 0; i < tmp; i++) {
+		size_t tmp = singersIDList.size();
+		size_t tmpID = -1;
+		for (size_t i = 0; i < tmp; i++) {
 			if (singer == this->singersIDList[i].Name) 
 				tmpID = this->singersIDList[i].ID;
 		}
@@ -278,7 +278,7 @@ public:
 			return false;
 
 		tmp = list.size();
-		for (unsigned i = 1; i < tmp; i++)
+		for (size_t i = 1; i < tmp; i++)
 			if (list[i].singerID == tmpID)
 				list[i].printSong();
 
@@ -286,22 +286,22 @@ public:
 	}
 
 	bool printByPoet(const string poet ){
-		unsigned tmp = list.size();
-		for (unsigned i = 1; i < tmp; i++)
+		size_t tmp = list.size();
+		for (size_t i = 1; i < tmp; i++)
 			if (list[i].poetName == poet)
 				list[i].printSong();
 		return true;
 	}
 
 	bool printByKomp(const string komp) {
-		unsigned tmp = list.size();
-		for (unsigned i = 1; i < tmp; i++)
+		size_t tmp = list.size();
+		for (size_t i = 1; i < tmp; i++)
 			if (list[i].kompName == komp)
 				list[i].printSong();
 		return true;
 	}
 
-	unsigned getSize() {
+	size_t getSize() {
 		return list.size() - 1;
 	}
 
@@ -310,7 +310,7 @@ public:
 		if (!fout.is_open())
 			return false;
 
-		unsigned lib_size = this->getSize();
+		size_t lib_size = this->getSize();
 		for (int i = 1; i < lib_size + 1; i++) {
 			fout << list[i].songName << " # " << list[i].albumName << " # " << list[i].singerName
 				<< " # " << list[i].poetName << " # " << list[i].kompName << " # " << list[i].day
@@ -339,7 +339,7 @@ public:
 			line += " # ";
 			TSong song;
 			string tmp = "";
-			unsigned i = 0;
+			size_t i = 0;
 			while ( (line[i] != ' ') || (line[i + 1] != '#') || (line[i + 2] != ' ') ) {
 				tmp += line[i];
 				i++;
