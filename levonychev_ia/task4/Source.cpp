@@ -339,8 +339,17 @@ public:
 	{
 		contacts.erase(contacts.begin() + number - 1);
 	}
-	friend ostream& operator<<(ostream& os, const PhoneBook Book)
+	friend ostream& operator<<(ostream& os, const PhoneBook& Book)
 	{	
+		os << "\tÒÅËÅÔÎÍÍÀß ÊÍÈÃÀ" << endl;
+		for (int i = 0; i < Book.contacts.size(); i++)
+			os << i + 1 << ". " << Book.contacts[i] << endl;
+		os << endl << "×èñëî êîíòàêòîâ: ";
+		os << Book.contacts.size() << endl;
+		return os;
+	}
+	friend ofstream& operator<<(ofstream& os, const PhoneBook Book)
+	{
 		os << "\tÒÅËÅÔÎÍÍÀß ÊÍÈÃÀ" << endl;
 		for (int i = 0; i < Book.contacts.size(); i++)
 			os << i + 1 << ". " << Book.contacts[i] << endl;
@@ -384,7 +393,9 @@ int main()
 	Book.find_favorite();
 	cout << Book.get_number_of_contacts() << endl;
 	
-
+	ofstream out("test.txt");
+	out << Book;
+	out.close();
 	cin.get();
 	return 0;
 
