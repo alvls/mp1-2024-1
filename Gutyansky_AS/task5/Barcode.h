@@ -14,11 +14,17 @@ public:
       throw std::runtime_error("Barcode string must have length " + std::to_string(BARCODE_LENGTH));
     }
 
+    bool hasNonZero = false;
     for (size_t i = 0; i < BARCODE_LENGTH; i++) {
       if (!isdigit(str[i])) {
         throw std::runtime_error("Barcode string must contain only digits");
       }
       m_Data[i] = str[i];
+      hasNonZero = true;
+    }
+
+    if (!hasNonZero) {
+      throw std::runtime_error("Barcode must contain at least one nonzero digit");
     }
   }
 

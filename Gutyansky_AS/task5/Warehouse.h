@@ -1,28 +1,39 @@
 #pragma once
-#include <unordered_map>
+#include <vector>
 #include <stdexcept>
 #include "Barcode.h"
 #include "Item.h"
 
 class Warehouse {
 private:
-  std::unordered_map<Barcode, Item> m_Items;
+  std::vector<Item> m_Items;
 
 public:
-  void RegisterItem(const Barcode& barcode, const Item& item) {
-    if (m_Items.find(barcode) != m_Items.end()) {
-      throw std::runtime_error("Barcode " + barcode.AsString() + " already used");
+  void RegisterItem(const Item& item) {
+    if (HasItem(item.GetBarcode())) {
+      throw std::runtime_error("Barcode " + item.GetBarcode().AsString() + " already used");
     }
 
-    m_Items[barcode] = item;
+    m_Items.push_back(item);
   }
 
-  bool TryGetItem(const Barcode& barcode, Item& item) const {
-    if (m_Items.find(barcode) != m_Items.end()) {
-      item = m_Items[barcode];
-      return true;
+  bool HasItem(const Barcode& barcode) const {
+    for (const Item& item : m_Items) {
+      if (item.GetBarcode() == barcode) {
+        return true;
+      }
     }
 
     return false;
+  }
+
+  const Item& GetItem(const Barcode& barcode) const {
+    for (const Item& item : m_Items) {
+      if (item.GetBarcode() == barcode) {
+        return item;
+      }
+    }
+
+    throw std::runtime_error("Barcode " + barcode.AsString() + " not found");
   }
 };
