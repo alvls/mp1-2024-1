@@ -93,61 +93,58 @@ public:
 
     bool bookTickets(Date date, Time time, string movieName, int hallNumber, bool isVIP, int numTickets)
     {
-        time_t now = ::time(nullptr);
-        tm* currentTime = localtime(&now);
         Cinema* cinema = findCinema(date, time, movieName, hallNumber);
-        if (date.day < currentTime->tm_mday ||
-            date.month < currentTime->tm_mon + 1 ||
-            date.year < currentTime->tm_year + 1900 ||
-            date.day > currentTime->tm_mday + 3 ||
-            (date.day == currentTime->tm_mday + 3 && time.hour * 60 + time.minute > (cinema->time.hour * 60 + cinema->time.minute) + 10))
-        {
-            cout << "Продажа билетов на этот сеанс не доступна." << endl;
-            return false;
-        }
-        if (cinema)
-        {
-            if (currentTime->tm_hour > cinema->time.hour ||
-                (currentTime->tm_hour == cinema->time.hour && currentTime->tm_min >= cinema->time.minute + 10))
-            {
-                cout << "Продажа билетов на этот сеанс завершена." << endl;
-                return false;
-            }
-            int totalPrice = calculateTotalPrice(*cinema, numTickets, isVIP);
-            for (int row = 0; row < cinema->seats.size(); ++row)
-                for (int seat = 0; seat < cinema->seats[0].size(); ++seat)
-                    if (checkAvailability(*cinema, row, seat) && numTickets > 0)
-                    {
-                        reserveSeats(*cinema, row, seat);
-                        --numTickets;
-                    }
-            cout << "Билеты успешно забронированы. Общая стоимость: " << totalPrice << " рублей." << endl;
-            return true;
-        }
-        else
+        if (!cinema)
         {
             cout << "Сеанс не найден." << endl;
             return false;
         }
+        time_t now = ::time(nullptr);
+        tm* currentTime = localtime(&now);
+        if (date.day < currentTime->tm_mday ||
+            date.month < currentTime->tm_mon + 1 ||
+            date.year < currentTime->tm_year + 1900 ||
+            date.day > currentTime->tm_mday + 3)
+        {
+            cout << "Продажа билетов на этот сеанс не доступна." << endl;
+            return false;
+        }
+        int currentTimeInMinutes = time.hour * 60 + time.minute;
+        int cinemaTimeInMinutes = cinema->time.hour * 60 + cinema->time.minute;
+        if (currentTimeInMinutes > cinemaTimeInMinutes + 10)
+        {
+            cout << "Продажа билетов на этот сеанс завершена." << endl;
+            return false;
+        }
+        int totalPrice = calculateTotalPrice(*cinema, numTickets, isVIP);
+        for (int row = 0; row < cinema->seats.size(); ++row)
+            for (int seat = 0; seat < cinema->seats[0].size(); ++seat)
+                if (checkAvailability(*cinema, row, seat) && numTickets > 0)
+                {
+                    reserveSeats(*cinema, row, seat);
+                    --numTickets;
+                }
+        cout << "Билеты успешно забронированы. Общая стоимость: " << totalPrice << " рублей." << endl;
+        return true;
     }
 
     void cancelTickets(Date date, Time time, string movieName, int hallNumber, int numTickets)
     {
         Cinema* cinema = findCinema(date, time, movieName, hallNumber);
-        if (cinema)
+        if (!cinema)
         {
-            int numTickets_ = numTickets;
-            for (int row = 0; row < cinema->seats.size(); ++row)
-                for (int seat = 0; seat < cinema->seats[0].size(); ++seat)
-                    if (!checkAvailability(*cinema, row, seat) && numTickets > 0)
-                    {
-                        cinema->seats[row][seat] = true;
-                        --numTickets;
-                    }
-            cout << "Заказ на " << numTickets_ << " билетов отменен." << endl << endl;
-        }
-        else
             cout << "Сеанс не найден." << endl;
+            return;
+        }
+        int numCancelledTickets = 0;
+        for (int row = 0; row < cinema->seats.size(); ++row)
+            for (int seat = 0; seat < cinema->seats[0].size(); ++seat)
+                if (!checkAvailability(*cinema, row, seat) && numCancelledTickets < numTickets)
+                {
+                    cinema->seats[row][seat] = true;
+                    ++numCancelledTickets;
+                }
+        cout << "Отменено билетов: " << numCancelledTickets << endl << "--------------------" << endl;
     }
 
     void printTickets(Date date, Time time, string movieName, int hallNumber, int numTickets)
@@ -175,8 +172,6 @@ public:
 
 int main()
 {
-    // Программ считывает текущее время на компьютере, и поэтому проблематично показать проверку на отказ бронирования билетов,
-    // если прошло больше 10 минут от начала сеанса. В целом я проверял, эта проверка работает(бронинование в пределах 3 дней тоже)
     system("chcp 1251");
     system("cls");
     TicketOffice ticketOffice;
@@ -200,23 +195,21 @@ int main()
     ticketOffice.addCinema(cinema9);
     Cinema cinema10(Date(30, 4, 2024), Time(9, 20), "Голос улиц", 1, 250, 8, 12);
     ticketOffice.addCinema(cinema10);
-    // отмена билетов может выдавать неверное значение, т.к если бронинование билетов недоступно, то всё равно вызывается отмена билетов
-    // (отсутствуют проверки в main(), потому что это демонстрационный вариант)
     Date currentDate1(22, 4, 2024); // дата, когда будет фильм
     Time currentTime1(9, 20); // время начала фильма
     ticketOffice.bookTickets(currentDate1, currentTime1, "Зелёная книга", 1, false, 2);
-    ticketOffice.printTickets(currentDate1, currentTime1, "Зелёная книга", 1, 1);
+    ticketOffice.printTickets(currentDate1, currentTime1, "Зелёная книга", 1, 2);
     ticketOffice.cancelTickets(currentDate1, currentTime1, "Зелёная книга", 1, 1);
     Date currentDate2(23, 4, 2024);
     Time currentTime2(12, 0);
-    ticketOffice.bookTickets(currentDate2, currentTime2, "Бесславные ублюдки", 1, true, 2);
+    ticketOffice.bookTickets(currentDate2, currentTime2, "Бесславные ублюдки", 1, true, 1);
     ticketOffice.printTickets(currentDate2, currentTime2, "Бесславные ублюдки", 1, 1);
     ticketOffice.cancelTickets(currentDate2, currentTime2, "Бесславные ублюдки", 1, 1);
     Date currentDate3(28, 4, 2024);
     Time currentTime3(19, 40);
     ticketOffice.bookTickets(currentDate3, currentTime3, "Движение вверх", 1, true, 2);
-    ticketOffice.printTickets(currentDate3, currentTime3, "Движение вверх", 1, 1);
-    ticketOffice.cancelTickets(currentDate3, currentTime3, "Движение вверх", 1, 1);
+    ticketOffice.printTickets(currentDate3, currentTime3, "Движение вверх", 1, 2);
+    ticketOffice.cancelTickets(currentDate3, currentTime3, "Движение вверх", 1, 2);
     system("pause");
     return 0;
 }
