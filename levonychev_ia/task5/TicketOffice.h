@@ -28,5 +28,5 @@ class TicketOffice
 	Cinema cinema;
 public:
 	TicketOffice(Cinema& cinema_);
-	void buy_tickets(Date date, Time time, std::string name, unsigned hall_number, unsigned seat_type, unsigned count_of_tickets);
+	double buy_tickets(Date date, Time time, std::string name, unsigned hall_number, unsigned seat_type, unsigned count_of_tickets); // seat_type == 0 - base, 1 - vip
 };

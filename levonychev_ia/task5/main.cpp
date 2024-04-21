@@ -34,13 +34,16 @@ int main()
 
     cinema.add_hall(hall1);
     cinema.add_hall(hall2);
-    cinema.add_movie_session({ 22, 4, 24 }, { 18, 0 }, "Avatar", hall1, 250);
+    cinema.add_movie_session({ 22, 4, 24 }, { 18, 0 }, "Avatar", hall2, 250);
     cinema.add_movie_session({ 22, 4, 24 }, { 23, 15 }, "Catch me if you can", hall2, 300);
     cinema.info();
 
     TicketOffice ticket_office(cinema);
 
-    ticket_office.buy_tickets({ 22, 4, 24 }, { 23, 15 }, "Catch me if you can", 1, 1, 2);
+    double price1 = ticket_office.buy_tickets({ 22, 4, 24 }, { 23, 15 }, "Catch me if you can", 2, 0, 2);
+    double price2 = ticket_office.buy_tickets({ 22, 4, 24 }, { 18, 0 }, "Avatar", 2, 0, 5);
+    cout << price1 << endl;
+    cout << price2 << endl;
     system("pause");
     return 0;
 }

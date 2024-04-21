@@ -40,6 +40,7 @@ struct MovieSession
 	std::string name;
 	Hall hall;
 	double base_cost;
+	unsigned free_seats = hall.row_count * hall.seat_count;
 };
 struct Cinema
 {
