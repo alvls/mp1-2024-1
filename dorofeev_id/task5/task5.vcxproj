@@ -111,10 +111,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="TicketOffice.h" />
+    <ClInclude Include="GZD.h" />
+    <ClInclude Include="RailwayTicketOffice.h" />
+    <ClInclude Include="Ticket.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TicketOffice.cpp" />
+    <ClCompile Include="GZD.cpp" />
+    <ClCompile Include="RailwayTicketOffice.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Ticket.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

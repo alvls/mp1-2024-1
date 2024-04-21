@@ -11,12 +11,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TicketOffice.h">
+    <ClInclude Include="GZD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RailwayTicketOffice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ticket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TicketOffice.cpp">
+    <ClCompile Include="GZD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RailwayTicketOffice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ticket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
