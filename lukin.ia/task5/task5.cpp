@@ -93,6 +93,10 @@ public:
 		is_card_inside = true;
 		return;
 	}
+	void card_off()
+	{
+		is_card_inside = false;
+	}
 	bool enter_the_pin(int input)
 	{
 		if (!is_card_inside)
@@ -253,7 +257,6 @@ start:
 		else
 		{
 			cout << "Incorrect card number!"<<endl;	
-			clear_c();
 		}	
 		clear_c();
 	}
@@ -347,7 +350,7 @@ start:
 					cout << "Could not withdraw the entire amount: the banknote limit has been reached (40)!" << endl;
 				else if (tmp.status == 3)
 					cout << "It was not possible to withdraw the entire amount: the banknote cartridge is empty!" << endl;
-				cout << "money withdrawn" << tmp.the_wh_am<< "\nCount of 5000 banknotes" << tmp.count_of_bnk[0] << "\nCount of 2000 banknotes" << tmp.count_of_bnk[1] << "\nCount of 1000 banknotes" << tmp.count_of_bnk[2] << "\nCount of 500 banknotes" << tmp.count_of_bnk[3] << "\nCount of 200 banknotes" << tmp.count_of_bnk[4] << "\nCount of 100 banknotes" << tmp.count_of_bnk[5] << endl;
+				cout << "money withdrawn " << tmp.the_wh_am<< "\nCount of 5000 banknotes " << tmp.count_of_bnk[0] << "\nCount of 2000 banknotes " << tmp.count_of_bnk[1] << "\nCount of 1000 banknotes " << tmp.count_of_bnk[2] << "\nCount of 500 banknotes " << tmp.count_of_bnk[3] << "\nCount of 200 banknotes " << tmp.count_of_bnk[4] << "\nCount of 100 banknotes " << tmp.count_of_bnk[5] << endl;
 				system("pause");
 				clear_c();
 			}
@@ -382,7 +385,7 @@ start:
 					cout << "Could not put the entire amount: the banknote limit has been reached (40)!" << endl;
 				else if (tmp.status == 3)
 					cout << "It was not possible to put the entire amount: the banknote cartridge is full!" << endl;
-				cout << "allotted money" << tmp.the_wh_am << "\nCount of 5000 banknotes" << tmp.count_of_bnk[0] << "\nCount of 2000 banknotes" << tmp.count_of_bnk[1] << "\nCount of 1000 banknotes" << tmp.count_of_bnk[2] << "\nCount of 500 banknotes" << tmp.count_of_bnk[3] << "\nCount of 200 banknotes" << tmp.count_of_bnk[4] << "\nCount of 100 banknotes" << tmp.count_of_bnk[5] << endl;
+				cout << "allotted money " << tmp.the_wh_am << "\nCount of 5000 banknotes " << tmp.count_of_bnk[0] << "\nCount of 2000 banknotes " << tmp.count_of_bnk[1] << "\nCount of 1000 banknotes " << tmp.count_of_bnk[2] << "\nCount of 500 banknotes " << tmp.count_of_bnk[3] << "\nCount of 200 banknotes " << tmp.count_of_bnk[4] << "\nCount of 100 banknotes " << tmp.count_of_bnk[5] << endl;
 				system("pause");
 				clear_c();
 			}
@@ -439,7 +442,10 @@ start:
 			if (choice == 1111)
 				return;
 			else if (choice == 2)
+			{
+				example.card_off();
 				goto start;
+			}
 			flag = 1;
 			clear_c();
 		}
