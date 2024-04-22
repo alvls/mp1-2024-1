@@ -531,13 +531,13 @@ public:
 				continue;
 			}
 
-			//fios block !!!! cin lj пробела работает
 			vector <string> fio_s;
 			fio_s.resize(ticket_num);
+			getchar();
 			cout << "Please, enter fio of each person: (One persone - one string, use spaces to separate words \n";
 			for (int i = 0; i < ticket_num; i++) {
 				string tmp_fio;
-				cin >> tmp_fio;
+				getline(cin, tmp_fio);
 				fio_s[i] = tmp_fio;
 			}
 
