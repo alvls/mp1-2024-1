@@ -43,16 +43,16 @@ void ProcessingCenter::printAccountState(const string& card_number) {
 }
 
 bool Bankomat::CheckCard(const string& card_number) {
-	return PC.CheckCard(card_number);
+	return PC->CheckCard(card_number);
 }
 
 void Bankomat::BlockCard(const string& card_number) {
-	PC.BlockCard(card_number);
+	PC->BlockCard(card_number);
 }
 
 void Bankomat::addClient(const string& card_number, const string& f_name, const string& l_name, const string& m_name,
 	long long sum, const string& pin_code) {
-	PC.addClient(card_number, f_name, l_name, m_name, sum, pin_code);
+	PC->addClient(card_number, f_name, l_name, m_name, sum, pin_code);
 }
 
 void Bankomat::acceptCard(const string& card_number) {
@@ -62,7 +62,7 @@ void Bankomat::acceptCard(const string& card_number) {
 }
 
 Client Bankomat::findClient(const string& card_number) {
-	return PC.findClient(card_number);
+	return PC->findClient(card_number);
 }
 
 bool Bankomat::CheckPin(const string& pin) {
@@ -70,7 +70,7 @@ bool Bankomat::CheckPin(const string& pin) {
 	if (pin.size() != 4) throw string("PIN verification error 2");
 	if (CheckCard(card)) throw string("Blocked card");
 
-	if (PC.getPin(card) == pin) {
+	if (PC->getPin(card) == pin) {
 		isRightPin = true;
 		return true;
 	}
@@ -86,11 +86,11 @@ bool Bankomat::CheckPin(const string& pin) {
 void Bankomat::printAccountState() {
 	if (card == "") throw string("Print error 1");
 	if (!isRightPin) throw string("Print error 2");
-	PC.printAccountState(card);
+	PC->printAccountState(card);
 }
 
 bool Bankomat::giveCash(int amount) {
-	if ((!isRightPin) || (amount % 100 != 0) || (amount > PC.getSum(card))
+	if ((!isRightPin) || (amount % 100 != 0) || (amount > PC->getSum(card))
 		|| (amount > all_sum)) return false;
 
 	int num_bills = 0;
@@ -109,7 +109,8 @@ bool Bankomat::giveCash(int amount) {
 	}
 	if (num_bills > 40) return false;
 	for (int i = 0; i < 6; i++) cst[i] = s[i];
-	PC.updAcc(card, amt, '-');
+	PC->updAcc(card, amt, '-');
+	all_sum -= amt;
 	return true;
 }
 
@@ -127,7 +128,8 @@ bool Bankomat::acceptCash(const vector<int>& c) {
 		cst[i] += c[i];
 	}
 
-	PC.updAcc(card, sum, '+');
+	PC->updAcc(card, sum, '+');
+	all_sum += sum;
 	return true;
 }
 

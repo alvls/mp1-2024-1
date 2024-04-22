@@ -1,33 +1,36 @@
 #include "Bankomat.h"
 
+ProcessingCenter globalProcessingCenter;
+
 int main()
 {
-	Bankomat ATM;
-	ATM.addClient("0001", "Ivan", "Ivanov", "Ivanovich", 1000, "1234");
-	ATM.addClient("0002", "Petr", "Petrov", "Petrovich", 5000, "4321");
+	Bankomat ATM1(&globalProcessingCenter);
+	Bankomat ATM2(&globalProcessingCenter);
+	ATM1.addClient("0001", "Ivan", "Ivanov", "Ivanovich", 1000, "1234");
+	ATM2.addClient("0002", "Petr", "Petrov", "Petrovich", 5000, "4321");
 
 	try {
-		ATM.acceptCard("0001");
-		bool f1 = ATM.CheckPin("1111");
-		bool f2 = ATM.CheckPin("2222");
-		ATM.returnCard();
-		ATM.acceptCard("0001");
-		bool f3 = ATM.CheckPin("3333");
-		bool f4 = ATM.CheckPin("1234");
-		bool f5 = ATM.giveCash(1000);
+		ATM1.acceptCard("0001");
+		bool f1 = ATM1.CheckPin("1111");
+		bool f2 = ATM1.CheckPin("2222");
+		ATM1.returnCard();
+		ATM1.acceptCard("0001");
+		bool f3 = ATM1.CheckPin("3333");
+		bool f4 = ATM1.CheckPin("1234");
+		bool f5 = ATM1.giveCash(1000);
 		cout << (f5 == true ? "Operation completed" : "Operation failed") << '\n';
-		ATM.printAccountState();
-		ATM.returnCard();
+		ATM1.printAccountState();
+		ATM1.returnCard();
 
-		ATM.acceptCard("0002");
-		bool f6 = ATM.CheckPin("4321");
-		bool f7 = ATM.acceptCash({ 3, 1, 0, 2, 0, 1 });
+		ATM2.acceptCard("0002");
+		bool f6 = ATM2.CheckPin("4321");
+		bool f7 = ATM2.acceptCash({ 3, 1, 0, 2, 0, 1 });
 		cout << (f7 == true ? "Operation completed" : "Operation failed") << '\n';
-		ATM.printAccountState();
-		ATM.returnCard();
+		ATM2.printAccountState();
+		ATM2.returnCard();
 
-		Client x = ATM.findClient("0001");
-		cout << x.l_name << ' ' << x.f_name << ' ' << x.m_name << '\n';
+		Client x = ATM2.findClient("0001");
+		cout << x.l_name << ' ' << x.f_name << ' ' << x.m_name << ' ' << x.sum << ' ' << '\n';
 
 	}
 	catch (string s) {

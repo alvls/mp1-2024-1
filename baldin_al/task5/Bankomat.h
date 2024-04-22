@@ -48,7 +48,7 @@ class Bankomat {
 	int cst[6] = {}; // 100, 200, 500, 1000, 2000, 5000
 	int nom[6] = { 100, 200, 500, 1000, 2000, 5000 };
 	long long all_sum = 0;
-	ProcessingCenter PC;
+	ProcessingCenter* PC;
 	string card = "";
 	int attemps = 0;
 	bool isRightPin = false;
@@ -58,7 +58,7 @@ class Bankomat {
 	void BlockCard(const string& card_number);
 
 public:
-	Bankomat() {
+	Bankomat(ProcessingCenter* pc) : PC(pc) {
 		for (int i = 0; i < 6; i++) {
 			cst[i] = 2000 * 0.8;
 			all_sum += cst[i] * nom[i];
