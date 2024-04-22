@@ -81,9 +81,22 @@ private:
 		}
 	}
 public:
+	year_month_day ActualDate() {
+		return actual;
+	}
+
 	bool AddClient(string number, string password, string name) {
 		if (password.length() < 3)
 			return false;
+		if (number.length() != 4)
+			return false;
+		if (stoi(number) < 0)
+			return false;
+		for (char ch : number) {
+			if (!isdigit(ch)) {
+				return false;
+			}
+		}
 		Data[number] = Client(password, name);
 		return true;
 	}
@@ -295,6 +308,7 @@ int main() {
 	man.PrintInfo();
 	man.SignOut();
 
+	today = bank.ActualDate();
 
 	bank.AddClient("0123", "admin123", "Сырьёзный Сергей Александрович");
 	bank.CreditSalary("0123", 1230000);
