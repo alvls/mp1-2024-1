@@ -18,6 +18,30 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CEntity.h" />
+    <ClInclude Include="CGame.h" />
+    <ClInclude Include="CGameRender.h" />
+    <ClInclude Include="CObject.h" />
+    <ClInclude Include="CRenderOpenGL.h" />
+    <ClInclude Include="CScript.h" />
+    <ClInclude Include="CWindow.h" />
+    <ClInclude Include="CWorld.h" />
+    <ClInclude Include="DataTypes.h" />
+    <ClInclude Include="ScarletEngine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CEntity.cpp" />
+    <ClCompile Include="CGame.cpp" />
+    <ClCompile Include="CGameRender.cpp" />
+    <ClCompile Include="CObject.cpp" />
+    <ClCompile Include="CRenderOpenGL.cpp" />
+    <ClCompile Include="CScript.cpp" />
+    <ClCompile Include="CWindow.cpp" />
+    <ClCompile Include="CWorld.cpp" />
+    <ClCompile Include="DataTypes.cpp" />
+    <ClCompile Include="Snake.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{8AA13742-C363-4E12-9EE2-FF183CA90535}</ProjectGuid>
@@ -110,8 +134,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
