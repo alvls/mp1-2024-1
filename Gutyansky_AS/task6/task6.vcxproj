@@ -115,8 +115,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ScreenBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BattleshipGame.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLoop.h" />
+    <ClInclude Include="MainGameState.h" />
     <ClInclude Include="ScreenBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
