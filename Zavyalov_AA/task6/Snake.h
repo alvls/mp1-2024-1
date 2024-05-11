@@ -45,7 +45,7 @@ void end_animation(short n, short m, char c) {
 			for (int i = 1; i < 15; i++) {
 				SetConsoleCursorPosition(hConsole, { short(n + 4), m });
 				SetConsoleTextAttribute(hConsole, i);
-				std::cout << "You won! Press any key to continue. ";
+				std::cout << " You won! Press any key to continue. ";
 				WORD c;
 				int placeholder;
 				bool x = wait_for_key(150, c, placeholder);
@@ -58,7 +58,8 @@ void end_animation(short n, short m, char c) {
 	{
 		SetConsoleCursorPosition(hConsole, { short(n + 4), m });
 		SetConsoleTextAttribute(hConsole, 15);
-		std::cout << "You lost. ";
+		std::cout << " You lost. Press any key to continue. ";
+		_getch();
 	}
 }
 bool is_restricted(COORD pos, std::vector<COORD> restricted_positions) {
@@ -305,22 +306,22 @@ public:
 		std::srand(std::time(NULL));
 		short headx = 2 + rand() % (width - 6), heady = 2 + rand() % (height - 2);
 		snake = Snake({ headx, heady });
+
 		field.Show();
 		snake.Show();
+		SetConsoleTextAttribute(hConsole, 15);
+		SetConsoleCursorPosition(hConsole, { short(width + 3), 0 });
+		std::cout << "Current score: " << snake.getSize();
+		SetConsoleCursorPosition(hConsole, { short(width + 20), 0 });
+		std::cout << "Your goal: " << goal;
+		SetConsoleCursorPosition(hConsole, { short(width + 3), 6 });
+		std::cout << "It is recommended to not hold arrow keys in order to avoid \"skidding\" of the snake.";
+
 		WORD KB_code = KB_LEFT, prev_KB_code = KB_LEFT;
 		bool isFoodEaten = true;
 		bool win = true;
 		COORD foodpos = { 0,0 };
 		while (true) {
-			
-			/*std::vector<COORD> restricted = snake.getBody();
-			restricted.push_back(snake.getHead());
-			COORD foodpos = restricted[0];
-			while (is_restricted(foodpos, restricted)) {
-				short foodx = 1 + rand() % width, foody = 1 + rand() % height;
-				foodpos = { foodx, foody };
-			}
-			Food food(foodpos);*/
 			DWORD curtime = GetTickCount();
 			if (isFoodEaten) {
 				std::vector<COORD> restricted = snake.getBody();
@@ -421,23 +422,42 @@ public:
 				break;
 			}
 
+			SetConsoleTextAttribute(hConsole, 15);
+			SetConsoleCursorPosition(hConsole, { short(width + 3), 0 });
+			std::cout << "Current score: " << snake.getSize();
+
 			if (win == false) break;
 			if (snake.getSize() == goal) break;
 			
-			snake.Move(KB_code);
+			if (!isFoodEaten) snake.Move(KB_code);
+			SetConsoleCursorPosition(hConsole, { short(width + 3), short(height + 3) });
 			prev_KB_code = KB_code;
 
-			while (DWORD ds = GetTickCount() < curtime + timeleft) {}
-			std::cin.clear();
-			// hod igroka
-			//Sleep(500);
+			while (GetTickCount() < curtime + timeleft) {}
+			//std::cin.clear(); // TODO ÇÀÌÅÍÈÒÜ
 		}
 		if (win) {
+			snake.Hide();
+			field.Hide();
+			SetConsoleCursorPosition(hConsole, foodpos);
+			std::cout << char(32);
 			end_animation(height, width, 'w');
+			SetConsoleCursorPosition(hConsole, { short(height + 4), width });
+			for (int i = 0; i < 37; i++) {
+				std::cout << char(32);
+			}
 		}
 		else
 		{
+			snake.Hide();
+			field.Hide();
+			SetConsoleCursorPosition(hConsole, foodpos);
+			std::cout << char(32);
 			end_animation(height, width, 'l');
+			SetConsoleCursorPosition(hConsole, { short(height + 4), width });
+			for (int i = 0; i < 37; i++) {
+				std::cout << char(32);
+			}
 		}
 	}
 	void End() {
