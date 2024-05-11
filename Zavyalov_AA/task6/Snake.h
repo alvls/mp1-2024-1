@@ -14,33 +14,6 @@
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-void end_animation(short n, short m, char c) {
-	if (c == 'w') {
-		while (true) {
-			for (int i = 1; i < 15; i++) {
-				SetConsoleCursorPosition(hConsole, { short(n + 4), m });
-				SetConsoleTextAttribute(hConsole, i);
-				std::cout << "You won!";
-				Sleep(150);
-			}
-
-		}
-	}
-	else if (c == 'l')
-	{
-		SetConsoleCursorPosition(hConsole, { short(n + 4), m });
-		SetConsoleTextAttribute(hConsole, 15);
-		std::cout << "You lost.";
-	}
-}
-bool is_restricted(COORD pos, std::vector<COORD> restricted_positions) {
-	for (COORD coord : restricted_positions) {
-		if (pos.X == coord.X && pos.Y == coord.Y) {
-			return true;
-		}
-	}
-	return false;
-}
 bool wait_for_key(int timeout_milliseconds, WORD& ch, int& timeleft) {
 	HANDLE tui_handle = GetStdHandle(STD_INPUT_HANDLE);
 	DWORD tui_evtc = 0;
@@ -64,6 +37,45 @@ bool wait_for_key(int timeout_milliseconds, WORD& ch, int& timeleft) {
 		GetNumberOfConsoleInputEvents(tui_handle, &tui_evtc);
 	}
 	timeleft = 0;
+	return false;
+}
+void end_animation(short n, short m, char c) {
+	if (c == 'w') {
+		while (true) {
+			for (int i = 1; i < 15; i++) {
+				SetConsoleCursorPosition(hConsole, { short(n + 4), m });
+				SetConsoleTextAttribute(hConsole, i);
+				std::cout << "You won! Press any key to continue. ";
+				WORD c;
+				int placeholder;
+				bool x = wait_for_key(150, c, placeholder);
+				if (x) return;
+			}
+
+		}
+	}
+	else if (c == 'l')
+	{
+		SetConsoleCursorPosition(hConsole, { short(n + 4), m });
+		SetConsoleTextAttribute(hConsole, 15);
+		std::cout << "You lost. ";
+	}
+}
+bool is_restricted(COORD pos, std::vector<COORD> restricted_positions) {
+	for (COORD coord : restricted_positions) {
+		if (pos.X == coord.X && pos.Y == coord.Y) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool isBody(COORD nextheadpos, std::vector<COORD> body_positions) {
+	for (COORD element : body_positions) {
+		if (nextheadpos.X == element.X && nextheadpos.Y == element.Y) {
+			return true;
+		}
+	}
 	return false;
 }
 class Snake
@@ -355,12 +367,10 @@ public:
 
 			}
 
-			COORD nextheadpos;
-
 			switch (KB_code)
 			{
 			case KB_LEFT:
-				if (snake.getHead().X - 1 < 1) {
+				if (snake.getHead().X - 1 < 1 || isBody({ short(snake.getHead().X - 1), snake.getHead().Y}, snake.getBody())) {
 					win = false;
 				}
 				else
@@ -372,7 +382,7 @@ public:
 				}
 				break;
 			case KB_RIGHT:
-				if (snake.getHead().X + 1 > width) {
+				if (snake.getHead().X + 1 > width || isBody({ short(snake.getHead().X + 1), snake.getHead().Y }, snake.getBody())) {
 					win = false;
 				}
 				else
@@ -384,7 +394,7 @@ public:
 				}
 				break;
 			case KB_UP:
-				if (snake.getHead().Y - 1 < 1) {
+				if (snake.getHead().Y - 1 < 1 || isBody({ snake.getHead().X , short( snake.getHead().Y - 1) }, snake.getBody())) {
 					win = false;
 				}
 				else
@@ -396,7 +406,7 @@ public:
 				}
 				break;
 			case KB_DOWN:
-				if (snake.getHead().Y + 1 > height) {
+				if (snake.getHead().Y + 1 > height || isBody({ snake.getHead().X , short(snake.getHead().Y + 1) }, snake.getBody())) {
 					win = false;
 				}
 				else
@@ -412,12 +422,10 @@ public:
 			}
 
 			if (win == false) break;
+			if (snake.getSize() == goal) break;
+			
 			snake.Move(KB_code);
 			prev_KB_code = KB_code;
-
-			if (snake.getSize() == goal) {
-				break;
-			}
 
 			while (DWORD ds = GetTickCount() < curtime + timeleft) {}
 			std::cin.clear();
