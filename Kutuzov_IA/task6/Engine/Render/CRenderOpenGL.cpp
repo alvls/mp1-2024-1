@@ -5,7 +5,7 @@ using namespace std;
 
 CRenderOpenGL::CRenderOpenGL(CGame* InGame): CGameRender(InGame) 
 {
-	Window = new CWindow();
+	Window = new CWindow("Game");
 }
 
 CRenderOpenGL::~CRenderOpenGL()

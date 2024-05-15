@@ -19,27 +19,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CEntity.h" />
-    <ClInclude Include="CGame.h" />
-    <ClInclude Include="CGameRender.h" />
-    <ClInclude Include="CObject.h" />
-    <ClInclude Include="CRenderOpenGL.h" />
-    <ClInclude Include="CScript.h" />
-    <ClInclude Include="CWindow.h" />
-    <ClInclude Include="CWorld.h" />
-    <ClInclude Include="DataTypes.h" />
-    <ClInclude Include="ScarletEngine.h" />
+    <ClInclude Include="Engine\Game\CGame.h" />
+    <ClInclude Include="Engine\Game\DataTypes.h" />
+    <ClInclude Include="Engine\Render\CGameRender.h" />
+    <ClInclude Include="Engine\Render\CRenderOpenGL.h" />
+    <ClInclude Include="Engine\Render\CWindow.h" />
+    <ClInclude Include="Engine\ScarletEngine.h" />
+    <ClInclude Include="Engine\World\CCollider.h" />
+    <ClInclude Include="Engine\World\CEntity.h" />
+    <ClInclude Include="Engine\World\CObject.h" />
+    <ClInclude Include="Engine\World\CScript.h" />
+    <ClInclude Include="Engine\World\CWorld.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CEntity.cpp" />
-    <ClCompile Include="CGame.cpp" />
-    <ClCompile Include="CGameRender.cpp" />
-    <ClCompile Include="CObject.cpp" />
-    <ClCompile Include="CRenderOpenGL.cpp" />
-    <ClCompile Include="CScript.cpp" />
-    <ClCompile Include="CWindow.cpp" />
-    <ClCompile Include="CWorld.cpp" />
-    <ClCompile Include="DataTypes.cpp" />
+    <ClCompile Include="Engine\Game\CGame.cpp" />
+    <ClCompile Include="Engine\Game\DataTypes.cpp" />
+    <ClCompile Include="Engine\Render\CGameRender.cpp" />
+    <ClCompile Include="Engine\Render\CRenderOpenGL.cpp" />
+    <ClCompile Include="Engine\Render\CWindow.cpp" />
+    <ClCompile Include="Engine\World\CCollider.cpp" />
+    <ClCompile Include="Engine\World\CEntity.cpp" />
+    <ClCompile Include="Engine\World\CObject.cpp" />
+    <ClCompile Include="Engine\World\CScript.cpp" />
+    <ClCompile Include="Engine\World\CWorld.cpp" />
     <ClCompile Include="Snake.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

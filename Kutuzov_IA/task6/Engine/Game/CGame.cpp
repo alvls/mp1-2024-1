@@ -1,15 +1,11 @@
 #include "CGame.h"
-#include "CWorld.h"
-#include "CGameRender.h"
+#include "../World/CWorld.h"
+#include "../Render/CGameRender.h"
 
 using namespace std;
 
 // CGame
-CGame::CGame()
-{
-	GameWorld = new CWorld(this);
-	GameRender = new CGameRender(this);
-}
+CGame::CGame() {}
 
 CGame::~CGame()
 {

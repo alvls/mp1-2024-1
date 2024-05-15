@@ -1,6 +1,6 @@
 #pragma once
-#include "DataTypes.h"
-#include "CGame.h"
+#include "../Game/DataTypes.h"
+#include "../Game/CGame.h"
 
 class CGameRender
 {

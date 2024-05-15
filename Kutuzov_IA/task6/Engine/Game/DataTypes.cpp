@@ -19,25 +19,55 @@ TVector2D TVector2D::operator+(TVector2D& InVector)
 	return TVector2D(X + InVector.X, Y + InVector.Y);
 }
 
+TVector2D TVector2D::operator+=(TVector2D& InVector)
+{
+	return TVector2D(X + InVector.X, Y + InVector.Y);
+}
+
+
 TVector2D TVector2D::operator-(TVector2D& InVector)
 {
 	return TVector2D(X - InVector.X, Y - InVector.Y);
 }
+
+TVector2D TVector2D::operator-=(TVector2D& InVector)
+{
+	return TVector2D(X - InVector.X, Y - InVector.Y);
+}
+
 
 TVector2D TVector2D::operator*(float Scale)
 {
 	return TVector2D(X * Scale, Y * Scale);
 }
 
+TVector2D TVector2D::operator*=(float Scale)
+{
+	return TVector2D(X * Scale, Y * Scale);
+}
+
+
 TVector2D TVector2D::operator*(TVector2D& InVector)
 {
 	return TVector2D(X * InVector.X, Y * InVector.Y);
 }
 
+TVector2D TVector2D::operator*=(TVector2D& InVector)
+{
+	return TVector2D(X * InVector.X, Y * InVector.Y);
+}
+
+
 TVector2D TVector2D::operator/(float Scale)
 {
 	return TVector2D(X / Scale, Y / Scale);
 }
+
+TVector2D TVector2D::operator/=(float Scale)
+{
+	return TVector2D(X / Scale, Y / Scale);
+}
+
 
 TVector2D TVector2D::Normalize()
 {

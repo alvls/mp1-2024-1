@@ -1,15 +1,17 @@
 #include "CEntity.h"
 #include "CWorld.h"
-#include "CGame.h"
+#include "../Game/CGame.h"
 
 using namespace std;
 
 // CEntity
 
-CEntity::CEntity(CWorld* InWorld)
+CEntity::CEntity(CWorld* InWorld, std::string Name)
 {
 	if (InWorld)
 		World = InWorld;
+
+	EntityName = Name;
 }
 
 CEntity::~CEntity() {}

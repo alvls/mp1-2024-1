@@ -10,10 +10,19 @@ struct TVector2D
 	float Length();
 
 	TVector2D operator+(TVector2D& InVector);
+	TVector2D operator+=(TVector2D& InVector);
+
 	TVector2D operator-(TVector2D& InVector);
+	TVector2D operator-=(TVector2D& InVector);
+
 	TVector2D operator*(float Scale);
+	TVector2D operator*=(float Scale);
+
 	TVector2D operator*(TVector2D& InVector);
+	TVector2D operator*=(TVector2D& InVector);
+
 	TVector2D operator/(float Scale);
+	TVector2D operator/=(float Scale);
 
 	TVector2D Normalize();
 	float DotProduct(TVector2D& InVector);

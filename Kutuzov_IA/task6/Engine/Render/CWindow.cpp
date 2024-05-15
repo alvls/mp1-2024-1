@@ -17,7 +17,7 @@ LRESULT CALLBACK WindowProcedure(HWND HWnd, UINT UMsg, WPARAM WParam, LPARAM LPa
 	return DefWindowProc(HWnd, UMsg, WParam, LParam);
 }
 
-CWindow::CWindow() : HInstance(GetModuleHandle(nullptr))
+CWindow::CWindow(std::string Title, int Width, int Height) : HInstance(GetModuleHandle(nullptr))
 {
 	char ClassName[28] = "Scarlet Engine Window Class";
 
@@ -32,9 +32,6 @@ CWindow::CWindow() : HInstance(GetModuleHandle(nullptr))
 
 	DWORD Style = WS_CAPTION | WS_MAXIMIZEBOX | WS_SYSMENU;
 
-	int Width = 640;
-	int Height = 480;
-
 	RECT Rect;
 	Rect.left = 250;
 	Rect.top = 250;
@@ -46,7 +43,7 @@ CWindow::CWindow() : HInstance(GetModuleHandle(nullptr))
 	HWnd = CreateWindowEx(
 		0,
 		ClassName,
-		"Title",
+		Title.c_str(),
 		Style,
 		Rect.left,
 		Rect.top,

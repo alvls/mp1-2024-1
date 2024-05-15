@@ -1,6 +1,7 @@
 #pragma once
-#include "DataTypes.h"
+#include "../Game/DataTypes.h"
 #include "CEntity.h"
+#include "CCollider.h"
 #include <string>
 #include <map>
 
@@ -14,33 +15,33 @@ protected:
 	bool Visible; // Is Visible
 
 	std::map<TVector2D, TSprite> Sprites; // Sprites that the object consists of with local offsets
-	TRectangleCollider Collider; // Collider of the object
-
 	std::map<std::string, CScript*> Scripts; // Map of all the scripts attached to object
-
-public:
-	bool ReceivesCollision; // Does object receive collision events
-	bool CreatesCollision; // Does ojbect create collisions with other objects
 
 
 protected:
 	virtual void OnCollided(CObject* CollidingObject);
 
+private:
+	void CallAddCollider(CCollider* Collider);
+
 public:
-	CObject(CWorld* World);
+	CObject(CWorld* World, std::string Name = "Object");
 	virtual ~CObject();
 
-	virtual bool Created();
+	// Position
+	TVector2D GetPosition();
+	void SetPosition(TVector2D& NewPosition);
+	void Move(TVector2D& Offset);
 
 	// Scripts
-	bool AddScript(CScript* Script, std::string NameOverride = "-");
-	bool ExecuteScript(std::string ScriptName);
+	bool AddScript(CScript* Script, std::string Name);
 
 	// Rendering
 	bool IsVisible();
-	void Render();
 
 	// Collision
+	template <typename T> T* AddCollider(std::string ColliderName);
+
 	bool CheckCollisionWithAnotherObject(CObject* OtherObject);
 
 	virtual void ReceivedCollision(CObject* CollidingObject);

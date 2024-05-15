@@ -22,6 +22,11 @@ protected:
 
 	virtual void Update(float DetlaTime); // To override in child classes
 
+private:
+	// Entity handling
+	bool CallSpawn(CEntity* InEntity); // Spawns entity into the world
+	bool CallSpawn(CObject* InObject); // Adds a new object into the world
+
 public:
 	CWorld(CGame* InGame);
 
@@ -31,16 +36,13 @@ public:
 	// Returns Game Instance pointer
 	CGame* GetGame();
 
-	// Entity handling
-	// Spawns entity into the world
-	bool SpawnEntity(CEntity* InEntity);
-	// Destroys entity in the world
-	bool DestroyEntity(CEntity* InEntity);
+	// Spawning (for classes with defined CallSpawn)
+	template <typename T> T* Spawn(std::string Name = "Entity");
 
-	// Adds a new object into the world
-	bool AddObject(CObject* InObject);
-	// Destroys object in the world
-	bool DestroyObject(CObject* InObject);
+	// Destruction
+	bool Destroy(CEntity* InEntity); // Destroys entity in the world
+	bool Destroy(CObject* InObject); // Destroys object in the world
+
 
 	// Handling object collisions in the world
 	void UpdateCollisions();

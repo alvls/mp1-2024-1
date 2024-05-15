@@ -35,12 +35,25 @@ void CWorld::Update(float DetlaTime) {} // To override in child classes
 // Returns Game Instance pointer
 CGame* CWorld::GetGame() { return Game; }
 
+
+
+// Spawning (for classes with defined CallSpawn)
+template <typename T> T* CWorld::Spawn(std::string Name)
+{
+	T* NewObject = new T(this, Name);
+	if (CallSpawn(NewObject))
+		return NewObject;
+
+	return nullptr;
+}
+
+
 // Entity handling
 // Spawns entity into the world
-bool CWorld::SpawnEntity(CEntity* InEntity)
+bool CWorld::CallSpawn(CEntity* InEntity)
 {
 	int Index = 0;
-	string EntityID = InEntity->Name;
+	string EntityID = InEntity->EntityName;
 
 	while (Entities.count(EntityID + "_" + to_string(Index)) > 0)
 		Index++;
@@ -51,8 +64,25 @@ bool CWorld::SpawnEntity(CEntity* InEntity)
 	return InEntity->EntityCreated(EntityID, this);
 }
 
+// Adds a new object into the world
+bool CWorld::CallSpawn(CObject* InObject)
+{
+	if (!InObject)
+		return false;
+
+	if (InObject->ReceivesCollision)
+		CollisionReceivers.push_back(InObject);
+
+	if (InObject->CreatesCollision)
+		CollisionCreators.push_back(InObject);
+
+	CallSpawn(static_cast<CEntity*>(InObject)); // Spawns Entity
+}
+
+
+
 // Destroys entity in the world
-bool CWorld::DestroyEntity(CEntity* InEntity)
+bool CWorld::Destroy(CEntity* InEntity)
 {
 	if (!InEntity)
 		return false;
@@ -68,34 +98,14 @@ bool CWorld::DestroyEntity(CEntity* InEntity)
 	return true;
 }
 
-// Adds a new object into the world
-bool CWorld::AddObject(CObject* InObject)
-{
-	if (!InObject)
-		return false;
-
-	if (!(Entities.count(InObject->GetEntityWorldID()) > 0))
-		return false;
-
-
-	if (InObject->ReceivesCollision)
-		CollisionReceivers.push_back(InObject);
-
-	if (InObject->CreatesCollision)
-		CollisionCreators.push_back(InObject);
-
-	return true;
-}
-
 // Destroys object in the world
-bool CWorld::DestroyObject(CObject* InObject)
+bool CWorld::Destroy(CObject* InObject)
 {
 	if (!InObject)
 		return false;
 
 	if (!(Entities.count(InObject->GetEntityWorldID()) > 0))
 		return false;
-
 
 	if (InObject->ReceivesCollision)
 		CollisionReceivers.erase(remove(CollisionReceivers.begin(), CollisionReceivers.end(), InObject), CollisionReceivers.end());
@@ -103,7 +113,7 @@ bool CWorld::DestroyObject(CObject* InObject)
 	if (InObject->CreatesCollision)
 		CollisionCreators.erase(remove(CollisionCreators.begin(), CollisionCreators.end(), InObject), CollisionCreators.end());
 
-	return true;
+	return Destroy(static_cast<CEntity*>(InObject));
 }
 
 

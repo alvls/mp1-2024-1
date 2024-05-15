@@ -14,10 +14,10 @@ protected:
 	std::vector<std::string> Tags; // Entity tags
 
 public:
-	std::string Name; // Name of the entity, doesn't have to be unique
+	std::string EntityName; // Name of the entity, doesn't have to be unique
 
 public:
-	CEntity(CWorld* InWorld = nullptr);
+	CEntity(CWorld* InWorld = nullptr, std::string Name = "Entity");
 	virtual ~CEntity();
 
 	// Returns world pointer

@@ -12,75 +12,84 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{7bef16dc-2fa3-42b9-92ce-e8a532ef7a49}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Header">
-      <UniqueIdentifier>{8f0ddffc-11b4-42e3-85b6-c6b8b29c5729}</UniqueIdentifier>
+    <Filter Include="Engine\World">
+      <UniqueIdentifier>{4dbad3a5-983a-4173-8d92-8fe94e1b8146}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Source">
-      <UniqueIdentifier>{a57e78d2-9622-479b-b38d-4f35d3eef9df}</UniqueIdentifier>
+    <Filter Include="Engine\Render">
+      <UniqueIdentifier>{e4fec7fa-aa5e-4817-89fb-af937a24d8ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Game">
+      <UniqueIdentifier>{95c1e856-bb68-4288-b258-33d1dac2dde8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataTypes.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="Engine\World\CEntity.h">
+      <Filter>Engine\World</Filter>
     </ClInclude>
-    <ClInclude Include="CEntity.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="Engine\World\CObject.h">
+      <Filter>Engine\World</Filter>
     </ClInclude>
-    <ClInclude Include="CGame.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="Engine\World\CScript.h">
+      <Filter>Engine\World</Filter>
     </ClInclude>
-    <ClInclude Include="CGameRender.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="Engine\World\CWorld.h">
+      <Filter>Engine\World</Filter>
     </ClInclude>
-    <ClInclude Include="CObject.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="Engine\Render\CGameRender.h">
+      <Filter>Engine\Render</Filter>
     </ClInclude>
-    <ClInclude Include="CRenderOpenGL.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="Engine\Render\CRenderOpenGL.h">
+      <Filter>Engine\Render</Filter>
     </ClInclude>
-    <ClInclude Include="CScript.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="Engine\Render\CWindow.h">
+      <Filter>Engine\Render</Filter>
     </ClInclude>
-    <ClInclude Include="CWorld.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="Engine\Game\CGame.h">
+      <Filter>Engine\Game</Filter>
     </ClInclude>
-    <ClInclude Include="ScarletEngine.h">
-      <Filter>Engine\Header</Filter>
+    <ClInclude Include="Engine\Game\DataTypes.h">
+      <Filter>Engine\Game</Filter>
     </ClInclude>
-    <ClInclude Include="CWindow.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Engine\ScarletEngine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World\CCollider.h">
+      <Filter>Engine\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CEntity.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="Engine\World\CEntity.cpp">
+      <Filter>Engine\World</Filter>
     </ClCompile>
-    <ClCompile Include="CGame.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="Engine\World\CObject.cpp">
+      <Filter>Engine\World</Filter>
     </ClCompile>
-    <ClCompile Include="CGameRender.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="Engine\World\CScript.cpp">
+      <Filter>Engine\World</Filter>
     </ClCompile>
-    <ClCompile Include="CObject.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="Engine\World\CWorld.cpp">
+      <Filter>Engine\World</Filter>
     </ClCompile>
-    <ClCompile Include="CRenderOpenGL.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="Engine\Render\CGameRender.cpp">
+      <Filter>Engine\Render</Filter>
     </ClCompile>
-    <ClCompile Include="CScript.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="Engine\Render\CRenderOpenGL.cpp">
+      <Filter>Engine\Render</Filter>
     </ClCompile>
-    <ClCompile Include="CWorld.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="Engine\Render\CWindow.cpp">
+      <Filter>Engine\Render</Filter>
     </ClCompile>
-    <ClCompile Include="DataTypes.cpp">
-      <Filter>Engine\Source</Filter>
+    <ClCompile Include="Engine\Game\CGame.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Game\DataTypes.cpp">
+      <Filter>Engine\Game</Filter>
     </ClCompile>
     <ClCompile Include="Snake.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CWindow.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World\CCollider.cpp">
+      <Filter>Engine\World</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
