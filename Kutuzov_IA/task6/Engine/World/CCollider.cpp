@@ -9,6 +9,26 @@ CCollider::CCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePos
 
 }
 
+CCollider::~CCollider()
+{
+}
+
+// Registering
+bool CCollider::RegisterCollider()
+{
+	if (!Registered && GetOwner())
+	{
+
+	}
+
+	return false;
+}
+
+bool CCollider::UnRegisterCollider()
+{
+	return false;
+}
+
 // Checks if collisions happen
 bool CCollider::CheckCollision(CCollider* OtherCollider)
 {
@@ -30,15 +50,15 @@ TVector2D CCollider::GetGlobalPosition()
 
 // Rectange Collider
 
-CRectangeCollider::CRectangeCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition, TVector2D In_Size): CCollider(Owner, Name, In_RelativePosition)
+CRectangleCollider::CRectangleCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition, TVector2D In_Size): CCollider(Owner, Name, In_RelativePosition)
 {
 	SetSize(In_Size);
 }
 
 // Collision Check
-bool CRectangeCollider::CheckCollision(CCollider* OtherCollider)
+bool CRectangleCollider::CheckCollision(CCollider* OtherCollider)
 {
-	CRectangeCollider* RectCollider = static_cast<CRectangeCollider*>(OtherCollider);
+	CRectangleCollider* RectCollider = static_cast<CRectangleCollider*>(OtherCollider);
 	if (RectCollider)
 		return CallCheckCollision(RectCollider);
 
@@ -48,7 +68,7 @@ bool CRectangeCollider::CheckCollision(CCollider* OtherCollider)
 		return false;
 }
 
-bool CRectangeCollider::CallCheckCollision(CRectangeCollider* Collider)
+bool CRectangleCollider::CallCheckCollision(CRectangleCollider* Collider)
 {
 	TVector2D LeftCorner = GetGlobalPosition() - (GetSize() * 0.5f);
 	TVector2D OtherLeftCorner = Collider->GetGlobalPosition() - (Collider->GetSize() * 0.5f);
@@ -63,14 +83,14 @@ bool CRectangeCollider::CallCheckCollision(CRectangeCollider* Collider)
 	return OriginOverlapX && OriginOverlapY || OtherOverlapX && OtherOverlapY;
 }
 
-bool CRectangeCollider::CallCheckCollision(CCollider* Collider)
+bool CRectangleCollider::CallCheckCollision(CCollider* Collider)
 {
 	return false;
 }
 
 // Size
-TVector2D CRectangeCollider::GetSize() { return Size; }
+TVector2D CRectangleCollider::GetSize() { return Size; }
 
-void CRectangeCollider::SetSize(TVector2D& In_Size) { Size = In_Size; }
+void CRectangleCollider::SetSize(TVector2D& In_Size) { Size = In_Size; }
 
 

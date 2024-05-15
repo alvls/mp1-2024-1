@@ -7,12 +7,20 @@ class CCollider : public CScript
 protected:
 	TVector2D RelativePosition; // Position of the collider relative to the owner object
 
+	bool Registered; // Whether the collider was registered in the world or not
+
 public:
 	bool ReceivesCollision; // Does collider receive collision events
 	bool CreatesCollision; // Does collider create collisions with other objects
 
 public:
 	CCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition = TVector2D());
+
+	virtual ~CCollider();
+
+	// Registering
+	bool RegisterCollider();
+	bool UnRegisterCollider();
 
 	// Checks if collisions happen
 	virtual bool CheckCollision(CCollider* OtherCollider);
@@ -27,16 +35,17 @@ public:
 };
 
 
-class CRectangeCollider : public CCollider
+class CRectangleCollider : public CCollider
 {
 protected:
 	TVector2D Size;
 
 private:
-		bool CallCheckCollision(CRectangeCollider* Collider);
+	bool CallCheckCollision(CRectangleCollider* Collider);
+	bool CallCheckCollision(CCollider* Collider);
 
 public:
-	CRectangeCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition = TVector2D(), TVector2D In_Size);
+	CRectangleCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition = TVector2D(), TVector2D In_Size);
 
 	virtual bool CheckCollision(CCollider* OtherCollider) override;
 

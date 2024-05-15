@@ -1,6 +1,8 @@
 #include "CWorld.h"
 #include "CEntity.h"
 #include "CObject.h"
+#include "CScript.h"
+#include "CWorldScriptHandler.h"
 
 using namespace std;
 
@@ -9,7 +11,11 @@ using namespace std;
 CWorld::CWorld(CGame* InGame)
 {
 	if (InGame)
+	{
 		Game = InGame;
+
+		WorldScriptHandler = Spawn<CWorldScriptHandler>("World Script Handler");
+	}
 
 	else
 		throw (exception("Invalid Game pointer!"));
@@ -44,7 +50,11 @@ template <typename T> T* CWorld::Spawn(std::string Name)
 	if (CallSpawn(NewObject))
 		return NewObject;
 
-	return nullptr;
+	else
+	{
+		delete NewObject;
+		return nullptr;
+	}
 }
 
 
@@ -70,13 +80,17 @@ bool CWorld::CallSpawn(CObject* InObject)
 	if (!InObject)
 		return false;
 
-	if (InObject->ReceivesCollision)
-		CollisionReceivers.push_back(InObject);
+	return CallSpawn(static_cast<CEntity*>(InObject)); // Spawns Entity
+}
 
-	if (InObject->CreatesCollision)
-		CollisionCreators.push_back(InObject);
-
-	CallSpawn(static_cast<CEntity*>(InObject)); // Spawns Entity
+// Used for spawning world scripts
+bool CWorld::CallSpawn(CScript* InScript)
+{
+	if (!InScript)
+		return false;
+	
+	if (WorldScriptHandler)
+		WorldScriptHandler->CallAddScript(InScript, InScript->EntityName);
 }
 
 
@@ -107,12 +121,6 @@ bool CWorld::Destroy(CObject* InObject)
 	if (!(Entities.count(InObject->GetEntityWorldID()) > 0))
 		return false;
 
-	if (InObject->ReceivesCollision)
-		CollisionReceivers.erase(remove(CollisionReceivers.begin(), CollisionReceivers.end(), InObject), CollisionReceivers.end());
-
-	if (InObject->CreatesCollision)
-		CollisionCreators.erase(remove(CollisionCreators.begin(), CollisionCreators.end(), InObject), CollisionCreators.end());
-
 	return Destroy(static_cast<CEntity*>(InObject));
 }
 
@@ -120,15 +128,14 @@ bool CWorld::Destroy(CObject* InObject)
 // Handling object collisions in the world
 void CWorld::UpdateCollisions()
 {
-
 	// Very unoptimized, should probably implement some kind of chunk system to handle this properly
 
-	for (auto Object : CollisionCreators)
-		for (auto OtherObject : CollisionReceivers)
-			if (Object->CheckCollisionWithAnotherObject(OtherObject))
+	for (auto Collider : CollisionCreators)
+		for (auto OtherCollider : CollisionReceivers)
+			if (Collider->CheckCollision(OtherCollider))
 			{
-				Object->CreatedCollision(OtherObject);
-				OtherObject->ReceivedCollision(Object);
+				Collider->GetOwner()->CreatedCollision(OtherCollider, Collider);
+				OtherCollider->GetOwner()->ReceivedCollision(Collider, OtherCollider);
 			}
 }
 

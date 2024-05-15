@@ -56,6 +56,9 @@
     <ClInclude Include="Engine\World\CCollider.h">
       <Filter>Engine\World</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\World\CWorldScriptHandler.h">
+      <Filter>Engine\World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\World\CEntity.cpp">
@@ -89,6 +92,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Engine\World\CCollider.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World\CWorldScriptHandler.cpp">
       <Filter>Engine\World</Filter>
     </ClCompile>
   </ItemGroup>

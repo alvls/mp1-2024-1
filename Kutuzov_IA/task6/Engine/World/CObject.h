@@ -19,10 +19,11 @@ protected:
 
 
 protected:
-	virtual void OnCollided(CObject* CollidingObject);
+	virtual void OnCollided(CCollider* OtherCollider, CCollider* Collider);
 
 private:
-	void CallAddCollider(CCollider* Collider);
+	bool CallAddScript(CScript* Script, std::string Name);
+	bool CallAddCollider(CCollider* Collider);
 
 public:
 	CObject(CWorld* World, std::string Name = "Object");
@@ -34,7 +35,7 @@ public:
 	void Move(TVector2D& Offset);
 
 	// Scripts
-	bool AddScript(CScript* Script, std::string Name);
+	template <typename T> T* AddScript(std::string Name);
 
 	// Rendering
 	bool IsVisible();
@@ -42,9 +43,7 @@ public:
 	// Collision
 	template <typename T> T* AddCollider(std::string ColliderName);
 
-	bool CheckCollisionWithAnotherObject(CObject* OtherObject);
-
-	virtual void ReceivedCollision(CObject* CollidingObject);
-	virtual void CreatedCollision(CObject* CollidingObject);
+	virtual void ReceivedCollision(CCollider* OtherCollider, CCollider* Collider);
+	virtual void CreatedCollision(CCollider* OtherCollider, CCollider* Collider);
 
 };

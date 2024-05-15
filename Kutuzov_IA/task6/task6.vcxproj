@@ -30,6 +30,7 @@
     <ClInclude Include="Engine\World\CObject.h" />
     <ClInclude Include="Engine\World\CScript.h" />
     <ClInclude Include="Engine\World\CWorld.h" />
+    <ClInclude Include="Engine\World\CWorldScriptHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Game\CGame.cpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="Engine\World\CObject.cpp" />
     <ClCompile Include="Engine\World\CScript.cpp" />
     <ClCompile Include="Engine\World\CWorld.cpp" />
+    <ClCompile Include="Engine\World\CWorldScriptHandler.cpp" />
     <ClCompile Include="Snake.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

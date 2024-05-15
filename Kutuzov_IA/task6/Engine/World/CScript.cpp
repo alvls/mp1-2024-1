@@ -9,7 +9,8 @@ CScript::CScript(CObject* InOwner, string Name) : CEntity(InOwner->GetWorld(), N
 	if (InOwner)
 		Owner = InOwner;
 
-	Owner->AddScript(this, Name);
+	else
+		throw (exception("Invalid Owner pointer!"));
 }
 
 // Owner

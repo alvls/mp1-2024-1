@@ -6,6 +6,9 @@
 class CGame;
 class CEntity;
 class CObject;
+class CScript;
+class CWorldScriptHandler;
+class CCollider
 
 
 // Game world class, storing all Enitities in it
@@ -14,11 +17,13 @@ class CWorld
 protected:
 	CGame* Game;
 
+	CWorldScriptHandler* WorldScriptHandler;
+
 	std::map<std::string, CEntity*> Entities; // List of all entities in the world
 
 	// Collision lists
-	std::vector<CObject*> CollisionReceivers;
-	std::vector<CObject*> CollisionCreators;
+	std::vector<CCollider*> CollisionReceivers;
+	std::vector<CCollider*> CollisionCreators;
 
 	virtual void Update(float DetlaTime); // To override in child classes
 
@@ -26,6 +31,7 @@ private:
 	// Entity handling
 	bool CallSpawn(CEntity* InEntity); // Spawns entity into the world
 	bool CallSpawn(CObject* InObject); // Adds a new object into the world
+	bool CallSpawn(CScript* InScript); // Used for spawning world scripts
 
 public:
 	CWorld(CGame* InGame);

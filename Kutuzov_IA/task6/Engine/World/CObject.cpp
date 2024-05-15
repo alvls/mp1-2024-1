@@ -30,7 +30,21 @@ void CObject::Move(TVector2D& Offset) { Position += Offset; }
 
 
 // Add Script
-bool CObject::AddScript(CScript* Script, string Name)
+template<typename T>
+T* CObject::AddScript(std::string Name)
+{
+	T* NewScript = new T(this, Name);
+	if (CallAddScript(NewScript, Name))
+		return NewScript;
+
+	else
+	{
+		delete NewScript;
+		return nullptr;
+	}
+}
+
+bool CObject::CallAddScript(CScript* Script, string Name)
 {
 	if (!Script)
 		return false;
@@ -42,9 +56,7 @@ bool CObject::AddScript(CScript* Script, string Name)
 		ScriptName += to_string(ScriptNameIndex);
 
 	Scripts[ScriptName] = Script;
-	Script->EntityCreated(ScriptName);
-
-	return true;
+	return Script->EntityCreated(ScriptName);
 }
 
 
@@ -53,35 +65,41 @@ bool CObject::IsVisible() { return Visible; }
 
 
 // Collision
-void CObject::OnCollided(CObject* CollidingObject)
+void CObject::OnCollided(CCollider* OtherCollider, CCollider* Collider)
 {
 
 }
 
-bool CObject::CheckCollisionWithAnotherObject(CObject* OtherObject)
+
+void CObject::ReceivedCollision(CCollider* OtherCollider, CCollider* Collider)
 {
-	
+	OnCollided(OtherCollider, Collider);
 }
 
-void CObject::ReceivedCollision(CObject* CollidingObject)
+void CObject::CreatedCollision(CCollider* OtherCollider, CCollider* Collider)
 {
-	OnCollided(CollidingObject);
+	OnCollided(OtherCollider, Collider);
 }
 
-void CObject::CreatedCollision(CObject* CollidingObject)
-{
-	OnCollided(CollidingObject);
-}
+
 
 
 
 template<typename T> T* CObject::AddCollider(std::string ColliderName)
 {
-	T* NewCollider = GetWorld()->Spawn<T>(ColliderName);
-	CallAddCollider()
+	T* NewCollider = AddScript<T>(ColliderName);
+	if (CallAddCollider(NewCollider))
+		return NewCollider;
+
+	else
+	{
+		delete NewCollider;
+		return nullptr;
+	}
 }
 
 
-void CObject::CallAddCollider(CCollider* Collider)
+bool CObject::CallAddCollider(CCollider* Collider)
 {
+
 }
