@@ -18,7 +18,15 @@ bool CCollider::RegisterCollider()
 {
 	if (!Registered && GetOwner())
 	{
+		if (CreatesCollision)
+			GetOwner()->GetWorld()->CollisionCreators.push_back(this);
 
+		if (ReceivesCollision)
+			GetOwner()->GetWorld()->CollisionReceivers.push_back(this);
+
+		Registered = true;
+
+		return true;
 	}
 
 	return false;
