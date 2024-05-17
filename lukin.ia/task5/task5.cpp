@@ -58,30 +58,31 @@ public:
 };
 class ATM
 {
-	static processing_center clients; //получается одна база данных на все банкоматы этого банка (надеюсь)
+	processing_center* clients; //получается одна база данных на все банкоматы этого банка (надеюсь)
 	cartridge banknotes[6] = { {1600,5000},{1600,2000},{1600,1000},{1600,500},{1600,200},{1600,100} };
 	bool is_card_inside = false;
 	client user;//временная копия пользователя
 	client find_user(string card)
 	{
-		for (int i = 0; i < clients.database.size(); i++)
-			if (clients.database[i].card_number == card)
-				return clients.database[i];
+		for (int i = 0; i < clients->database.size(); i++)
+			if (clients->database[i].card_number == card)
+				return clients->database[i];
 		throw 3;
 	}
 	void data_ban()//для блока карты на сервере
 	{
-		for (int i = 0; i < clients.database.size(); i++)
-			if (clients.database[i].card_number == user.card_number)
-				clients.database[i].is_banned = true;
+		for (int i = 0; i < clients->database.size(); i++)
+			if (clients->database[i].card_number == user.card_number)
+				clients->database[i].is_banned = true;
 	}
 	void upd_acc()
 	{
-		for (int i = 0; i < clients.database.size(); i++)
-			if (clients.database[i].card_number == user.card_number)
-				clients.database[i].account = user.account;
+		for (int i = 0; i < clients->database.size(); i++)
+			if (clients->database[i].card_number == user.card_number)
+				clients->database[i].account = user.account;
 	}
 public:
+	ATM(processing_center* data) :clients(data) {};
 	void accept_card(string card)
 	{
 		user = find_user(card);
@@ -130,10 +131,11 @@ public:
 	{
 		return user;
 	}
-	void add_client(string name, unsigned long int account_, unsigned int pin, string card)
+	/*void add_client(string name, unsigned long int account_, unsigned int pin, string card)
 	{
-		clients.add_client(name, account_, pin, card);
-	}
+		clients->add_client(name, account_, pin, card);
+	}*/
+	//по сути теперь это уже не нужно?
 	output wdr_cash(int sum)
 	{
 		int tmp = sum;
@@ -201,10 +203,8 @@ public:
 		return deposit;
 	}
 };
-processing_center ATM::clients;
 void check_pin(ATM& tmp)
 {
-	
 	int pin;
 	for (int flag = 0; flag == 0;)
 	{
@@ -225,12 +225,12 @@ void check_pin(ATM& tmp)
 }
 void ATM_menu()
 {
-	ATM example;
+	processing_center data;
 	try 
 	{
-		example.add_client("Paul", 1000000000, 3467, "0012");
-		example.add_client("Bob", 54000, 2234, "1200");
-		example.add_client("Alex", 1000, 2908, "2200");
+		data.add_client("Paul", 1000000000, 3467, "0012");
+		data.add_client("Bob", 54000, 2234, "1200");
+		data.add_client("Alex", 1000, 2908, "2200");
 	}
 	catch (int excep)
 	{
@@ -245,6 +245,7 @@ void ATM_menu()
 			return;
 		}
 	}
+	ATM example(&data);
 	int choice;
 start:
 	string card = "";

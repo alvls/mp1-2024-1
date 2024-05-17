@@ -50,19 +50,29 @@ public:
 		string tmp;
 		getline(cin, tmp);
 		if (tmp.length() > len)
-			tmp = tmp.substr(0, len);
+			throw runtime_error("ERROR:Input string exceeds input length!");
 		return tmp;
 	}
 	~TextRedactor() {};
 };
-int main()
+void main()
 {
-	TextRedactor ex;
-	ex.SetLen(5);
-	ex.SetPos({ 10,4 });
-	ex.PlaceCursor();
-	COORD getter = ex.GetPos();
-	string example = ex.GetString();
-	cout << "String length is: " << ex.GetLen() << endl << "Cursor position is: {" << getter.X << "," << getter.Y << "}" << endl << "Your string is: " << example << endl;
-	system("pause");
+	try
+	{
+		TextRedactor ex;
+		ex.SetLen(15);
+		ex.SetPos({ 10,4 });
+		ex.PlaceCursor();
+		COORD getter = ex.GetPos();
+		string example = ex.GetString();
+		cout << "String length is: " << ex.GetLen() << endl << "Cursor position is: {" << getter.X << "," << getter.Y << "}" << endl << "Your string is: " << example << endl;
+		system("pause");
+	}
+	catch (const runtime_error& exc)
+	{
+		system("cls");
+		cout << exc.what() << endl;
+		Sleep(2500);
+		return;
+	}
 }
