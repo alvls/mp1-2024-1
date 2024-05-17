@@ -111,6 +111,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="task3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ddd.txt" />
+    <Text Include="premade.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
