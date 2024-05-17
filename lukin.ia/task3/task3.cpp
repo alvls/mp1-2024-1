@@ -50,7 +50,7 @@ public:
 		string tmp;
 		getline(cin, tmp);
 		if (tmp.length() > len)
-			throw runtime_error("ERROR:Input string exceeds input length!");
+			throw runtime_error("ERROR:Input string exceeds input length!");//можно просто return, но так есть возможность как то обработать ошибку: вывести на экран, что не так и тд.
 		return tmp;
 	}
 	~TextRedactor() {};
@@ -70,9 +70,6 @@ void main()
 	}
 	catch (const runtime_error& exc)
 	{
-		system("cls");
-		cout << exc.what() << endl;
-		Sleep(2500);
-		return;
+		;
 	}
 }
