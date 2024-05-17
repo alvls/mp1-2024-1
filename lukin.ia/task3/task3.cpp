@@ -1,6 +1,7 @@
-#include <string>
+п»ї#include <string>
 #include <iostream>
 #include <windows.h>
+#include <conio.h>
 using namespace std;
 
 class TextRedactor
@@ -46,30 +47,43 @@ public:
 	}
 	string GetString()
 	{
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { position.X, position.Y });
-		string tmp;
-		getline(cin, tmp);
-		if (tmp.length() > len)
-			throw runtime_error("ERROR:Input string exceeds input length!");//можно просто return, но так есть возможность как то обработать ошибку: вывести на экран, что не так и тд.
-		return tmp;
+		PlaceCursor();
+		string str;
+		char ch;
+		while (1)
+		{
+			ch = _getch();
+			if (ch == '\r')
+			{
+				cout << endl;
+				return str;
+			}
+			else if (ch == '\b')
+			{
+				if (!str.empty())
+				{
+					cout << "\b \b"; 
+					str.pop_back();
+				}
+			}
+			else if (str.size() < len)
+			{
+				str += ch;
+				cout << ch;
+			}
+		}
+		return str;
 	}
 	~TextRedactor() {};
 };
 void main()
 {
-	try
-	{
-		TextRedactor ex;
-		ex.SetLen(15);
-		ex.SetPos({ 10,4 });
-		ex.PlaceCursor();
-		COORD getter = ex.GetPos();
-		string example = ex.GetString();
-		cout << "String length is: " << ex.GetLen() << endl << "Cursor position is: {" << getter.X << "," << getter.Y << "}" << endl << "Your string is: " << example << endl;
-		system("pause");
-	}
-	catch (const runtime_error& exc)
-	{
-		;
-	}
+	TextRedactor ex;
+	ex.SetLen(15);
+	ex.SetPos({ 10,4 });
+	ex.PlaceCursor();
+	COORD getter = ex.GetPos();
+	string example = ex.GetString();
+	cout << "String length is: " << example.size() << endl << "Cursor position is: {" << getter.X << "," << getter.Y << "}" << endl << "Your string is: " << example << endl;
+	system("pause");
 }
