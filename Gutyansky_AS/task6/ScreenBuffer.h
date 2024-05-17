@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
+#include <vector>
 #include <cstdarg>
 
 #ifdef _WIN32
@@ -58,4 +59,5 @@ public:
     int Printf(int x, int y, char const* format, ...);
     int Write(char const* data, size_t len);
     int Write(int x, int y, char const* data, size_t len);
+    int Write(int x, int y, std::vector<char const*> sprite);
 };

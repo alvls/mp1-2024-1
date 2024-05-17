@@ -22,16 +22,22 @@
     <ClInclude Include="ScreenBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameLoop.h">
+    <ClInclude Include="GameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BattleshipGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MainGameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleshipGameStates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

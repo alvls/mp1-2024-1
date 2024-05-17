@@ -1,18 +1,19 @@
 #pragma once
-#include <conio.h>
-#include "GameLoop.h"
-#include "Game.h"
+#include <string>
+#include "GameState.h"
+#include "Engine.h"
 #include "ScreenBuffer.h"
 
-class MainGameState : public GameLoop {
+class MainGameState : public GameState {
 private:
     int m_X = 0, m_Y = 0;
 public:
-    MainGameState(Game* game) : GameLoop(game) { }
+    MainGameState(Engine* game) : GameState(game) { }
 
-    void OnUpdate() override {
-        if (_kbhit()) {
-            switch (_getch())
+    int Run() override {
+        while (1) {
+            Redraw();
+            switch (GetEngine()->GetInput())
             {
             case 'w':
                 m_Y--;
@@ -27,32 +28,25 @@ public:
                 m_X++;
                 break;
             case 'x':
-                GetEngine()->ChangeState("EXIT");
-                break;
+                GetEngine()->SleepMilliseconds(500);
+                return -1;
             }
-
         }
     }
 
-    void OnDraw(ScreenBuffer& screen) override {
-        static char line[] = "+-------+";
-        static char empty[] = "+       +";
+    void Draw(ScreenBuffer& screen) override {
+        static std::vector<const char*> sprite = {
+            "+-------+",
+            "+       +",
+            "+       +",
+            "+       +",
+            "+-------+",
+        };
 
-        screen.Clear();
-
-        screen.Write(m_X, m_Y, line, sizeof(line) - 1);
-        screen.Write(m_X, m_Y + 1, empty, sizeof(empty) - 1);
-        screen.Printf(m_X, m_Y + 2, "+ %02d-%02d +", m_X, m_Y);
-        screen.Write(m_X, m_Y + 3, empty, sizeof(empty) - 1);
-        screen.Write(m_X, m_Y + 4, line, sizeof(line) - 1);
-
-        screen.Flush();
-
-#ifdef _WIN32
-        Sleep(30);
-#else
-        usleep(30000);
-#endif //_WIN32
+        screen.Write(m_X, m_Y, sprite);
+        screen.Write(m_X+8, m_Y, sprite);
+        screen.Write(m_X, m_Y+4, sprite);
+        screen.Write(m_X+8, m_Y+4, sprite);
     }
 
 };
