@@ -1,4 +1,7 @@
 #pragma once
+#include "DataTypes.h"
+#include <string>
+
 class CWorld;
 class CGameRender;
 
@@ -9,7 +12,11 @@ protected:
 	CWorld* GameWorld;
 	CGameRender* GameRender;
 
+	TCamera Camera;
+
 	bool Running;
+
+	std::string GameName;
 
 public:
 	CGame();
@@ -20,5 +27,18 @@ public:
 
 	// Quits the game
 	void QuitGame();
+
+	// Returns the name of the game
+	std::string GetGameName();
+	
+	// Returns GameWorld
+	CWorld* GetWorld();
+
+	// Returns GameRender
+	CGameRender* GetRender();
+
+	// Returns Camera
+	TCamera& GetCamera();
+
 };
 

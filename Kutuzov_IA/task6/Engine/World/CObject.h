@@ -21,9 +21,6 @@ protected:
 protected:
 	virtual void OnCollided(CCollider* OtherCollider, CCollider* Collider);
 
-private:
-	bool CallAddScript(CScript* Script, std::string Name);
-	bool CallAddCollider(CCollider* Collider);
 
 public:
 	CObject(CWorld* World, std::string Name = "Object");
@@ -36,13 +33,12 @@ public:
 
 	// Scripts
 	template <typename T> T* AddScript(std::string Name);
+	bool CallAddScript(CScript* Script, std::string Name); // Adds an already existing script to the object
 
 	// Rendering
 	bool IsVisible();
 
 	// Collision
-	template <typename T> T* AddCollider(std::string ColliderName);
-
 	virtual void ReceivedCollision(CCollider* OtherCollider, CCollider* Collider);
 	virtual void CreatedCollision(CCollider* OtherCollider, CCollider* Collider);
 

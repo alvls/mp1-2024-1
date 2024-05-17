@@ -35,7 +35,11 @@ struct TSprite
 	std::map<TVector2D, char> Pixels;
 };
 
-struct TRectangleCollider
+struct TCamera
 {
-	TVector2D Size;
+	TVector2D Position = TVector2D(0.f, 0.f);
+
+	TVector2D Resolution = TVector2D(1280.f, 720.f);
+	float UnitsPerPixel = 1.f;
 };
+

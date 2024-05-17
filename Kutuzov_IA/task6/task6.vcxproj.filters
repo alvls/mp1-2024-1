@@ -21,6 +21,9 @@
     <Filter Include="Engine\Game">
       <UniqueIdentifier>{95c1e856-bb68-4288-b258-33d1dac2dde8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Render\Shaders">
+      <UniqueIdentifier>{fb58a9d9-70a1-45a1-a9e0-9300a5827c4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\World\CEntity.h">
@@ -58,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="Engine\World\CWorldScriptHandler.h">
       <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\CConsoleRender.h">
+      <Filter>Engine\Render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -97,5 +103,13 @@
     <ClCompile Include="Engine\World\CWorldScriptHandler.cpp">
       <Filter>Engine\World</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Render\CConsoleRender.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\Render\Shaders\Basic.shader">
+      <Filter>Engine\Render\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

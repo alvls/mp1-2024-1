@@ -8,7 +8,7 @@ class CEntity;
 class CObject;
 class CScript;
 class CWorldScriptHandler;
-class CCollider
+class CCollider;
 
 
 // Game world class, storing all Enitities in it
@@ -22,8 +22,8 @@ protected:
 	std::map<std::string, CEntity*> Entities; // List of all entities in the world
 
 	// Collision lists
-	std::vector<CCollider*> CollisionReceivers;
-	std::vector<CCollider*> CollisionCreators;
+	std::map<std::string, CCollider*> CollisionReceivers;
+	std::map<std::string, CCollider*> CollisionCreators;
 
 	virtual void Update(float DetlaTime); // To override in child classes
 
@@ -52,4 +52,6 @@ public:
 
 	// Handling object collisions in the world
 	void UpdateCollisions();
+	void RegisterCollider(CCollider* Collider);
+	void UnregisterCollider(CCollider* Collider);
 };

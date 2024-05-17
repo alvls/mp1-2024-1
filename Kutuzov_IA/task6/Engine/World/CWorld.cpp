@@ -91,6 +91,8 @@ bool CWorld::CallSpawn(CScript* InScript)
 	
 	if (WorldScriptHandler)
 		WorldScriptHandler->CallAddScript(InScript, InScript->EntityName);
+
+	return true;
 }
 
 
@@ -132,11 +134,29 @@ void CWorld::UpdateCollisions()
 
 	for (auto Collider : CollisionCreators)
 		for (auto OtherCollider : CollisionReceivers)
-			if (Collider->CheckCollision(OtherCollider))
+			if (Collider.second->CheckCollision(OtherCollider.second))
 			{
-				Collider->GetOwner()->CreatedCollision(OtherCollider, Collider);
-				OtherCollider->GetOwner()->ReceivedCollision(Collider, OtherCollider);
+				Collider.second->GetOwner()->CreatedCollision(OtherCollider.second, Collider.second);
+				OtherCollider.second->GetOwner()->ReceivedCollision(Collider.second, OtherCollider.second);
 			}
+}
+
+void CWorld::RegisterCollider(CCollider* Collider)
+{
+	if (Collider->CreatesCollision)
+		CollisionCreators[Collider->GetEntityWorldID()] = Collider;
+
+	if (Collider->ReceivesCollision)
+		CollisionReceivers[Collider->GetEntityWorldID()] = Collider;
+}
+
+void CWorld::UnregisterCollider(CCollider* Collider)
+{
+	if (Collider->CreatesCollision)
+		CollisionCreators.erase(Collider->GetEntityWorldID());
+
+	if (Collider->ReceivesCollision)
+		CollisionReceivers.erase(Collider->GetEntityWorldID());
 }
 
 

@@ -49,7 +49,7 @@ bool CObject::CallAddScript(CScript* Script, string Name)
 	if (!Script)
 		return false;
 
-	string ScriptName = Name;
+	string ScriptName = GetEntityWorldID() + "" + Name;
 	int ScriptNameIndex = Scripts.count(Name);
 
 	if (ScriptNameIndex > 0)
@@ -65,10 +65,7 @@ bool CObject::IsVisible() { return Visible; }
 
 
 // Collision
-void CObject::OnCollided(CCollider* OtherCollider, CCollider* Collider)
-{
-
-}
+void CObject::OnCollided(CCollider* OtherCollider, CCollider* Collider) {}
 
 
 void CObject::ReceivedCollision(CCollider* OtherCollider, CCollider* Collider)
@@ -83,23 +80,3 @@ void CObject::CreatedCollision(CCollider* OtherCollider, CCollider* Collider)
 
 
 
-
-
-template<typename T> T* CObject::AddCollider(std::string ColliderName)
-{
-	T* NewCollider = AddScript<T>(ColliderName);
-	if (CallAddCollider(NewCollider))
-		return NewCollider;
-
-	else
-	{
-		delete NewCollider;
-		return nullptr;
-	}
-}
-
-
-bool CObject::CallAddCollider(CCollider* Collider)
-{
-
-}

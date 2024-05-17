@@ -5,7 +5,14 @@
 using namespace std;
 
 // CGame
-CGame::CGame() {}
+CGame::CGame() 
+{
+	Camera = TCamera();
+	GameName = "Game";
+
+	GameWorld = nullptr;
+	GameRender = nullptr;
+}
 
 CGame::~CGame()
 {
@@ -28,5 +35,22 @@ void CGame::RunGame()
 void CGame::QuitGame()
 {
 	Running = false;
+}
+
+string CGame::GetGameName() { return GameName; }
+
+CWorld* CGame::GetWorld()
+{
+	return GameWorld;
+}
+
+CGameRender* CGame::GetRender()
+{
+	return GameRender;
+}
+
+TCamera& CGame::GetCamera()
+{
+	return Camera;
 }
 

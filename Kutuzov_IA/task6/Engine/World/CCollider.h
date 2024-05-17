@@ -14,7 +14,7 @@ public:
 	bool CreatesCollision; // Does collider create collisions with other objects
 
 public:
-	CCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition = TVector2D());
+	CCollider(CObject* Owner, std::string Name = "Collider", TVector2D& In_RelativePosition = TVector2D());
 
 	virtual ~CCollider();
 
@@ -45,7 +45,7 @@ private:
 	bool CallCheckCollision(CCollider* Collider);
 
 public:
-	CRectangleCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition = TVector2D(), TVector2D In_Size);
+	CRectangleCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition = TVector2D(), TVector2D In_Size = TVector2D());
 
 	virtual bool CheckCollision(CCollider* OtherCollider) override;
 

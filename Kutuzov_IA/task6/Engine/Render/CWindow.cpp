@@ -1,4 +1,10 @@
 #include "CWindow.h"
+#include <Windows.h>
+
+#include <GL/GL.h>
+#pragma comment (lib, "opengl32.lib")
+
+using namespace std;
 
 
 LRESULT CALLBACK WindowProcedure(HWND HWnd, UINT UMsg, WPARAM WParam, LPARAM LParam)
@@ -30,7 +36,7 @@ CWindow::CWindow(std::string Title, int Width, int Height) : HInstance(GetModule
 
 	RegisterClass(&WndClass);
 
-	DWORD Style = WS_CAPTION | WS_MAXIMIZEBOX | WS_SYSMENU;
+	DWORD Style = WS_CAPTION | WS_MAXIMIZEBOX | WS_SYSMENU | CS_OWNDC;
 
 	RECT Rect;
 	Rect.left = 250;
@@ -54,6 +60,38 @@ CWindow::CWindow(std::string Title, int Width, int Height) : HInstance(GetModule
 		HInstance,
 		NULL
 	);
+
+	// Context Creation
+
+	PIXELFORMATDESCRIPTOR Pfd =
+	{
+		sizeof(PIXELFORMATDESCRIPTOR),
+		1,
+		PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,    // Flags
+		PFD_TYPE_RGBA,        // The kind of framebuffer. RGBA or palette.
+		32,                   // Colordepth of the framebuffer.
+		0, 0, 0, 0, 0, 0,
+		0,
+		0,
+		0,
+		0, 0, 0, 0,
+		24,                   // Number of bits for the depthbuffer
+		8,                    // Number of bits for the stencilbuffer
+		0,                    // Number of Aux buffers in the framebuffer.
+		PFD_MAIN_PLANE,
+		0,
+		0, 0, 0
+	};
+
+
+	int PixelFormatNumber = ChoosePixelFormat(GetDC(HWnd), &Pfd);
+	SetPixelFormat(GetDC(HWnd), PixelFormatNumber, &Pfd);
+	
+	HGLRC HGLRContext = wglCreateContext(GetDC(HWnd));
+	//wglGetProcAddress()
+
+	wglMakeCurrent(GetDC(HWnd), HGLRContext);
+
 
 	ShowWindow(HWnd, SW_SHOW);
 }

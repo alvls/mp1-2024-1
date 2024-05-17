@@ -1,5 +1,6 @@
 #include "CCollider.h"
 #include "CObject.h"
+#include "CWorld.h"
 
 // Collider
 
@@ -18,11 +19,7 @@ bool CCollider::RegisterCollider()
 {
 	if (!Registered && GetOwner())
 	{
-		if (CreatesCollision)
-			GetOwner()->GetWorld()->CollisionCreators.push_back(this);
-
-		if (ReceivesCollision)
-			GetOwner()->GetWorld()->CollisionReceivers.push_back(this);
+		GetOwner()->GetWorld()->RegisterCollider(this);
 
 		Registered = true;
 

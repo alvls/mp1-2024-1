@@ -7,6 +7,8 @@ class CSnakeGame : public CGame
 public:
 	CSnakeGame()
 	{
+		GameName = "Snake";
+
 		GameWorld = new CWorld(this);
 		GameRender = new CRenderOpenGL(this);
 	}
@@ -24,6 +26,5 @@ int main()
 	SnakeGame->RunGame();
 
 	delete SnakeGame;
-
 	return 0;
 }
