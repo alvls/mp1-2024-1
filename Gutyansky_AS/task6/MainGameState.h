@@ -28,7 +28,7 @@ public:
                 m_X++;
                 break;
             case 'x':
-                GetEngine()->SleepMilliseconds(500);
+                GetEngine()->SleepMillisecondsa(500);
                 return -1;
             }
         }
