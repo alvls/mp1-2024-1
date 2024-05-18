@@ -1,6 +1,6 @@
 ﻿#include "Game.h"
 #include <iostream>
-#include "GameObjects.h"
+
 #include <conio.h> //-
 #include <windows.h> //-
 using namespace std;
@@ -8,7 +8,13 @@ using namespace std;
 template<typename T>
 inline shared_ptr<T> Game::create(int x, int y)
 {
-	return make_shared<T>(this, x, y);
+	shared_ptr<T> obj = make_shared<T>(this, x, y);
+	gmap[y][x] = obj;
+	//auto activeObj = dynamic_pointer_cast<ActiveGobject>(obj);
+	//if (activeObj) {
+		//activeObjects.push_back(activeObj);
+	//}
+	return obj;
 }
 
 void Game::buildMap(size_t sizex, size_t sizey) //матрица - массив строк
@@ -20,21 +26,15 @@ void Game::buildMap(size_t sizex, size_t sizey) //матрица - массив 
 	}
 	cout << "resize y = "<<gmap.size()<<" x = "<<gmap[0].size()<<endl;
 
-	//for (size_t i = 0;i < sy;i++) {
+	//for (size_t i = 0;i < 2;i++) {
 	//	for (size_t j = 0;j < sx;j++) {
-	//		gmap[i][j] = Air(this, j, i);
+	//		cout << "wall " << i << " " << j << endl;
+	//		gmap[i][j] = create<Wall>(j,i);
 	//	}
 	//}
-
-	for (size_t i = 0;i < 2;i++) {
-		for (size_t j = 0;j < sx;j++) {
-			cout << "wall " << i << " " << j << endl;
-			gmap[i][j] = create<Wall>(j,i);
-		}
-	}
 	cout << "walls\n";
 	gmap[sy - 1][sx - 1] = create<Wall>(sy - 1,sx - 1);
-	gmap[4][4] = create<Snake>(4, 4);
+	create<Snake>(4, 4);
 
 }
 
@@ -62,19 +62,10 @@ void Game::update() {
 	getInput();
 	cout << (int)key << endl;
 
-	for (size_t i = 0;i < sy;i++) {
-		for (size_t j = 0;j < sx;j++) {
-			if (gmap[i][j]) {
-				cout << gmap[i][j]->symbol;
-				gmap[i][j]->update();
-			}
-			else {
-				cout << '-';
-			}
-
-		}
-		cout << endl;
+	for (auto& obj : activeObjects) {
+		obj->update();
 	}
+
 	cout << endl<<"END UPD, PRINT\n";
 	printmap();
 }
