@@ -2,30 +2,52 @@
 //#include <iostream>
 
 
+
 class Game;
+
+enum class Otype {
+    None, Air, Wall, Snake, Food
+};
 
 class Gobject {
     friend class Game;
-    static Game* gamep;
+protected:
+    Otype type;
+    Game* game;
+    char symbol;
+    int x; //может и не понадобятся
+    int y;
     
 public:
     static char defaultsymbol;
-    char symbol;// = defaultsymbol;
-    Gobject() {
-        symbol = defaultsymbol;
-        //std::cout << "Gobject symbol rewrite \n";
+    Gobject() { type = Otype::None; symbol = '0'; };
+    Gobject(Otype type, char symbol, Game* gamep, int x=0, int y=0):type(type), symbol(symbol), game(gamep), x(x),y(y) {
     }
-    virtual void interact(Gobject ob); //будут разные перегрузки для разных классов-наследников
+    //virtual void interact(Gobject ob); //будут разные перегрузки для разных классов-наследников
+    virtual void update(){}
+
+    virtual ~Gobject() {};
 };
 
 
 
 class Wall : public Gobject {
-    static char defaultsymbol; //это статическое поле дочернего класса со своим значением
-public:
-    Wall() :Gobject(){
 
-        symbol = defaultsymbol; //повторяется так как в конструкторе Gobject будет присвоено значение статического поля класса Gobject, а не Wall
-        //std::cout << "WALL symbol rewrite \n";
+public:
+    Wall(Game* gamep, int x=0, int y=0) :Gobject(Otype::Wall, 'W', gamep, x,y) {
     }
+};
+
+class Air : public Gobject {
+public:
+    Air(Game* gamep, int x = 0, int y = 0) :Gobject(Otype::Air, '.', gamep, x, y) {
+    }
+};
+
+class Snake : public Gobject {
+public:
+    Snake(Game* gamep, int x = 0, int y = 0) :Gobject(Otype::Snake, 'S', gamep, x, y) {
+    }
+
+    void update() override;
 };

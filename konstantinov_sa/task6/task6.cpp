@@ -1,6 +1,6 @@
 ﻿#include<iostream>
-#include <conio.h>
-#include <windows.h>
+#include <conio.h> //-
+#include <windows.h> //-
 //#include<vector>
 #include"GameObjects.h"
 #include"Game.h"
@@ -30,7 +30,19 @@ int main() {
 
     Game g;
     g.buildMap(10, 5);
-    g.printmap();
+    //g.printmap();
+    while (true) {
+        if (_kbhit()) {
 
-	system("pause");
+
+            g.update();
+            Sleep(500);
+        }
+
+    }
+
+        
+ 
+
+	//system("pause");
 }
