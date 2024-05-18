@@ -5,13 +5,12 @@
 #include <vector>
 #include <limits>
 
-//потому что max есть в windows.h, что не даёт использоватьь его для numeric_limits
+//потому что max есть в windows.h, что не даёт использовать его для numeric_limits
 #if defined(max)
 #undef max
 #endif
 
 // дружественные для двух классов??
-//NULL как 0 выводится? если да, то не выводить его прост при выводе
 typedef unsigned ui;
 typedef std::pair<unsigned, unsigned> pui;
 
@@ -70,22 +69,22 @@ public:
 		Console = GetStdHandle(STD_OUTPUT_HANDLE);
 		if (Console == 0)
 			throw "UNCATCHED ERROR: CONSOLE HAVE NOT FOUND";
-		COORD pos{ zero_x, zero_y}, bcp = pos;
+		COORD pos{ zero_x + 1, zero_y + 1};
 
 		pos.X += snake_coords[0].first;
 		pos.Y += snake_coords[0].second;
 		SetConsoleCursorPosition(Console, pos);
 		std::cout << head;
 		for (ui i = 1; i < snake_coords.size(); i++) {
-			pos.X = zero_x + snake_coords[i].first;
-			pos.Y = zero_y + snake_coords[i].second;
+			pos.X = zero_x + 1 + snake_coords[i].first;
+			pos.Y = zero_y + 1 + snake_coords[i].second;
 			SetConsoleCursorPosition(Console, pos);
 			std::cout << body;
 		}
 	}
 	
 	bool PotentialMove(const char dir, pui& move) {
-		pui hcell = GetHeadCoordinations();
+		pui hcell = snake_coords[0];
 		switch (dir) {
 		case ARROW_DOWN:
 			move.first = hcell.first;
@@ -104,8 +103,6 @@ public:
 			move.second = hcell.second;
 			break;
 		default:
-			move.first = hcell.first;
-			move.second = hcell.second;
 			return false;
 		}
 		if (snake_coords.size() > 1)
@@ -119,6 +116,12 @@ public:
 			snake_coords[i + 1] = snake_coords[i];
 		}
 		snake_coords[0] = move;
+	}
+
+	void Eat(const pui move) {
+		pui tmp = snake_coords[snake_coords.size() - 1];
+		Move(move);
+		snake_coords.push_back(tmp);
 	}
 };
 
@@ -152,33 +155,14 @@ public:
 	}
 
 	bool CheckCollision(const pui cell, const ui zero_x, const ui zero_y) {
-		if ( (cell.first > width) || (cell.first <= 0) )
+		if ( (cell.first >= width) || (cell.first < 0) )
 			return true;
-		int q = cell.second - 1;
-		if ((cell.second > height) || (cell.second <= 0))
+		if ((cell.second >= height) || (cell.second < 0))
 			return true;
 		return false;
 	}
 
 	// вот это всё в класс "поле" бы 
-	/*
-	// а теперь это нужно вообще?
-	bool SetCell(pui cell, const char sym) {
-		ui x = cell.first, y = cell.second;
-		if (con_field[x * width + y] != 'e')
-			return false;
-		con_field[x * width + y] = sym;
-		return true;
-	}
-
-	// а теперь это нужно вообще?
-	bool SetSnake(std::vector <pui> snk_crd) {
-		for (pui itr : snk_crd) {
-			// а как рисовать голову другим цветом
-		}
-	}
-	*/
-
 	void drawField(ui zero_x = 1, ui zero_y = 1) {
 		ui sz = width * height;
 		std::string tab = "", space = "";
@@ -220,11 +204,11 @@ public:
 		if ((width_ < 6) || (height_ < 3))
 			throw "VERY SMALL FIELD";
 
-		ui middle = width_ / 2 - (width_ + 1) % 2; 
+		ui middle = (width_ - start_snake_len)/ 2 - (width_ + 1) % 2;
 			//(width_ + 1) % 2 - cvещает на 1 влево, если ширина чётная (левая клетка середины, которая пара клеток)
 			// eg: 6/2 = 3, 012!3!45 - (7%2 == 1) -> 01!2!345
 		for (int i = 0; i < 5; i++)
-			snake.AddCoordinationsPair(std::make_pair(middle++, height_ / 2));
+			snake.AddCoordinationsPair(std::make_pair(middle++, height_ / 2 + height_%2));
 		
 		do {
 			food_pos = std::make_pair(rand() % width_, rand() % height_);
@@ -249,8 +233,8 @@ public:
 		SetConsoleCursorPosition(Console, pos);
 		snake.drawSnake(zero_x, zero_y);
 
-		pos.X = zero_x + food_pos.first;
-		pos.Y = zero_y + food_pos.second;
+		pos.X = zero_x + 1 + food_pos.first;
+		pos.Y = zero_y + 1 + food_pos.second;
 		SetConsoleCursorPosition(Console, pos);
 		std::cout << 'F';
 
@@ -262,23 +246,39 @@ public:
 
 	bool play(const ui zero_x = 1, const ui zero_y = 1) { 
 		//ui speed - divider for sleep()
-		char dir = ARROW_LEFT;
-		pui move;
+		char dir = ARROW_LEFT, bcp_dir;
+		pui move, bcp_move;
+		bool movable = true;
 		snake.PotentialMove(dir, move);
 		DrawField(zero_x, zero_y);
 		_getch();
 		while ((!field.CheckCollision(move, zero_x, zero_y)) && (!snake.CheckHeadCollision(move))) {
-			//if not apple
+			if (move != food_pos)
 				snake.Move(move);
-			//if apple
-				//snake.Eat(); = Move & len++;
+			else {
+				snake.Eat(move);// = Move & len++;
 				//food.Gen();
+				do {
+					food_pos = std::make_pair(rand() % field.GetWidth(), rand() % field.GetHeight());
+				} while (snake.CheckCollision(food_pos));
+			}
 			DrawField(zero_x, zero_y);
 			Sleep(1000);
-			if (_kbhit()) {
-				_getch(); /// ?!?!?!?!?!??!??!?
-				dir = _getch();
+			bcp_dir = dir;
+			while (_kbhit()) {
+				if ((_getch() == 0xE0) && (_kbhit())) {
+					dir = _getch();
+					while (_kbhit()) { _getch(); }
+				}
 			}
+
+			//можно упротить, если хранить bcp_dir как поле
+			bcp_move = move;
+			if (!snake.PotentialMove(dir, move)) {
+				move = bcp_move;
+				dir = bcp_dir;
+			}
+
 			snake.PotentialMove(dir, move);
 		}
 		std::cout << "NU VSE\n";
