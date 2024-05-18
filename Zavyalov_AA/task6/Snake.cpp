@@ -10,6 +10,8 @@ bool wait_for_key(int timeout_milliseconds, WORD& ch, int& timeleft) {
 	INPUT_RECORD tui_inrec = { 0 };
 	DWORD tui_numread = 0;
 
+	FlushConsoleInputBuffer(tui_handle);
+
 	while (GetTickCount() < deadline) {
 		if (tui_evtc > 0) {
 			ReadConsoleInput(tui_handle, &tui_inrec, 1, &tui_numread);
