@@ -39,6 +39,8 @@ public:
     Snake(Game* gamep, int x = 0, int y = 0) :ActiveGobject('S', gamep, x, y) {
     }
 
+    void crawl(int tx, int ty);
+
     void update() override;
     ~Snake() {};
 };

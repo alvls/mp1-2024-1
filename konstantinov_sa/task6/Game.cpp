@@ -10,10 +10,10 @@ inline shared_ptr<T> Game::create(int x, int y)
 {
 	shared_ptr<T> obj = make_shared<T>(this, x, y);
 	gmap[y][x] = obj;
-	//auto activeObj = dynamic_pointer_cast<ActiveGobject>(obj);
-	//if (activeObj) {
-		//activeObjects.push_back(activeObj);
-	//}
+	auto activeObj = dynamic_pointer_cast<ActiveGobject>(obj);
+	if (activeObj) {
+		activeObjects.push_back(activeObj);
+	}
 	return obj;
 }
 
@@ -26,15 +26,15 @@ void Game::buildMap(size_t sizex, size_t sizey) //матрица - массив 
 	}
 	cout << "resize y = "<<gmap.size()<<" x = "<<gmap[0].size()<<endl;
 
-	//for (size_t i = 0;i < 2;i++) {
-	//	for (size_t j = 0;j < sx;j++) {
-	//		cout << "wall " << i << " " << j << endl;
-	//		gmap[i][j] = create<Wall>(j,i);
-	//	}
-	//}
+	for (size_t i = 0;i < 2;i++) {
+		for (size_t j = 0;j < sx;j++) {
+			cout << "wall " << i << " " << j << endl;
+			gmap[i][j] = create<Wall>(j,i);
+		}
+	}
 	cout << "walls\n";
-	gmap[sy - 1][sx - 1] = create<Wall>(sy - 1,sx - 1);
-	create<Snake>(4, 4);
+	create<Wall>(4,6);
+	create<Snake>(2, 2);
 
 }
 
@@ -63,6 +63,7 @@ void Game::update() {
 	cout << (int)key << endl;
 
 	for (auto& obj : activeObjects) {
+		cout << "ACTIVE UPD\n";
 		obj->update();
 	}
 
@@ -104,13 +105,20 @@ void Game::getInput() {
 	}
 }
 
-void Game::move(int fx, int fy, int tx, int ty)
+bool Game::isInBounds(int x, int y) {
+	return (x >= 0) && (y >= 0) && (x < sx) && (y < sy);
+}
+
+void Game::move(int fx, int fy, int tx, int ty, bool validate)
 {
-	
-	if (fx >= 0 && fy >= 0 && fx < sx && fy < sy && tx >= 0 && ty >= 0 && tx < sx && ty < sy) {
-		cout << "_MOVE_" << endl;
+	//cout << "_TRY MOVE_" << tx << " " << ty << endl;
+	if ((!validate) || (isInBounds(fx, fy) && isInBounds(tx, ty))) {
+		cout << "_MOVE_" <<tx<<" "<<ty << endl;
+		
 		gmap[ty][tx] = gmap[fy][fx];
 		gmap[fy][fx] = nullptr;
+		gmap[ty][tx]->x = tx;
+		gmap[ty][tx]->y = ty;
 	}
 	else {
 		cout << "_CANT MOVE_" << endl;

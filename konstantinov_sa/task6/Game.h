@@ -22,12 +22,13 @@ class Game {
     shared_ptr<T> create(int x, int y);
 public:
     Dir key;
+    bool isInBounds(int x, int y);
     void buildMap(size_t sizex, size_t sizey);
     void printmap();
     void update();
     void getInput();
-    void move(int fx, int fy, int tx, int ty);
-    const Gobject& get(int x, int y) { return *gmap[y][x]; }
+    void move(int fx, int fy, int tx, int ty, bool validate = false);
+    shared_ptr<Gobject> get(int x, int y) { return gmap[y][x]; }
 
 
 };
