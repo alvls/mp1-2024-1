@@ -2,7 +2,9 @@
 #include <unordered_map>
 #include <memory>
 #include <conio.h>
+#include <type_traits>
 #include "GameState.h"
+#include "ScreenBuffer.h"
 #include "IEngine.h"
 
 class Engine : public IEngine {
@@ -12,7 +14,7 @@ private:
 protected:
     ScreenBuffer m_Screen;
 
-    int GetCurrentState() {
+    int GetCurrentState() const {
         return m_CurrentState;
     }
 

@@ -1,10 +1,11 @@
 #pragma once
+#include <memory>
 #include "Engine.h"
 #include "MainGameState.h"
 #include "GameState.h"
 #include "BattleshipGameStates.h"
 
-class BattleshipGame : public Engine {
+class BattleshipGame final : public Engine {
 protected:
     int GetStartState() override {
         return BattleshipGameStates::MainScene;

@@ -10,6 +10,7 @@
 #else // _WIN32
 #include <unistd.h>
 #endif
+#include <string>
 
 class ScreenBuffer {
 private:
@@ -59,5 +60,5 @@ public:
     int Printf(int x, int y, char const* format, ...);
     int Write(char const* data, size_t len);
     int Write(int x, int y, char const* data, size_t len);
-    int Write(int x, int y, std::vector<char const*> sprite);
+    int Write(int x, int y, const std::vector<std::string>& sprite);
 };
