@@ -15,6 +15,8 @@ private:
     Board m_LeftBoard, m_RightBoard;
     Player* m_Players[2];
 
+    int m_CurrentPlayer;
+
     bool m_AimShown;
     int m_AimX;
     int m_AimY;
@@ -39,7 +41,7 @@ private:
     void DrawMoves(Board& board, const std::map<std::pair<int, int>, MoveResult>& moves) {
         for (const auto& m : moves) {
             MoveResult res = m.second;
-            char c = 'O';
+            char c = 'o';
             if (res == MoveResult::Hit) c = 'H';
             else if (res == MoveResult::Destroy) c = 'X';
 
@@ -90,6 +92,7 @@ public:
         std::vector<Ship> sh = { Ship(0, 0, 2, 3), };
         m_Players[0] = new HumanPlayer(this, 10, sh);
         m_Players[1] = new AIPlayer(10, sh);
+        m_CurrentPlayer = 0;
     }
 
     ~MainGameState() {
@@ -101,8 +104,10 @@ public:
         int ind = 0;
         while (1) {
             Redraw();
-            auto move = m_Players[0]->GetMove();
-            HandleMove(move, m_Players[0], m_Players[1]);
+            auto move = m_Players[m_CurrentPlayer]->GetMove();
+            HandleMove(move, m_Players[m_CurrentPlayer], m_Players[1 - m_CurrentPlayer]);
+
+            m_CurrentPlayer = 1 - m_CurrentPlayer;
         }
     }
 
@@ -110,7 +115,9 @@ public:
         m_LeftBoard.Clear();
         m_RightBoard.Clear();
 
+        DrawMoves(m_LeftBoard, m_Players[1]->GetPreviousMoves());
         DrawShips(m_LeftBoard, m_Players[0]->GetShips());
+
         DrawMoves(m_RightBoard, m_Players[0]->GetPreviousMoves());
 
         if (m_AimShown) {
