@@ -14,7 +14,7 @@ private:
     Snake snake;
     Food food;
     bool isRunning = true;
-    int score = 1;
+    int score = 0;
 
 public:
     Game() : map(settings.width, settings.height, settings.wallSymbol),

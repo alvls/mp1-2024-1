@@ -66,9 +66,15 @@ void Game::run() {
             draw();
             if (snake.body.size() == settings.MaxLenSnake) {
                 cout << "Вы выиграли! Ваш счёт: " << score << '\n';
+                cout << "Затраченное время: " << (clock() - spent_time) / CLOCKS_PER_SEC << '\n';
                 GameResult result(settings.width, settings.height, score, (clock() - spent_time) / CLOCKS_PER_SEC, true);
                 writeGameResultToFile(result);
-                Sleep(2000);
+                cout << "\nДля выхода в меню нажмите Enter" << '\n';
+                while (true) {
+                    if (_getch() == Enter) {
+                        break;
+                    }
+                }
                 return;
             }
         }
@@ -77,5 +83,10 @@ void Game::run() {
     cout << "Затраченное время: " << (clock() - spent_time) / CLOCKS_PER_SEC << '\n';
     GameResult result(settings.width, settings.height, score, (clock() - spent_time) / CLOCKS_PER_SEC, false);
     writeGameResultToFile(result);
-    Sleep(2000);
+    cout << "\nДля выхода в меню нажмите Enter" << '\n';
+    while (true) {
+        if (_getch() == Enter) {
+            break;
+        }
+    }
 }

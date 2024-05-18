@@ -1,9 +1,15 @@
 #include "Utils.h"
 
 void gotoxy(int x, int y) {
-    COORD pos = { x, y };
-    HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleCursorPosition(output, pos);
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+    HANDLE  handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO structCursorInfo;
+    GetConsoleCursorInfo(handle, &structCursorInfo);
+    structCursorInfo.bVisible = FALSE;
+    SetConsoleCursorInfo(handle, &structCursorInfo);
 }
 
 bool fileExists(const string& filename) {
@@ -44,29 +50,45 @@ void UpdateSettings(int width_, int height_, int max_len_, float snakeSpeed_,
 void changeSize() {
     system("cls");
     int w, h;
-    cout << "Введите размер поля: ";
+    cout << "Введите размер поля (ширина >= 10, высота >= 5): ";
     cin >> w >> h;
+    while (w < 10 || h < 5) {
+        cout << "Размер поля должен быть хотя бы 10x5" << '\n';
+        cout << "Введите размер ещё раз: ";
+        cin >> w >> h;
+    }
     UpdateSettings(w, h);
 }
 
 void changeWinSize() {
     system("cls");
     int cnt;
-    cout << "Введите количество очков необходимых для победы: ";
+    cout << "Введите количество очков необходимых для победы (>= 5): ";
     cin >> cnt;
+    while (cnt < 5) {
+        cout << "Количество очков должно быть равно хотя бы 5" << '\n';
+        cout << "Введите ещё раз: ";
+        cin >> cnt;
+    }
     UpdateSettings(-1, -1, cnt);
 }
 
 void changeDiff1() {
     UpdateSettings(-1, -1, -1, 0.5);
+    cout << "Сложность изменена" << '\n';
+    char c = _getch();
 }
 
 void changeDiff2() {
     UpdateSettings(-1, -1, -1, 0.35);
+    cout << "Сложность изменена" << '\n';
+    char c = _getch();
 }
 
 void changeDiff3() {
     UpdateSettings(-1, -1, -1, 0.25);
+    cout << "Сложность изменена" << '\n';
+    char c = _getch();
 }
 
 void changeSnakeSymbol() {
@@ -101,15 +123,15 @@ void ResultsTable() {
         throw "Не удалось открыть файл для чтения результатов игр";
     }
     cout << "Последние 10 игр" << '\n';
-    cout << "Ширина поля  Высота поля  Счёт  Время  Результат" << '\n';
+    cout << "Ширина   Высота   Счёт   Время   Результат" << '\n';
     GameResult res;
     while (file >> res.width >> res.height >> res.score >> res.time >> res.isWin) {
-        cout << res.width << ' ' << res.height << ' ' << res.score << ' '
-            << res.time << ' ' << (res.isWin ? "Победа" : "Проигрыш") << '\n';
+        cout << "  " << res.width << "       " << res.height << "      " << res.score <<
+            "     " << res.time << "   " << (res.isWin ? "Победа" : "Проигрыш") << '\n';
     }
     file.close();
     while (true) {
-        if (_getch() == 27) {
+        if (_getch() == Esc) {
             break;
         }
     }
