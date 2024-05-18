@@ -7,8 +7,14 @@ private:
     int m_Size;
     std::vector<std::string> m_Buffer;
 public:
-    Board(int size) : m_Size(size), m_Buffer(size + 2, std::string(size + 2, '#')) {
-        Clear();
+    Board(int size) : m_Size(size), m_Buffer(size + 2, std::string(size + 2, ' ')) {
+        for (int i = 1; i < m_Buffer.size() - 1; ++i) {
+            m_Buffer[i][0] = '|';
+            m_Buffer[i].back() = '|';
+        }
+
+        m_Buffer[0].assign(size + 2, '-');
+        m_Buffer.back().assign(size + 2, '-');
     }
 
     int GetSize() const {

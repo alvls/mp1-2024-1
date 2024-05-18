@@ -45,7 +45,7 @@ private:
     void DrawMoves(Board& board, const std::map<std::pair<int, int>, MoveResult>& moves) {
         for (const auto& m : moves) {
             MoveResult res = m.second;
-            char c = 'o';
+            char c = '.';
             if (res == MoveResult::Hit) c = 'H';
             else if (res == MoveResult::Destroy) c = 'X';
 
@@ -118,12 +118,13 @@ protected:
         }
 
         screen.Printf(0, 0, m_Title.c_str());
-        screen.Printf(0, 2, "Your ships");
-        screen.Printf(0, 3, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[0]->GetShips()), m_Players[0]->GetShips().size());
-        screen.Write(0, 4, m_LeftBoard.GetBuffer());
-        screen.Printf(20, 2, "Your moves");
-        screen.Printf(20, 3, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[1]->GetShips()), m_Players[1]->GetShips().size());
-        screen.Write(20, 4, m_RightBoard.GetBuffer());
+        screen.Printf(0, 2, "w/a/s/d - move  h - shoot");
+        screen.Printf(0, 4, "Your ships");
+        screen.Printf(0, 5, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[0]->GetShips()), m_Players[0]->GetShips().size());
+        screen.Write(0, 6, m_LeftBoard.GetBuffer());
+        screen.Printf(20, 4, "Your moves");
+        screen.Printf(20, 5, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[1]->GetShips()), m_Players[1]->GetShips().size());
+        screen.Write(20, 6, m_RightBoard.GetBuffer());
     }
 public:
     BattleState(BattleshipGameData* gameData, IEngine* game) : GameState(game), m_LeftBoard(gameData->GetBoardSize()), m_RightBoard(gameData->GetBoardSize()), 

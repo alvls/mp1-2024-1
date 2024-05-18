@@ -42,7 +42,9 @@ protected:
         m_Board.Clear();
 
         DrawShips(m_Board, m_Ships);
-        screen.Write(0, 0, m_Board.GetBuffer());
+        screen.Printf(0, 0, "Place your ships");
+        screen.Printf(0, 2, "w/a/s/d - move  q/e - rotate  k/l - select ship  h - submit");
+        screen.Write(0, 4, m_Board.GetBuffer());
     }
 public:
     PlacementState(BattleshipGameData* gameData, IEngine* engine) : GameState(engine), m_Board(gameData->GetBoardSize()), m_GameData(gameData) { }
