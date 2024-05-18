@@ -13,13 +13,10 @@ private:
     int m_AimY;
 
 public:
-    HumanPlayer(IHumanMoveInput* moveInput, int boardSize, const std::vector<Ship>& ships) : Player(boardSize, ships), m_MoveInput(moveInput) {}
+    HumanPlayer(IHumanMoveInput* moveInput, int boardSize, const std::vector<Ship>& ships) : Player(boardSize, ships), m_MoveInput(moveInput), m_AimX(0), m_AimY(0) {}
 
     std::pair<int, int> GetMove() override {
         m_MoveInput->ShowAim(true);
-
-        m_AimX = 0;
-        m_AimY = 0;
 
         while (true) {
             m_MoveInput->SetAimPosition(m_AimX, m_AimY);

@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <utility>
 #include "Player.h"
 #include "Ship.h"
 
@@ -9,8 +8,8 @@ private:
     bool CheckPosition(std::pair<int, int> pos) {
         if (m_Moves.find(pos) != m_Moves.end()) return false;
 
-        for (int i = max(0, pos.second - 1); i < min(m_BoardSize - 1, pos.second + 1); ++i) {
-            for (int j = max(0, pos.first - 1); j < min(m_BoardSize - 1, pos.second + 1); ++j) {
+        for (int i = max(0, pos.second - 1); i <= min(m_BoardSize - 1, pos.second + 1); ++i) {
+            for (int j = max(0, pos.first - 1); j <= min(m_BoardSize - 1, pos.first + 1); ++j) {
                 if (i == pos.second && j == pos.first) continue;
 
                 auto it = m_Moves.find({ j, i });
@@ -31,8 +30,8 @@ public:
             std::pair<int, int> pos = move.first;
             std::pair<int, int> best = { -1, -1 };
             bool rowFound = false;
-            for (int i = max(0, pos.second - 1); i < min(m_BoardSize - 1, pos.second + 1); ++i) {
-                for (int j = max(0, pos.first - 1); j < min(m_BoardSize - 1, pos.second + 1); ++j) {
+            for (int i = max(0, pos.second - 1); i <= min(m_BoardSize - 1, pos.second + 1); ++i) {
+                for (int j = max(0, pos.first - 1); j <= min(m_BoardSize - 1, pos.first + 1); ++j) {
                     if (i == pos.second && j == pos.first) continue;
 
                     if (CheckPosition({ j, i })) {

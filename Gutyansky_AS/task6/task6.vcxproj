@@ -132,6 +132,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScreenBuffer.h" />
     <ClInclude Include="Ship.h" />
+    <ClInclude Include="ShipsRandomPlacement.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

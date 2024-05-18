@@ -8,10 +8,12 @@
 #include "IHumanMoveInput.h"
 #include "HumanPlayer.h"
 #include "AIPlayer.h"
+#include "ShipsRandomPlacement.h"
 #include "Board.h"
 
 class MainGameState final : public GameState, public IHumanMoveInput {
 private:
+    std::string m_Title;
     Board m_LeftBoard, m_RightBoard;
     Player* m_Players[2];
 
@@ -63,7 +65,7 @@ private:
         }
     }
 
-    void HandleMove(std::pair<int, int> move, Player* player, Player* other) {
+    MoveResult HandleMove(std::pair<int, int> move, Player* player, Player* other) {
         auto& otherShips = other->GetShips();
 
         for (auto& ship : otherShips) {
@@ -73,42 +75,80 @@ private:
 
                     if (!ship.IsDestroyed()) {
                         player->GetPreviousMoves()[move] = MoveResult::Hit;
+
+                        return MoveResult::Hit;
                     }
                     else {
                         for (int j = 0; j < ship.GetSize(); ++j) {
                             player->GetPreviousMoves()[{ ship.GetX(j), ship.GetY(j) }] = MoveResult::Destroy;
                         }
-                    }
 
-                    return;
+                        return MoveResult::Destroy;
+                    }
                 }
             }
         }
 
         player->GetPreviousMoves()[move] = MoveResult::Fail;
+        return MoveResult::Fail;
+    }
+
+    int GetDestroyedShipsCount(const std::vector<Ship>& ships) {
+        int count = 0;
+        for (auto ship : ships) {
+            if (ship.IsDestroyed()) ++count;
+        }
+
+        return count;
     }
 public:
-    MainGameState(Engine* game) : GameState(game), m_LeftBoard(10), m_RightBoard(10), m_AimShown(false), m_AimX(0), m_AimY(0) {
-        std::vector<Ship> sh = { Ship(0, 0, 2, 3), };
-        m_Players[0] = new HumanPlayer(this, 10, sh);
-        m_Players[1] = new AIPlayer(10, sh);
-        m_CurrentPlayer = 0;
-    }
-
-    ~MainGameState() {
-        delete m_Players[0];
-        delete m_Players[1];
-    }
+    MainGameState(Engine* game) : GameState(game), m_LeftBoard(10), m_RightBoard(10), m_AimShown(false), m_AimX(0), m_AimY(0) { }
 
     int Run() override {
+        m_Players[0] = new HumanPlayer(this, 10, GenerateShips(10, { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 }));
+        m_Players[1] = new AIPlayer(10, GenerateShips(10, { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 }));
+        m_CurrentPlayer = 0;
+
         int ind = 0;
         while (1) {
+            m_Title = (m_CurrentPlayer == 0 ? "Your turn" : "Other player turn");
             Redraw();
             auto move = m_Players[m_CurrentPlayer]->GetMove();
-            HandleMove(move, m_Players[m_CurrentPlayer], m_Players[1 - m_CurrentPlayer]);
+            MoveResult res = HandleMove(move, m_Players[m_CurrentPlayer], m_Players[1 - m_CurrentPlayer]);
+
+            if (res == MoveResult::Fail) {
+                m_Title += ": Miss";
+            }
+            else if (res == MoveResult::Hit) {
+                m_Title += ": Hit";
+            }
+            else if (res == MoveResult::Destroy) {
+                m_Title += ": Destroyed";
+            }
+
+            Redraw();
+            GetEngine()->SleepMilliseconds(1500);
 
             m_CurrentPlayer = 1 - m_CurrentPlayer;
+
+            if (GetDestroyedShipsCount(m_Players[1]->GetShips()) == m_Players[1]->GetShips().size()) {
+                m_Title = "YOU WIN!!!";
+                Redraw();
+                GetEngine()->SleepMilliseconds(1500);
+                break;
+            }
+            else if (GetDestroyedShipsCount(m_Players[0]->GetShips()) == m_Players[0]->GetShips().size()) {
+                m_Title = "YOU LOST :(";
+                Redraw();
+                GetEngine()->SleepMilliseconds(1500);
+                break;
+            }
         }
+
+        delete m_Players[0];
+        delete m_Players[1];
+
+        return -1;
     }
 
     void Draw(ScreenBuffer& screen) override {
@@ -124,10 +164,13 @@ public:
             DrawAim(m_RightBoard);
         }
 
-        screen.Printf(0, 0, "Your ships");
-        screen.Write(0, 1, m_LeftBoard.GetBuffer());
-        screen.Printf(16, 0, "Your moves");
-        screen.Write(15, 1, m_RightBoard.GetBuffer());
+        screen.Printf(0, 0, m_Title.c_str());
+        screen.Printf(0, 2, "Your ships");
+        screen.Printf(0, 3, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[0]->GetShips()), m_Players[0]->GetShips().size());
+        screen.Write(0, 4, m_LeftBoard.GetBuffer());
+        screen.Printf(20, 2, "Your moves");
+        screen.Printf(20, 3, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[1]->GetShips()), m_Players[1]->GetShips().size());
+        screen.Write(20, 4, m_RightBoard.GetBuffer());
     }
 
     void SetAimPosition(int x, int y) override {

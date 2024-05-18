@@ -61,5 +61,8 @@
     <ClInclude Include="IHumanMoveInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShipsRandomPlacement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

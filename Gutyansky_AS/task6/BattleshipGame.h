@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <ctime>
 #include "Engine.h"
 #include "MainGameState.h"
 #include "GameState.h"
@@ -16,6 +17,8 @@ protected:
     }
 
     void InitializeGame() override {
+        srand(time(0));
+
         m_Screen.ShowCursor(false);
     }
 public:
