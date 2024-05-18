@@ -2,6 +2,7 @@
 #include <vector>
 #include "GameState.h"
 #include "Engine.h"
+#include "BattleshipGameData.h"
 #include "ScreenBuffer.h"
 #include "Player.h"
 #include "Ship.h"
@@ -11,8 +12,9 @@
 #include "ShipsRandomPlacement.h"
 #include "Board.h"
 
-class MainGameState final : public GameState, public IHumanMoveInput {
+class BattleState final : public GameState, public IHumanMoveInput {
 private:
+    BattleshipGameData* m_GameData;
     std::string m_Title;
     Board m_LeftBoard, m_RightBoard;
     Player* m_Players[2];
@@ -101,12 +103,35 @@ private:
 
         return count;
     }
+protected:
+    void Draw(ScreenBuffer& screen) override {
+        m_LeftBoard.Clear();
+        m_RightBoard.Clear();
+
+        DrawMoves(m_LeftBoard, m_Players[1]->GetPreviousMoves());
+        DrawShips(m_LeftBoard, m_Players[0]->GetShips());
+
+        DrawMoves(m_RightBoard, m_Players[0]->GetPreviousMoves());
+
+        if (m_AimShown) {
+            DrawAim(m_RightBoard);
+        }
+
+        screen.Printf(0, 0, m_Title.c_str());
+        screen.Printf(0, 2, "Your ships");
+        screen.Printf(0, 3, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[0]->GetShips()), m_Players[0]->GetShips().size());
+        screen.Write(0, 4, m_LeftBoard.GetBuffer());
+        screen.Printf(20, 2, "Your moves");
+        screen.Printf(20, 3, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[1]->GetShips()), m_Players[1]->GetShips().size());
+        screen.Write(20, 4, m_RightBoard.GetBuffer());
+    }
 public:
-    MainGameState(Engine* game) : GameState(game), m_LeftBoard(10), m_RightBoard(10), m_AimShown(false), m_AimX(0), m_AimY(0) { }
+    BattleState(BattleshipGameData* gameData, IEngine* game) : GameState(game), m_LeftBoard(gameData->GetBoardSize()), m_RightBoard(gameData->GetBoardSize()), 
+        m_AimShown(false), m_AimX(0), m_AimY(0), m_GameData(gameData) { }
 
     int Run() override {
-        m_Players[0] = new HumanPlayer(this, 10, GenerateShips(10, { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 }));
-        m_Players[1] = new AIPlayer(10, GenerateShips(10, { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 }));
+        m_Players[0] = new HumanPlayer(this, m_GameData->GetBoardSize(), m_GameData->GetPlayerShips());
+        m_Players[1] = new AIPlayer(m_GameData->GetBoardSize(), GenerateShips(m_GameData->GetBoardSize(), {4, 3, 3, 2, 2, 2, 1, 1, 1, 1}));
         m_CurrentPlayer = 0;
 
         int ind = 0;
@@ -151,30 +176,8 @@ public:
         return -1;
     }
 
-    void Draw(ScreenBuffer& screen) override {
-        m_LeftBoard.Clear();
-        m_RightBoard.Clear();
-
-        DrawMoves(m_LeftBoard, m_Players[1]->GetPreviousMoves());
-        DrawShips(m_LeftBoard, m_Players[0]->GetShips());
-
-        DrawMoves(m_RightBoard, m_Players[0]->GetPreviousMoves());
-
-        if (m_AimShown) {
-            DrawAim(m_RightBoard);
-        }
-
-        screen.Printf(0, 0, m_Title.c_str());
-        screen.Printf(0, 2, "Your ships");
-        screen.Printf(0, 3, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[0]->GetShips()), m_Players[0]->GetShips().size());
-        screen.Write(0, 4, m_LeftBoard.GetBuffer());
-        screen.Printf(20, 2, "Your moves");
-        screen.Printf(20, 3, "%d/%d destroyed", GetDestroyedShipsCount(m_Players[1]->GetShips()), m_Players[1]->GetShips().size());
-        screen.Write(20, 4, m_RightBoard.GetBuffer());
-    }
-
     void SetAimPosition(int x, int y) override {
-        if (x < 0 || x >= 10 || y < 0 || y >= 10) {
+        if (x < 0 || x >= m_GameData->GetBoardSize() || y < 0 || y >= m_GameData->GetBoardSize()) {
             throw "Can't set position out of board";
         }
 

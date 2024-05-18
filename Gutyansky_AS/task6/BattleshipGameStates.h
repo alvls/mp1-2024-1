@@ -1,5 +1,6 @@
 #pragma once
 
 enum BattleshipGameStates {
-    MainScene
+    Placement,
+    Battle
 };
