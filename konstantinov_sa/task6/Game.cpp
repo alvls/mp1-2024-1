@@ -6,7 +6,7 @@
 using namespace std;
 
 template<typename T>
-inline shared_ptr<T> Game::create(int x, int y)
+shared_ptr<T> Game::create(int x, int y)
 {
 	shared_ptr<T> obj = make_shared<T>(this, x, y);
 	gmap[y][x] = obj;
@@ -44,7 +44,7 @@ void Game::printmap()
 	for (size_t i = 0;i < sy;i++) {
 		for (size_t j = 0;j < sx;j++) {
 			if (gmap[i][j]) {
-				cout << gmap[i][j]->symbol;
+				renderObj(gmap[i][j]);
 			}
 			else {
 				cout << ' ';
@@ -124,6 +124,12 @@ void Game::move(int fx, int fy, int tx, int ty, bool validate)
 		cout << "_CANT MOVE_" << endl;
 	}
 		
+}
+
+void Game::renderObj(shared_ptr<Gobject> o)
+{
+	SetConsoleTextAttribute(handle, o->color);
+	cout << o->symbol;
 }
 
 

@@ -14,6 +14,8 @@ int main() {
 
     Game g;
     g.buildMap(10, 5);
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(h, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
     //cout << g.isInBounds(11, 5);
     //g.printmap();
     while (true) {

@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include "GameObjects.h"
+#include "windows.h"
 using namespace std;
 
 
@@ -16,14 +17,18 @@ class Game {
     vector<shared_ptr<ActiveGobject>> activeObjects;
     size_t sx = 0;
     size_t sy = 0;
+    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
     
 
+public:
+    int foodcount = 0;
     template<typename T>
     shared_ptr<T> create(int x, int y);
-public:
+
     Dir key;
     bool isInBounds(int x, int y);
     void buildMap(size_t sizex, size_t sizey);
+    void renderObj(shared_ptr<Gobject> o);
     void printmap();
     void update();
     void getInput();
