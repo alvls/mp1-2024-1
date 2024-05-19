@@ -276,8 +276,6 @@ void SnakeGame::Play() {
 	std::cout << "Current score: " << snake.getSize();
 	SetConsoleCursorPosition(hConsole, { short(width + 20), 0 });
 	std::cout << "Your goal: " << goal;
-	SetConsoleCursorPosition(hConsole, { short(width + 3), 6 });
-	std::cout << "It is recommended to not hold arrow keys in order to avoid \"skidding\" of the snake.";
 
 	WORD KB_code = KB_LEFT, prev_KB_code = KB_LEFT;
 	bool isFoodEaten = true;
