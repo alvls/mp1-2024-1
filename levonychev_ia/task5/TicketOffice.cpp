@@ -1,12 +1,25 @@
-#include "TicketOffice.h"
 #include <string>
 #include <iostream>
 #include <ciso646>
 #include <ctime>
+#include "TicketOffice.h"
 TicketOffice::TicketOffice(Cinema& cinema_) : cinema(cinema_) {}
 double TicketOffice::buy_tickets(Date date, Time time, std::string name, unsigned hall_number, unsigned seat_type, unsigned count_of_tickets)
 {	
-	double price;
+
+	std::time_t t = std::time(nullptr);
+	std::tm* now = std::localtime(&t);
+
+	int current_hour = now->tm_hour;
+	int current_min = now->tm_min;
+	int current_day = now->tm_mday;
+	int current_month = (now->tm_mon + 1);
+	int current_year = (now->tm_year + 1900);
+	Time current_time(current_hour, current_min);
+	Date current_date(current_day, current_month, current_year);
+
+	if (current_date > date or (current_date == date and current_time > time))
+		throw std::invalid_argument("Error!");
 	Hall* hall_ptr = nullptr;
 	for (Hall& a : cinema.halls)
 	{
@@ -15,6 +28,11 @@ double TicketOffice::buy_tickets(Date date, Time time, std::string name, unsigne
 			hall_ptr = &a;
 		}
 	}
+	if (hall_ptr == nullptr)
+	{
+		throw std::invalid_argument("Error!");
+	}
+
 	MovieSession* movie_session_ptr = nullptr;
 	for (MovieSession& a : cinema.movie_sessions)
 	{
@@ -27,9 +45,9 @@ double TicketOffice::buy_tickets(Date date, Time time, std::string name, unsigne
 	{
 		throw std::invalid_argument("Error!");
 	}
-	srand(std::time(NULL));
 	if (count_of_tickets > movie_session_ptr->free_seats)
 		throw std::invalid_argument("Error!");
+	srand(std::time(NULL));
 	for (int i = 0; i < count_of_tickets; i++)
 	{	
 		int flag = 1;
@@ -49,6 +67,7 @@ double TicketOffice::buy_tickets(Date date, Time time, std::string name, unsigne
 		} while (flag == 0);
 		movie_session_ptr->occupied_seats.push_back(seat_number);
 	}
+	double price;
 	price = movie_session_ptr->base_cost * count_of_tickets;
 	if (seat_type == 1)
 		price *= 2;
