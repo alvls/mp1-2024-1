@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "windows.h"
 #include "Game.h"
+#include <memory>
 
 //class Game;
 
