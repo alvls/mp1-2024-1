@@ -2,8 +2,8 @@
 #include "windows.h"
 #include "Game.h"
 #include <memory>
-
-//class Game;
+using namespace std;
+class Game;
 
 class Gobject {
     friend class Game;
@@ -72,12 +72,9 @@ public:
 
     Segment(Game* gamep, int x = 0, int y = 0) :ActiveGobject('=', gamep, x, y, FOREGROUND_GREEN) {
         willgrow = 0;
+        game->snakelen++;
     }
-    void init(int id_, shared_ptr<Segment> next_ = nullptr) {
-        if (id % 2)
-            color = color | FOREGROUND_INTENSITY;
-        next = next_;
-    }
+    void init(int id_, shared_ptr<Segment> next_ = nullptr);
     void transmit(int nx, int ny);
     void update() override;
 
@@ -87,10 +84,11 @@ class Snake : public ActiveGobject {
     int dx;
     int dy;
     int growstate;
+    
+public:
     shared_ptr<Segment> next;
     shared_ptr<Segment> tail;
-public:
-    Snake(Game* gamep, int x = 0, int y = 0) :ActiveGobject('S', gamep, x, y, FOREGROUND_GREEN|FOREGROUND_RED | FOREGROUND_INTENSITY) {
+    Snake(Game* gamep, int x = 0, int y = 0) :ActiveGobject('S', gamep, x, y, FOREGROUND_GREEN|FOREGROUND_RED) {
         growstate = 0;
     }
 

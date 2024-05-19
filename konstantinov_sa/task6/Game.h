@@ -3,13 +3,13 @@
 
 #include <vector>
 #include <memory>
-#include "GameObjects.h"
+
 #include "windows.h"
 using namespace std;
 
+class ActiveGobject;
 
-
-enum class Dir{NOKEY, U, R, D, L};
+enum class Dir{NOKEY, U, R, D, L, E};
 
 class Game {
     friend class Gobject;
@@ -21,11 +21,15 @@ class Game {
     
 
 public:
+    int maxfood = 1;
     int foodcount = 0;
+    int snakelen = 1;
     template<typename T>
     shared_ptr<T> create(int x, int y);
 
     Dir key;
+    void placeFood();
+    void Game::placeRandWalls(int count, int density);
     bool isInBounds(int x, int y);
     void buildMap(size_t sizex, size_t sizey);
     void renderObj(shared_ptr<Gobject> o);

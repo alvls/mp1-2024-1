@@ -13,7 +13,7 @@ int main() {
 	setlocale(LC_ALL, "rus");
 
     Game g;
-    g.buildMap(10, 5);
+    g.buildMap(16, 16);
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
     //cout << g.isInBounds(11, 5);

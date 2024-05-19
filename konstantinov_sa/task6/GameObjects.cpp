@@ -1,7 +1,8 @@
 ﻿#include "GameObjects.h"
-//#include "Game.h"
+#include "Game.h"
 #include<iostream>
 #include<memory>
+using namespace std;
 
 
 
@@ -54,6 +55,16 @@ void Snake::update(){
 	crawl(nx, ny);
 }
 
+void Segment::init(int id_, shared_ptr<Segment> next_){
+	id = id_;
+	if (id % 3 == 1)
+		color = FOREGROUND_GREEN | FOREGROUND_BLUE;
+	else if (id % 3 == 2)
+		color = FOREGROUND_GREEN|FOREGROUND_INTENSITY;
+	next = next_;
+	//cout << "seg init id " << id << endl;
+}
+
 void Segment::transmit(int nx, int ny)
 {
 	tx = nx;
@@ -67,9 +78,12 @@ void Segment::transmit(int nx, int ny)
 
 void Segment::update()
 {
+	cout << "SEGMENT " << id << " to: " << tx << " " << ty << endl;
 	if (willgrow && !next) {
+		cout << "NEW SEGMENT" << endl;
 		int ox = x;
 		int oy = y;
+		
 		game->move(x, y, tx, ty);
 		
 		next = game->create<Segment>(ox, oy);
@@ -79,10 +93,7 @@ void Segment::update()
 		
 	}
 	else {
-		game->move(x, y, tx, ty);
+		if(x!=tx || y!=ty)
+			game->move(x, y, tx, ty);
 	}
-	
-	
-	
-
 }
