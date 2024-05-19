@@ -9,7 +9,7 @@ using namespace std;
 
 class ActiveGobject;
 
-enum class Dir{NOKEY, U, R, D, L, E};
+enum class Controls{NOKEY, U, R, D, L, E};
 
 class Game {
     friend class Gobject;
@@ -18,6 +18,8 @@ class Game {
     size_t sx = 0;
     size_t sy = 0;
     HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    int state = 0;
+    unsigned framedelay = 1000;
     
 
 public:
@@ -27,7 +29,7 @@ public:
     template<typename T>
     shared_ptr<T> create(int x, int y);
 
-    Dir key;
+    Controls key;
     void placeFood();
     void Game::placeRandWalls(int count, int density);
     bool isInBounds(int x, int y);
@@ -38,6 +40,8 @@ public:
     void getInput();
     void move(int fx, int fy, int tx, int ty, bool validate = false);
     shared_ptr<Gobject> get(int x, int y) { return gmap[y][x]; }
+    void over() { state = 0; }
+    void gameloop();
 
 
 };

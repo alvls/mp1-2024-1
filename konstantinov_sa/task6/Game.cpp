@@ -88,19 +88,19 @@ void Game::printmap()
 
 void Game::update() {
 	system("cls");
-	cout << "! UPDATE\n";
+	//cout << "! UPDATE\n";
 	getInput();
 	cout << (int)key << endl;
 
 	for (auto& obj : activeObjects) {
-		cout << " --- ACTIVE UPD\n";
+		//cout << " --- ACTIVE UPD\n";
 		obj->update();
 	}
 
 	if (foodcount < maxfood)
 		placeFood();
 
-	cout << endl<<"! END UPD, PRINT\n";
+	//cout << endl<<"! END UPD, PRINT\n";
 	printmap();
 	COORD newPosition;
 	newPosition.X = 0; // column coordinate
@@ -109,36 +109,38 @@ void Game::update() {
 }
 
 void Game::getInput() {
-	if (_kbhit()) {
+
+	while (_kbhit()) {
+		char inp;
 		
-
-
-		int inp = _getch();
-		cout << "FIRST " << inp<<endl;
-		
-
-		if (inp == 224) { // Код для стрелок
+		inp = _getch();
+		//cout << "FIRST " << (int)inp<<endl;
+		// Код для стрелок
+		if (inp == -32) {
 			inp = _getch(); // Получение дополнительного кода для стрелок
-			cout << "SECOND " << inp << endl;
+			//cout << "SECOND " << inp << endl;
 			switch (inp) {
 			case 72: // Стрелка вверх
-				key = Dir::U;
+				key = Controls::U;
 				break;
 			case 80: // Стрелка вниз
-				key = Dir::D;
+				key = Controls::D;
 				break;
 			case 75: // Стрелка влево
-				key = Dir::L;
+				key = Controls::L;
 				break;
 			case 77: // Стрелка вправо
-				key = Dir::R;
+				key = Controls::R;
 				break;
 			}
 		}
+		else if (inp == 13) {
+			key = Controls::E;
+		}
+		else {
+			key = Controls::NOKEY;
+		}
 		
-	}
-	else {
-		key = Dir::NOKEY;
 	}
 }
 
@@ -150,7 +152,7 @@ void Game::move(int fx, int fy, int tx, int ty, bool validate)
 {
 	//cout << "_TRY MOVE_" << tx << " " << ty << endl;
 	if ((!validate) || (isInBounds(fx, fy) && isInBounds(tx, ty))) {
-		cout << "_MOVE_" <<tx<<" "<<ty << endl;
+		//cout << "_MOVE_" <<tx<<" "<<ty << endl;
 		
 		gmap[ty][tx] = gmap[fy][fx];
 		gmap[fy][fx] = nullptr;
@@ -158,7 +160,7 @@ void Game::move(int fx, int fy, int tx, int ty, bool validate)
 		gmap[ty][tx]->y = ty;
 	}
 	else {
-		cout << "_CANT MOVE_" << endl;
+		//cout << "_CANT MOVE_" << endl;
 	}
 		
 }
@@ -207,4 +209,11 @@ void Game::renderObj(shared_ptr<Gobject> o)
 	cout << o->symbol;
 }
 
-
+void Game::gameloop() {
+	state = 1;
+	while (state) {
+		
+		update();
+		Sleep(framedelay);
+	}
+}

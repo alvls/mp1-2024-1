@@ -81,8 +81,8 @@ public:
 };
 
 class Snake : public ActiveGobject {
-    int dx;
-    int dy;
+    int dx = 1;
+    int dy = 0;
     int growstate;
     
 public:
