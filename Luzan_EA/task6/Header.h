@@ -4,15 +4,6 @@
 #include <conio.h>
 #include <vector>
 
-//можно упротить, если хранить bcp_dir как поле
-// переделать рандом
-// покраску во внутрь
-// почистить
-// придумать что-то с этой консолью, её слишком много
-	//исключения
-//установка сложности
-
-// дружественные для двух классов??
 typedef unsigned ui;
 typedef std::pair<unsigned, unsigned> pui;
 
@@ -31,6 +22,14 @@ const char EMPTY_CHAR = 'e';
 const char HEAD_CHAR = 'O';
 const char BODY_CHAR = 'o';
 const char FOOD_CHAR = '^';
+const unsigned int SCORE_PER_FOOD = 10;
+
+HANDLE GetConsoleHandle() {
+	HANDLE Console = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (Console == 0)
+		throw "CONSOLE HAVE NOT FOUND";
+	return Console;
+}
 
 class Snake {
 private:
@@ -77,15 +76,8 @@ public:
 		return false;
 	}
 
-	void drawSnake(const ui zero_x, const ui zero_y) {
-		HANDLE Console;
-		Console = GetStdHandle(STD_OUTPUT_HANDLE);
-		if (Console == 0)
-			throw "CONSOLE HAVE NOT FOUND";
-		COORD pos{ zero_x + 1, zero_y + 1};
-
-		pos.X += snake_coords[0].first;
-		pos.Y += snake_coords[0].second;
+	void drawSnake(HANDLE Console, const ui zero_x, const ui zero_y) {
+		COORD pos{ zero_x + snake_coords[0].first + 1, zero_y + snake_coords[0].second + 1};
 		SetConsoleCursorPosition(Console, pos);
 
 		CONSOLE_SCREEN_BUFFER_INFO buf;
@@ -101,7 +93,6 @@ public:
 			std::cout << body;
 		}
 		SetConsoleTextAttribute(Console, buf.wAttributes);
-
 	}
 	
 	bool PotentialMove(const char dir, pui& move) {
@@ -184,7 +175,7 @@ public:
 	}
 
 	// вот это всё в класс "поле" бы 
-	void drawField(ui zero_x = 1, ui zero_y = 1) {
+	void drawField(HANDLE Console, ui zero_x = 1, ui zero_y = 1) {
 		ui sz = width * height;
 		std::string tab = "", space = "";
 		for (int i = 0; i < zero_x; i++)
@@ -193,20 +184,34 @@ public:
 			space += ' ';
 
 		//вывод в консоль:
+		CONSOLE_SCREEN_BUFFER_INFO buf;
+		GetConsoleScreenBufferInfo(Console, &buf);
 		for (int i = 0; i < zero_y; i++)
 			std::cout << std::endl;
 		std::cout << tab;
+		SetConsoleTextAttribute(Console, ((WHITE << 4) | WHITE));
 		for (int i = 0; i < width+2; i++)
 			std::cout << wall;
+		SetConsoleTextAttribute(Console, buf.wAttributes);
 
 		std::cout << std::endl;
-		for (int i = 0; i < height; i++)
-			std::cout << tab << wall << space << wall << std::endl;
+		for (int i = 0; i < height; i++) {
+			std::cout << tab;
+			SetConsoleTextAttribute(Console, ((WHITE << 4) | WHITE));
+			std::cout << wall;
+			SetConsoleTextAttribute(Console, buf.wAttributes);
+			std::cout << space;
+			SetConsoleTextAttribute(Console, ((WHITE << 4) | WHITE));
+			std::cout << wall << std::endl;
+			SetConsoleTextAttribute(Console, buf.wAttributes);
+		}
 
 		std::cout << tab;
+		SetConsoleTextAttribute(Console, ((WHITE << 4) | WHITE));
 		for (int i = 0; i < width+2; i++)
 			std::cout << wall;
 		std::cout << std::endl;
+		SetConsoleTextAttribute(Console, buf.wAttributes);
 	}
 };
 
@@ -215,16 +220,17 @@ private:
 	pui food_pos;
 	Snake snake;
 	EmptyField field;
-
+	ui score_goal;
+	
 public:
-	Game(const ui width_, const ui height_, ui start_snake_len)
-		: field(width_, height_), snake(){
-		if (width_ - start_snake_len < 3)
+	Game(const ui width_, const ui height_, ui start_snake_len, ui win_snake_len_)
+		: field(width_, height_), snake(), score_goal((win_snake_len_ - start_snake_len) * SCORE_PER_FOOD) {
+		if (width_ - start_snake_len < 3) //not used this time
 			throw "FIELD IS LESS THAN SNAKE";
-		if ((width_ < 5) || (height_ < 3))
+		if ((width_ < 5) || (height_ < 3)) //not used this time
 			throw "FIELD IS VERY SMALL";
 		ui middle = ((width_ - start_snake_len) / 2) - ((width_ - start_snake_len + 1) % 2);
-			//(width_ + 1) % 2 - cvещает на 1 влево, если ширина чётная (левая клетка середины, которая пара клеток)
+			//(width_ + 1) % 2 - смещает на 1 влево, если ширина чётная (левая клетка середины, которая пара клеток)
 			// eg: 6/2 = 3, 012!3!45 - (7%2 == 1) -> 01!2!345
 		for (int i = 0; i < start_snake_len; i++)
 			snake.AddCoordinationsPair(std::make_pair(middle++, height_ / 2 + height_%2));
@@ -237,25 +243,13 @@ public:
 	void DrawField(const ui zero_x = 1, const ui zero_y = 1) { 
 		COORD pos{0, 0};
 		CONSOLE_SCREEN_BUFFER_INFO buf;
-		HANDLE Console = GetStdHandle(STD_OUTPUT_HANDLE);
-		if (Console == 0)
-			throw "CONSOLE HAVE NOT FOUND";
+		HANDLE Console = GetConsoleHandle();
 		GetConsoleScreenBufferInfo(Console, &buf);
-		
-		//SetConsoleTextAttribute(Console, (BROWN << 4) | BROWN);
 		SetConsoleCursorPosition(Console, pos);
-		field.drawField(zero_x, zero_y);
-		
-		pos.X = 0;
-		pos.Y = 0;
-		SetConsoleCursorPosition(Console, pos);
-		snake.drawSnake(zero_x, zero_y);
 
-		SetConsoleTextAttribute(Console, (LIGHTGREEN << 4) | BLACK);
-		pos.X = zero_x + 1 + food_pos.first;
-		pos.Y = zero_y + 1 + food_pos.second;
-		SetConsoleCursorPosition(Console, pos);
-		DrawFood();
+		field.drawField(Console, zero_x, zero_y);
+		snake.drawSnake(Console, zero_x, zero_y);
+		DrawFood(Console, zero_x, zero_y);
 
 		pos.X = zero_x;
 		pos.Y = zero_y + field.GetHeight() + 2 + 1;
@@ -269,6 +263,7 @@ public:
 		pui move, bcp_move;
 		bool movable = true;
 		ui score = 0;
+		bool win = false;
 
 		snake.PotentialMove(dir, move);
 		DrawField(zero_x, zero_y);
@@ -277,8 +272,13 @@ public:
 		while ((!field.CheckCollision(move, zero_x, zero_y)) && (!snake.CheckHeadCollision(move))) {
 			if (move == food_pos) { 
 				snake.Eat(move);
-				score += 10;
+				score += SCORE_PER_FOOD;
 				GenFood();
+				if (score >= score_goal) {
+					win = true; 
+					DrawField(zero_x, zero_y);
+					break;
+				}
 			}
 			else {
 				snake.Move(move);
@@ -304,19 +304,8 @@ public:
 			snake.PotentialMove(dir, move);
 		}
 		Sleep(500);
-		COORD pos{ 0, 0 };
-		HANDLE Console = GetStdHandle(STD_OUTPUT_HANDLE);
-		if (Console == 0)
-			throw "CONSOLE HAVE NOT FOUND";
-		SetConsoleCursorPosition(Console, pos);
-
-		for (int i = 0; i < field.GetHeight() + zero_y + 2; i++) {
-			for (int j = 0; j < field.GetWidth() + zero_x + 2; j++)
-				std::cout << ' ';
-			std::cout << std::endl;
-		}
-		std::cout << "YOUR SCORE: " << score << std::endl;
-		return true;
+		GameEnd(win, score, zero_x, zero_y);
+		return win;
 	}
 
 	pui GenFood() {
@@ -333,8 +322,36 @@ public:
 		return food_pos;
 	}
 
-	void DrawFood() {
+	void DrawFood(HANDLE Console, ui zero_x, ui zero_y) {
+		COORD pos{ zero_x + 1 + food_pos.first, zero_y + 1 + food_pos.second };
+		SetConsoleTextAttribute(Console, (LIGHTGREEN << 4) | BLACK);
+		SetConsoleCursorPosition(Console, pos);
 		std::cout << FOOD_CHAR;
+	}
+
+	void GameEnd(bool win, ui score, ui zero_x, ui zero_y) {
+		COORD pos{ 0, 0 };
+		HANDLE Console = GetConsoleHandle();
+		SetConsoleCursorPosition(Console, pos);
+
+		// this can be replaced by system("cls"), but this one clears only snake_game_area
+		//anyway, there are many long strings below
+		for (int i = 0; i < field.GetHeight() + zero_y + 2; i++) {
+			for (int j = 0; j < field.GetWidth() + zero_x + 2; j++)
+				std::cout << ' ';
+			std::cout << std::endl;
+		}
+		std::cout << "YOUR SCORE: " << score << std::endl;
+		if (win)
+			std::cout << "My congratulations\n";
+		else
+			std::cout << "Maybe next time\n";
+
+		//eastern egg
+		if (score == (42 * SCORE_PER_FOOD)) {
+			std::cout << "Not bad, hope you don't see the difference between words 'mouse' and 'food'\n";
+			std::cout << "Despite the fact, they are very smart...\n";
+		}
 	}
 };
 
