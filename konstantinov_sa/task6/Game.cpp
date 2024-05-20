@@ -75,8 +75,8 @@ void Game::buildMap() //матрица - массив строк
 	//cout << "walls\n";
 	
 	snakelen = 1;
-	int snx = 10;
-	int sny = 4;
+	int snx = 10 + rand() % (sx-1-10-2-5);
+	int sny = 2 + rand()%(sy-1-2-2);
 	auto s = create<Snake>(snx, sny);
 	
 	auto seg = create<Segment>(snx+1, sny);
