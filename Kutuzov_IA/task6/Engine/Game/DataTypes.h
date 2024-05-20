@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <string>
 
 struct TVector2D
 {
@@ -9,20 +10,26 @@ struct TVector2D
 
 	float Length();
 
-	TVector2D operator+(TVector2D& InVector);
-	TVector2D operator+=(TVector2D& InVector);
+	bool operator==(const TVector2D& InVector);
+	bool operator!=(const TVector2D& InVector);
 
-	TVector2D operator-(TVector2D& InVector);
-	TVector2D operator-=(TVector2D& InVector);
+	TVector2D operator+(const TVector2D& InVector);
+	TVector2D& operator+=(const TVector2D& InVector);
 
-	TVector2D operator*(float Scale);
-	TVector2D operator*=(float Scale);
+	TVector2D operator-(const TVector2D& InVector);
+	TVector2D& operator-=(const TVector2D& InVector);
 
-	TVector2D operator*(TVector2D& InVector);
-	TVector2D operator*=(TVector2D& InVector);
+	TVector2D operator*(const float Scale);
+	TVector2D& operator*=(const float Scale);
 
-	TVector2D operator/(float Scale);
-	TVector2D operator/=(float Scale);
+	TVector2D operator*(const TVector2D& InVector);
+	TVector2D& operator*=(const TVector2D& InVector);
+
+	TVector2D operator/(const float Scale);
+	TVector2D& operator/=(const float Scale);
+
+	TVector2D operator/(const TVector2D& InVector);
+	TVector2D& operator/=(const TVector2D& InVector);
 
 	TVector2D Normalize();
 	float DotProduct(TVector2D& InVector);
@@ -31,8 +38,11 @@ struct TVector2D
 
 struct TSprite
 {
-	TVector2D Size;
-	std::map<TVector2D, char> Pixels;
+	std::string SpriteID;
+	TVector2D RelPosition;
+	float Scale;
+
+	TSprite(std::string InSpriteID, TVector2D InRelPosition = TVector2D(), float InScale = 1.f);
 };
 
 struct TCamera
@@ -41,5 +51,13 @@ struct TCamera
 
 	TVector2D Resolution = TVector2D(1280.f, 720.f);
 	float UnitsPerPixel = 1.f;
+
+	TVector2D GetScreenSizeInUnits();
+};
+
+struct TRenderLayerLocation
+{
+	int RenderLayer = 0;
+	int Index = 0;
 };
 

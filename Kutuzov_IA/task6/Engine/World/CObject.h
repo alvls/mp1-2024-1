@@ -4,6 +4,7 @@
 #include "CCollider.h"
 #include <string>
 #include <map>
+#include <vector>
 
 class CEntity;
 class CScript;
@@ -12,9 +13,12 @@ class CObject : public CEntity
 {
 protected:
 	TVector2D Position; // Coordinates (top left corner)
-	bool Visible; // Is Visible
 
-	std::map<TVector2D, TSprite> Sprites; // Sprites that the object consists of with local offsets
+	bool Visible; // Is Visible
+	TRenderLayerLocation RenderLayerLocation; // Location on the Render Layer
+
+	std::vector<TSprite> Sprites; // Sprites that the object consists of with local offsets
+
 	std::map<std::string, CScript*> Scripts; // Map of all the scripts attached to object
 
 
@@ -32,11 +36,26 @@ public:
 	void Move(TVector2D& Offset);
 
 	// Scripts
-	template <typename T> T* AddScript(std::string Name);
+	template <typename T> T* AddScript(std::string Name)
+	{
+		T* NewScript = new T(this, Name);
+		if (CallAddScript(NewScript, Name))
+			return NewScript;
+
+		else
+		{
+			delete NewScript;
+			return nullptr;
+		}
+	}
+
 	bool CallAddScript(CScript* Script, std::string Name); // Adds an already existing script to the object
 
 	// Rendering
 	bool IsVisible();
+	void SetIsVisible(bool InIsVisible);
+	std::vector<TSprite>& GetSprites();
+	TRenderLayerLocation& GetRenderLayerLocation();
 
 	// Collision
 	virtual void ReceivedCollision(CCollider* OtherCollider, CCollider* Collider);

@@ -24,6 +24,12 @@
     <Filter Include="Engine\Render\Shaders">
       <UniqueIdentifier>{fb58a9d9-70a1-45a1-a9e0-9300a5827c4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Render\OpenGL">
+      <UniqueIdentifier>{0ac142bd-cf08-4e9a-9b13-9e2cc3d4f4fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Libs">
+      <UniqueIdentifier>{cb7f4193-d5a4-4f91-af16-6aafcc2db5f1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\World\CEntity.h">
@@ -65,6 +71,51 @@
     <ClInclude Include="Engine\Render\CConsoleRender.h">
       <Filter>Engine\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Game\CPlayerController.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World\CInputReceiver.h">
+      <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CVertexBuffer.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\DefOpenGL.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CIndexBuffer.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CVertexArray.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CVertexBufferLayout.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CShader.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CRenderer.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Game\KeyCodes.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Libs\stb_image.h">
+      <Filter>Engine\Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CTexture.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="CSnakeWorld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSnake.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CFruit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\World\CEntity.cpp">
@@ -105,6 +156,48 @@
     </ClCompile>
     <ClCompile Include="Engine\Render\CConsoleRender.cpp">
       <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Game\CPlayerController.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World\CInputReceiver.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CVertexBuffer.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\DefOpenGL.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CIndexBuffer.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CVertexArray.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CVertexBufferLayout.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CShader.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CRenderer.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Libs\stb_image.cpp">
+      <Filter>Engine\Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CTexture.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="CSnakeWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSnake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CFruit.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

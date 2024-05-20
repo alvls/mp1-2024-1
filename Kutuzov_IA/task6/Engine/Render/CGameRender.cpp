@@ -1,4 +1,5 @@
 #include "CGameRender.h"
+#include <chrono>
 
 using namespace std;
 
@@ -19,8 +20,15 @@ CGameRender::~CGameRender()
 
 float CGameRender::Render()
 {
+	auto TStart = chrono::high_resolution_clock::now();
+
 	RenderFrame();
-	return 0.016f;
+
+	auto TEnd = chrono::high_resolution_clock::now();
+
+	float DeltaTime = float((chrono::duration_cast<chrono::milliseconds>(TEnd - TStart)).count()) / 1000.f;
+
+	return DeltaTime;
 }
 
 void CGameRender::RenderFrame() {}

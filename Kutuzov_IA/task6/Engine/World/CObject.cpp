@@ -30,6 +30,7 @@ void CObject::Move(TVector2D& Offset) { Position += Offset; }
 
 
 // Add Script
+/*
 template<typename T>
 T* CObject::AddScript(std::string Name)
 {
@@ -43,14 +44,15 @@ T* CObject::AddScript(std::string Name)
 		return nullptr;
 	}
 }
+*/
 
 bool CObject::CallAddScript(CScript* Script, string Name)
 {
 	if (!Script)
 		return false;
 
-	string ScriptName = GetEntityWorldID() + "" + Name;
-	int ScriptNameIndex = Scripts.count(Name);
+	string ScriptName = GetEntityWorldID() + "_" + Name;
+	int ScriptNameIndex = Scripts.count(ScriptName);
 
 	if (ScriptNameIndex > 0)
 		ScriptName += to_string(ScriptNameIndex);
@@ -62,6 +64,13 @@ bool CObject::CallAddScript(CScript* Script, string Name)
 
 // Rendering
 bool CObject::IsVisible() { return Visible; }
+
+void CObject::SetIsVisible(bool InIsVisible)
+{
+	Visible = InIsVisible;
+}
+
+std::vector<TSprite>& CObject::GetSprites() { return Sprites; }
 
 
 // Collision
@@ -77,6 +86,8 @@ void CObject::CreatedCollision(CCollider* OtherCollider, CCollider* Collider)
 {
 	OnCollided(OtherCollider, Collider);
 }
+
+TRenderLayerLocation& CObject::GetRenderLayerLocation() { return RenderLayerLocation; }
 
 
 

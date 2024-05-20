@@ -4,6 +4,7 @@
 
 class CWorld;
 class CGameRender;
+class CPlayerController;
 
 // Main game class, handles everything else
 class CGame
@@ -11,8 +12,10 @@ class CGame
 protected:
 	CWorld* GameWorld;
 	CGameRender* GameRender;
+	CPlayerController* PlayerController;
 
 	TCamera Camera;
+	float TargetFPS;
 
 	bool Running;
 
@@ -36,6 +39,9 @@ public:
 
 	// Returns GameRender
 	CGameRender* GetRender();
+
+	// Returns PlayerController
+	CPlayerController* GetPlayerController();
 
 	// Returns Camera
 	TCamera& GetCamera();

@@ -9,14 +9,22 @@ protected:
 
 	bool Registered; // Whether the collider was registered in the world or not
 
+	std::map<std::string, CCollider*> CurrentCollisions;
+
 public:
 	bool ReceivesCollision; // Does collider receive collision events
 	bool CreatesCollision; // Does collider create collisions with other objects
 
+protected:
+	bool Created() override;
+
 public:
-	CCollider(CObject* Owner, std::string Name = "Collider", TVector2D& In_RelativePosition = TVector2D());
+	CCollider(CObject* Owner, std::string Name = "Collider");
 
 	virtual ~CCollider();
+
+	// Configuration
+	void UpdateCollisionSettings(bool InReceivesCollision = true, bool InCreatesCollision = true);
 
 	// Registering
 	bool RegisterCollider();
@@ -32,6 +40,11 @@ public:
 	// Global Position
 	TVector2D GetGlobalPosition();
 
+	// Current Collisions
+	void AddCollision(CCollider* Collider);
+	void RemoveCollision(CCollider* Collider);
+	bool HasCollisionWith(CCollider* Collider);
+
 };
 
 
@@ -45,11 +58,17 @@ private:
 	bool CallCheckCollision(CCollider* Collider);
 
 public:
-	CRectangleCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition = TVector2D(), TVector2D In_Size = TVector2D());
+	CRectangleCollider(CObject* Owner, std::string Name);
 
 	virtual bool CheckCollision(CCollider* OtherCollider) override;
 
 	// Size
 	TVector2D GetSize();
 	void SetSize(TVector2D& In_Size);
+
+	// Sides
+	float Left();
+	float Right();
+	float Top();
+	float Bottom();
 };

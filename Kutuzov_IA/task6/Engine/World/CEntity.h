@@ -16,6 +16,10 @@ protected:
 public:
 	std::string EntityName; // Name of the entity, doesn't have to be unique
 
+protected:
+	virtual bool Created(); // To override in child classes
+	virtual void Update(float DeltaTime); // To override in child classes
+
 public:
 	CEntity(CWorld* InWorld = nullptr, std::string Name = "Entity");
 	virtual ~CEntity();
@@ -31,14 +35,12 @@ public:
 
 	// Called when entity is spawned into the game
 	bool EntityCreated(std::string WorldID, CWorld* WorldOverride = nullptr);
-	virtual bool Created(); // To override in child classes
 
 	// Called every game frame
-	void EntityUpdate(float DeltaTime);
-	virtual void Update(float DeltaTime); // To override in child classes+
+	void EntityUpdate(float DeltaTime);	
 
 	// Tags
-	void AddTag(std::string& Tag);
-	bool HasTag(std::string& Tag);
+	void AddTag(std::string Tag);
+	bool HasTag(std::string Tag);
 };
 

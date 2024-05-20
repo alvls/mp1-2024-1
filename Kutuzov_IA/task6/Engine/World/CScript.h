@@ -10,6 +10,7 @@ protected:
 
 public:
 	CScript(CObject* InOwner, std::string Name = "Script");
+	virtual ~CScript() {}
 
 	// Owner
 	CObject* GetOwner();

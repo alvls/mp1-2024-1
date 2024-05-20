@@ -1,4 +1,8 @@
 #include "CRenderOpenGL.h"
+#include "../World/CWorld.h"
+#include "../World/CObject.h"
+#include "../Game/CGame.h"
+#include "../Game/CPlayerController.h"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -7,22 +11,62 @@
 #include <fstream>
 #include <sstream>
 
+#include "OpenGL/DefOpenGL.h"
+#include "OpenGL/CVertexBuffer.h"
+#include "OpenGL/CIndexBuffer.h"
+#include "OpenGL/CVertexArray.h"
+#include "OpenGL/CShader.h"
+#include "OpenGL/CRenderer.h"
+#include "OpenGL/CTexture.h"
 
 using namespace std;
 
-CRenderOpenGL::CRenderOpenGL(CGame* InGame): CGameRender(InGame) 
+
+// Sprite
+TSpriteGL::TSpriteGL() 
 {
+    Size = TVector2D();
+}
+
+TSpriteGL::TSpriteGL(std::string InTextureFilePath, TVector2D InSize): TextureFilePath(InTextureFilePath), Size(InSize){}
+
+TSpriteGL::TSpriteGL(std::string InTextureFilePath, float InSizeX, float InSizeY)
+    : TextureFilePath(InTextureFilePath)
+{
+    Size.X = InSizeX;
+    Size.Y = InSizeY;
+}
+
+
+// Input Receiving
+CGame* GlobalGamePtr;
+
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS || action == GLFW_REPEAT)
+        GlobalGamePtr->GetPlayerController()->SendInput(key, A_KEY_PRESS);
+
+    else if (action == GLFW_RELEASE)
+        GlobalGamePtr->GetPlayerController()->SendInput(key, A_KEY_RELEASE);
+}
+
+
+// Render Open GL
+CRenderOpenGL::CRenderOpenGL(CGame* InGame, map<string, TSpriteGL> InSpritePool): CGameRender(InGame)
+{
+    GlobalGamePtr = InGame;
+
     // Initialize the library
     if (!glfwInit())
         throw ("GLFW failed to intialize");
 
     // Create a windowed mode window and its OpenGL context
-    Window = glfwCreateWindow(1920, 1080, InGame->GetGameName().c_str(), NULL, NULL);
+    Window = glfwCreateWindow(InGame->GetCamera().Resolution.X, InGame->GetCamera().Resolution.Y, InGame->GetGameName().c_str(), NULL, NULL);
     if (!Window)
     {
         glfwTerminate();
         throw ("GLFW failed to create a window");
-    }
+    } 
 
     // Make the window's context current
     glfwMakeContextCurrent(Window);
@@ -30,140 +74,92 @@ CRenderOpenGL::CRenderOpenGL(CGame* InGame): CGameRender(InGame)
     if (glewInit() != GLEW_OK)
         throw ("GLEW isn't ok");
 
+    glfwSetKeyCallback(Window, &KeyCallback);
+    GLFWkeyfun;
+
+    SpritePool = InSpritePool;
+    for (auto Sprite : SpritePool)
+    {
+        CTexture* Texture = new CTexture(Sprite.second.TextureFilePath);
+        Textures[Sprite.first] = Texture;
+    }
+
     InitRender();
 }
 
 CRenderOpenGL::~CRenderOpenGL()
 {
-    glDeleteProgram(Shader);
+    delete VertexArray;
+    delete VertexBuffer;
+    delete IndexBuffer;
+    delete Shader;
+    delete WorldRenderer;
+
+    for (auto Texture : Textures)
+        delete Texture.second;
+
     glfwTerminate();
 }
 
 
-
-unsigned int CRenderOpenGL::CreateShader(const std::string& VertexShader, const std::string& FragmentShader)
+// Transformation
+TVector2D CRenderOpenGL::WorldToScreenCoordinates(TVector2D& WorldPosition)
 {
-    unsigned int Program = glCreateProgram();
-    unsigned int Vs = CompileShader(GL_VERTEX_SHADER, VertexShader);
-    unsigned int Fs = CompileShader(GL_FRAGMENT_SHADER, FragmentShader);
-
-    glAttachShader(Program, Vs);
-    glAttachShader(Program, Fs);
-    glLinkProgram(Program);
-    glValidateProgram(Program);
-
-    glDeleteShader(Vs);
-    glDeleteShader(Fs);
-
-    return Program;
+    return WorldPosition - Game->GetCamera().Position / (Game->GetCamera().GetScreenSizeInUnits() / 2.f);
 }
 
-unsigned int CRenderOpenGL::CompileShader(unsigned int Type, const std::string& Source)
+float CRenderOpenGL::WorldToScreenCoordinatesAxisX(float X)
 {
-    unsigned int ID = glCreateShader(Type);
-    const char* Src = Source.c_str();
-    glShaderSource(ID, 1, &Src, nullptr);
-    glCompileShader(ID);
-
-    // Check syntax errors
-    int Result;
-    glGetShaderiv(ID, GL_COMPILE_STATUS, &Result);
-    if (Result == GL_FALSE)
-    {
-        int Length;
-        glGetShaderiv(ID, GL_INFO_LOG_LENGTH, &Length);
-        char* Message = (char*)alloca(Length * sizeof(char));
-        glGetShaderInfoLog(ID, Length, &Length, Message);
-
-        cout << "Failed to compile Shader" << (Type == GL_VERTEX_SHADER ? "Vertex: " : "Fragment: ") << endl << Message << endl;
-
-        glDeleteShader(ID);
-        return 0;
-    }
-
-    return ID;
+    return (X - Game->GetCamera().Position.X) / (Game->GetCamera().GetScreenSizeInUnits().X / 2.f);
 }
 
-void CRenderOpenGL::ParseShader(const string FilePath, string& OutVertexShader, string& OutFragmentShader)
+float CRenderOpenGL::WorldToScreenCoordinatesAxisY(float Y)
 {
-    enum class ShaderType
-    {
-        NONE = -1, VERTEX = 0, FRAGMENT = 1
-    };
-
-    ifstream File(FilePath);
-
-    if (File.is_open())
-    {
-        ShaderType Type = ShaderType::NONE;
-        stringstream SStreams[2];
-
-        string Line;
-        while (getline(File, Line))
-        {
-            if (Line.find("#shader") != string::npos)
-            {
-                if (Line.find("Vertex") != string::npos)
-                    Type = ShaderType::VERTEX;
-
-                else if (Line.find("Fragment") != string::npos)
-                    Type = ShaderType::FRAGMENT;
-            }
-
-            else
-            {
-                SStreams[(int)Type] << Line << "\n";
-            }
-        }
-
-        OutVertexShader = SStreams[0].str();
-        OutFragmentShader = SStreams[1].str();
-
-        File.close();
-    }  
+    return (Y - Game->GetCamera().Position.Y) / (Game->GetCamera().GetScreenSizeInUnits().Y / 2.f);
 }
+
 
 void CRenderOpenGL::InitRender()
 {
-    float Positions[] =
-    {
-        -0.5f, -0.5f,
-         0.5f, -0.5f,
-         0.5f,  0.5f,
-        -0.5f,  0.5f
-    };
-
     unsigned int Indices[] =
     {
         0, 1, 2,
         2, 3, 0
     };
 
-    glGenBuffers(1, &Buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, Buffer);
-    glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), Positions, GL_DYNAMIC_DRAW);
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    
+    WorldRenderer = new CRenderer();
 
-    glGenBuffers(1, &IndexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(float), Indices, GL_DYNAMIC_DRAW);
+    VertexArray = new CVertexArray();
+    VertexBuffer = new CVertexBuffer();
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+    CVertexBufferLayout Layout;
+    Layout.Push<float>(2);
+    Layout.Push<float>(2);
 
-    string VertexShader, FragmentShader;
+    VertexArray->AddBuffer(*VertexBuffer, Layout);
 
-    ParseShader("Engine/Render/Shaders/Basic.shader", VertexShader, FragmentShader);
+    IndexBuffer = new CIndexBuffer(Indices, 6);
 
-    Shader = CreateShader(VertexShader, FragmentShader);
-    glUseProgram(Shader);
+    Shader = new CShader("Engine/Render/Shaders/Basic.shader");
+
+    VertexArray->UnBind();
+    VertexBuffer->UnBind();
+    IndexBuffer->UnBind();
+    Shader->UnBind();
 }
 
 void CRenderOpenGL::RenderFrame()
 {
     // Render here
     glClear(GL_COLOR_BUFFER_BIT);
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    
+    for (auto RenderLayer : Game->GetWorld()->GetRenderLayers())
+        for (auto Object : RenderLayer.second)
+        if (Object->IsVisible())
+            RenderObject(Object);
 
     // Swap front and back buffers
     glfwSwapBuffers(Window);
@@ -173,4 +169,38 @@ void CRenderOpenGL::RenderFrame()
 
     if (glfwWindowShouldClose(Window))
         Game->QuitGame();
+}
+
+
+// Rendering
+void CRenderOpenGL::RenderObject(CObject* Object)
+{
+    for (auto Sprite : Object->GetSprites())
+        RenderSprite(Sprite.SpriteID, Sprite.RelPosition + Object->GetPosition(), Sprite.Scale);
+}
+
+void CRenderOpenGL::RenderSprite(string SpriteID, TVector2D WorldPosition, float Scale)
+{
+    TSpriteGL& Sprite = SpritePool[SpriteID];
+
+    TVector2D Sz = Sprite.Size * Scale;
+    TVector2D Pos = WorldPosition;
+
+    float Positions[] =
+    {
+         WTSX(-Sz.X / 2 + Pos.X), WTSY(-Sz.Y / 2 + Pos.Y), 0.f, 0.f,
+         WTSX( Sz.X / 2 + Pos.X), WTSY(-Sz.Y / 2 + Pos.Y), 1.f, 0.f,
+         WTSX( Sz.X / 2 + Pos.X), WTSY( Sz.Y / 2 + Pos.Y), 1.f, 1.f,
+         WTSX(-Sz.X / 2 + Pos.X), WTSY( Sz.Y / 2 + Pos.Y), 0.f, 1.f
+    };
+
+    VertexBuffer->SetData(Positions, 4 * 4 * sizeof(float));
+
+    Textures[SpriteID]->Bind();
+    Shader->SetUniform1i("u_Texture", 0);
+
+    //Shader->SetUniform4f("u_Color", abs(WTSX(Pos.X)), 1 - abs(WTSY(Pos.Y)), 1.f, 1.f);
+
+    WorldRenderer->Draw(VertexArray, IndexBuffer, Shader);
+   
 }

@@ -1,17 +1,37 @@
 #include "CCollider.h"
 #include "CObject.h"
 #include "CWorld.h"
+#include <cmath>
+
+using namespace std;
 
 // Collider
 
-CCollider::CCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition) : CScript(Owner, Name)
+CCollider::CCollider(CObject* Owner, std::string Name)
+	: CScript(Owner, Name)
 {
-	SetRelativePosition(In_RelativePosition);
-
+	SetRelativePosition(TVector2D());
+	ReceivesCollision = true;
+	CreatesCollision = true;
 }
 
 CCollider::~CCollider()
 {
+	UnRegisterCollider();
+}
+
+bool CCollider::Created()
+{
+	RegisterCollider();
+	return true;
+}
+
+void CCollider::UpdateCollisionSettings(bool InReceivesCollision, bool InCreatesCollision)
+{
+	UnRegisterCollider();
+	ReceivesCollision = InReceivesCollision;
+	CreatesCollision = InCreatesCollision;
+	RegisterCollider();
 }
 
 // Registering
@@ -31,6 +51,15 @@ bool CCollider::RegisterCollider()
 
 bool CCollider::UnRegisterCollider()
 {
+	if (Registered && GetOwner())
+	{
+		GetOwner()->GetWorld()->UnregisterCollider(this);
+
+		Registered = false;
+
+		return true;
+	}
+
 	return false;
 }
 
@@ -51,13 +80,29 @@ TVector2D CCollider::GetGlobalPosition()
 	return RelativePosition + Owner->GetPosition();
 }
 
+// Current Collisions
+void CCollider::AddCollision(CCollider* Collider)
+{
+	CurrentCollisions[Collider->GetEntityWorldID()] = Collider;
+}
+
+void CCollider::RemoveCollision(CCollider* Collider)
+{
+	CurrentCollisions.erase(Collider->GetEntityWorldID());
+}
+
+bool CCollider::HasCollisionWith(CCollider* Collider)
+{
+	return (CurrentCollisions.find(Collider->GetEntityWorldID()) != CurrentCollisions.end());
+}
+
 
 
 // Rectange Collider
 
-CRectangleCollider::CRectangleCollider(CObject* Owner, std::string Name, TVector2D& In_RelativePosition, TVector2D In_Size): CCollider(Owner, Name, In_RelativePosition)
+CRectangleCollider::CRectangleCollider(CObject* Owner, std::string Name) : CCollider(Owner, Name)
 {
-	SetSize(In_Size);
+	SetSize(TVector2D());
 }
 
 // Collision Check
@@ -75,17 +120,9 @@ bool CRectangleCollider::CheckCollision(CCollider* OtherCollider)
 
 bool CRectangleCollider::CallCheckCollision(CRectangleCollider* Collider)
 {
-	TVector2D LeftCorner = GetGlobalPosition() - (GetSize() * 0.5f);
-	TVector2D OtherLeftCorner = Collider->GetGlobalPosition() - (Collider->GetSize() * 0.5f);
+	bool Collision = !( (Left() > Collider->Right()) || (Right() < Collider->Left()) || (Bottom() > Collider->Top()) || (Top() < Collider->Bottom()) );
 
-	bool OriginOverlapX = (LeftCorner.X < OtherLeftCorner.X) && (LeftCorner.X + GetSize().X > OtherLeftCorner.X);
-	bool OriginOverlapY = (LeftCorner.Y < OtherLeftCorner.Y) && (LeftCorner.Y + GetSize().Y > OtherLeftCorner.Y);
-
-	bool OtherOverlapX = (OtherLeftCorner.X < LeftCorner.X) && (OtherLeftCorner.X + Collider->GetSize().X > LeftCorner.X);
-	bool OtherOverlapY = (OtherLeftCorner.Y < LeftCorner.Y) && (OtherLeftCorner.Y + Collider->GetSize().Y > LeftCorner.Y);
-
-
-	return OriginOverlapX && OriginOverlapY || OtherOverlapX && OtherOverlapY;
+	return Collision;
 }
 
 bool CRectangleCollider::CallCheckCollision(CCollider* Collider)
@@ -97,5 +134,30 @@ bool CRectangleCollider::CallCheckCollision(CCollider* Collider)
 TVector2D CRectangleCollider::GetSize() { return Size; }
 
 void CRectangleCollider::SetSize(TVector2D& In_Size) { Size = In_Size; }
+
+// Sides
+float CRectangleCollider::Left()
+{
+	TVector2D GlobPos = GetGlobalPosition();
+	return GlobPos.X - (Size.X / 2);
+}
+
+float CRectangleCollider::Right()
+{
+	TVector2D GlobPos = GetGlobalPosition();
+	return GlobPos.X + (Size.X / 2);
+}
+
+float CRectangleCollider::Top()
+{
+	TVector2D GlobPos = GetGlobalPosition();
+	return GlobPos.Y + (Size.Y / 2);
+}
+
+float CRectangleCollider::Bottom()
+{
+	TVector2D GlobPos = GetGlobalPosition();
+	return GlobPos.Y - (Size.Y / 2);
+}
 
 

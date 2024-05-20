@@ -12,6 +12,7 @@ CEntity::CEntity(CWorld* InWorld, std::string Name)
 		World = InWorld;
 
 	EntityName = Name;
+	EntityWorldID = Name;
 }
 
 CEntity::~CEntity() {}
@@ -50,12 +51,12 @@ void CEntity::Update(float DeltaTime) {} // To override in child classes
 
 
 // Tags
-void CEntity::AddTag(string& Tag)
+void CEntity::AddTag(string Tag)
 {
 	Tags.push_back(Tag);
 }
 
-bool CEntity::HasTag(string& Tag)
+bool CEntity::HasTag(string Tag)
 {
 	for (string tag : Tags)
 		if (tag == Tag)
