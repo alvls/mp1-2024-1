@@ -116,6 +116,9 @@
     <ClInclude Include="CFruit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\World\CEntity.cpp">
@@ -197,6 +200,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CFruit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CWall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

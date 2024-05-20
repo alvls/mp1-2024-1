@@ -16,6 +16,7 @@ protected:
 
 	TCamera Camera;
 	float TargetFPS;
+	float DeltaTimeLimit; // Limits the delta time, useful for stability
 
 	bool Running;
 

@@ -15,7 +15,7 @@ void CFruit::OnCollided(CCollider* OtherCollider, CCollider* Collider)
 {
 	if (OtherCollider->GetOwner()->HasTag("Eater"))
 	{
-		CSnakeWorld* SnakeWorldCast = static_cast<CSnakeWorld*>(GetWorld());
+		CSnakeWorld* SnakeWorldCast = dynamic_cast<CSnakeWorld*>(GetWorld());
 		if (SnakeWorldCast)
 			SnakeWorldCast->FruitEaten();
 

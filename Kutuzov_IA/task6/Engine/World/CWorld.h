@@ -20,7 +20,6 @@ protected:
 	CWorldScriptHandler* WorldScriptHandler;
 
 	std::map<std::string, CEntity*> Entities; // List of all entities in the world
-	std::map<std::string, CObject*> Objects; // List of all objects in the world
 
 	// Rendering Layers
 	std::map<int, std::vector<CObject*>> RenderLayers;
@@ -81,9 +80,6 @@ public:
 	void HandleDestructionList();
 
 	void Destroy(CEntity* InEntity);
-
-	// Returns the list of objects in the world
-	std::map<std::string, CObject*>& GetObjects();
 
 	// Handling object collisions in the world
 	void UpdateCollisions();

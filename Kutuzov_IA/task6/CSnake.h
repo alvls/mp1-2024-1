@@ -6,6 +6,8 @@ class CSnakeBody;
 
 class CSnakeHead : public CObject, public CInputReceiver
 {
+	CSnakeWorld* SnakeWorld;
+
 	TVector2D CurrentDirection;
 	TVector2D InputDirection;
 	float Speed;
@@ -26,9 +28,14 @@ protected:
 
 public:
 	CSnakeHead(CWorld* InWorld, std::string InName);
+	virtual ~CSnakeHead();
+
 	void AddSegment();
 	void GameOver();
+
+	void Victory();
 };
+
 
 
 class CSnakeBody : public CObject
@@ -37,17 +44,26 @@ class CSnakeBody : public CObject
 	int Index;
 	CRectangleCollider* BodyCollider;
 
-public:
 	TVector2D Direction;
-	TVector2D NextDirection;
+	TIntVector2D CurrentTile;
 
 protected:
 	virtual void Update(float DeltaTime) override;
 
 public:
 	CSnakeBody(CWorld* InWorld, std::string InName);
+	virtual ~CSnakeBody();
+
 	void SpawnBody(CSnakeHead* InSnakeHead, int InIndex);
 
 	virtual void OnCollided(CCollider* OtherCollider, CCollider* Collider) override;
+
+	// Direction Interface
+	TVector2D GetDirection();
+	void SetDirection(TVector2D& NewDirection);
+
+	// CurrentTile Interface
+	TIntVector2D GetCurrentTile();
+	void SetCurrentTile(TIntVector2D& NewTile);
 };
 

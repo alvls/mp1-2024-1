@@ -22,6 +22,7 @@
     <ClInclude Include="CFruit.h" />
     <ClInclude Include="CSnake.h" />
     <ClInclude Include="CSnakeWorld.h" />
+    <ClInclude Include="CWall.h" />
     <ClInclude Include="Engine\Game\CGame.h" />
     <ClInclude Include="Engine\Game\CPlayerController.h" />
     <ClInclude Include="Engine\Game\DataTypes.h" />
@@ -52,6 +53,7 @@
     <ClCompile Include="CFruit.cpp" />
     <ClCompile Include="CSnake.cpp" />
     <ClCompile Include="CSnakeWorld.cpp" />
+    <ClCompile Include="CWall.cpp" />
     <ClCompile Include="Engine\Game\CGame.cpp" />
     <ClCompile Include="Engine\Game\CPlayerController.cpp" />
     <ClCompile Include="Engine\Game\DataTypes.cpp" />

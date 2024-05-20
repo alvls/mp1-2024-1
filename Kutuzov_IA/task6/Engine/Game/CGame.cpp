@@ -16,6 +16,7 @@ CGame::CGame()
 	Camera = TCamera();
 	GameName = "Game";
 	TargetFPS = 60.f;
+	DeltaTimeLimit = 0.2f;
 
 	GameWorld = nullptr;
 	GameRender = nullptr;
@@ -50,6 +51,8 @@ void CGame::RunGame()
 		this_thread::sleep_for(chrono::milliseconds(int(WaitTime * 1000))); // Not consistent! Should deal with it at some point
 
 		DeltaTime = DeltaTime < (1 / TargetFPS) ? (1 / TargetFPS) : DeltaTime;
+		// Limiting
+		DeltaTime = DeltaTimeLimit == 0 ? (DeltaTime) : (DeltaTime < DeltaTimeLimit ? (DeltaTime) : (DeltaTimeLimit));
 	}
 }
 

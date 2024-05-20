@@ -37,13 +37,14 @@ float CWorld::WorldUpdate(float DeltaTime)
 {
 	auto TStart = chrono::high_resolution_clock::now();
 
-	UpdateCollisions();
-
 	// Calls update for every entity in the world
 	for (auto Entity : Entities)
 		Entity.second->EntityUpdate(DeltaTime);
 
 	Update(DeltaTime);
+
+	UpdateCollisions();
+
 	HandleDestructionList();
 
 	auto TEnd = chrono::high_resolution_clock::now();
@@ -96,7 +97,6 @@ bool CWorld::CallSpawn(CObject* InObject)
 	if (!InObject)
 		return false;
 
-	Objects[InObject->GetEntityWorldID()] = InObject;
 	AddToRenderLayer(InObject);
 
 	return CallSpawn(static_cast<CEntity*>(InObject)); // Spawns Entity
@@ -105,8 +105,9 @@ bool CWorld::CallSpawn(CObject* InObject)
 
 void CWorld::HandleDestructionList()
 {
-	for (auto Entity : DestructionList)
+	for (int i = 0; i < DestructionList.size(); i++)
 	{
+		CEntity* Entity = DestructionList[i];
 		if (Entity)
 		{
 			CObject* ObjectCast = dynamic_cast<CObject*>(Entity);
@@ -141,28 +142,23 @@ bool CWorld::CallDestroy(CEntity* InEntity)
 // Destroys object in the world
 bool CWorld::CallDestroy(CObject* InObject)
 {
+	//cout << "Destroying: " << InObject->GetEntityWorldID() << endl;
 	if (!InObject)
 		return false;
 
 	if (!(Entities.count(InObject->GetEntityWorldID()) > 0))
 		return false;
 
-	if (!(Objects.count(InObject->GetEntityWorldID()) > 0))
-		return false;
-
-	Objects.erase(InObject->GetEntityWorldID());
 	RemoveFromRenderLayer(InObject);
 
-	return CallDestroy(static_cast<CEntity*>(InObject));
+	return CallDestroy(dynamic_cast<CEntity*>(InObject));
 }
 
 void CWorld::Destroy(CEntity* InEntity)
 {
+	//cout << InEntity->GetEntityWorldID() << endl;
 	DestructionList.push_back(InEntity);
 }
-
-// Returns the list of objects in the world
-std::map<std::string, CObject*>& CWorld::GetObjects() { return Objects; }
 
 
 // Handling object collisions in the world

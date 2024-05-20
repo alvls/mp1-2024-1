@@ -2,12 +2,12 @@
 #include <iostream>
 #include <cmath>
 
-CSnakeHead::CSnakeHead(CWorld* InWorld, std::string InName) : CObject(InWorld, InName), CInputReceiver(InWorld->GetGame(), "SnakeInputReceiver")
+CSnakeHead::CSnakeHead(CWorld* InWorld, std::string InName) : CObject(InWorld, InName), CInputReceiver(InWorld->GetGame(), InName + "_InputReceiver")
 {
 	RenderLayerLocation.RenderLayer = 1;
-	Sprites.push_back(TSprite("SnakeHead_F"));
-	CurrentDirection = TVector2D(0.f, 1.f);
-	InputDirection = TVector2D(0.f, 1.f);
+	Sprites.push_back(TSprite("SnakeHead_L"));
+	CurrentDirection = TVector2D(-1.f, 0.f);
+	InputDirection = TVector2D(-1.f, 0.f);
 
 	SetReceiveInput(true);
 
@@ -15,16 +15,15 @@ CSnakeHead::CSnakeHead(CWorld* InWorld, std::string InName) : CObject(InWorld, I
 	DistanceSinceLastCheck = 0.f;
 
 	MouthCollider = AddScript<CRectangleCollider>("MouthCollider");
-	MouthCollider->SetSize(TVector2D(80, 80));
-
-	AddSegment();
-	AddSegment();
-	AddSegment();
+	MouthCollider->SetSize(TVector2D(40, 40));
 
 	AddTag("Eater");
 }
 
-
+CSnakeHead::~CSnakeHead()
+{
+	BodyList.clear();
+}
 
 void CSnakeHead::ReceiveInput(int Input, char Action)
 {
@@ -46,6 +45,10 @@ void CSnakeHead::ReceiveInput(int Input, char Action)
 
 bool CSnakeHead::Created()
 {
+	CSnakeWorld* SnakeWorldCast = dynamic_cast<CSnakeWorld*>(GetWorld());
+	if (SnakeWorldCast)
+		SnakeWorld = SnakeWorldCast;
+
 	return true;
 }
 
@@ -60,20 +63,25 @@ void CSnakeHead::Update(float DeltaTime)
 	if (CurrentDirection.Y != 0.f)
 		SetPosition(TVector2D(TILE_SIZE * (int(GetPosition().X) / TILE_SIZE), GetPosition().Y));
 
+	// Tiles
+
+	SnakeWorld->FreeTile(BodyList[BodyList.size() - 1]->GetCurrentTile());
+	SnakeWorld->OccupyTile(SnakeWorld->GetTile(GetPosition()));
+
 	// UpdateBody;
+
 	for (auto BodySegment : BodyList)
-		BodySegment->Move(BodySegment->Direction * DeltaTime * Speed);
+		BodySegment->Move(BodySegment->GetDirection() * DeltaTime * Speed);
 
 	if (DistanceSinceLastCheck >= TILE_SIZE)
 	{
 		for (int i = BodyList.size() - 1; i > 0; i--)
 		{
-			//BodyList[i]->Direction = BodyList[i]->NextDirection;
-			BodyList[i]->Direction = BodyList[i - 1]->Direction;
+			BodyList[i]->SetCurrentTile(SnakeWorld->GetTile(BodyList[i]->GetPosition()));
+			BodyList[i]->SetDirection(BodyList[i - 1]->GetDirection());
 		}
 
-		BodyList[0]->Direction = CurrentDirection;
-		
+		BodyList[0]->SetDirection(CurrentDirection);
 
 		DistanceSinceLastCheck = 0;
 		CurrentDirection = InputDirection;
@@ -104,9 +112,16 @@ void CSnakeHead::UpdateSprite()
 
 void CSnakeHead::GameOver()
 {
+	Speed = 0.f;
+
 	CSnakeWorld* SnakeWorldCast = static_cast<CSnakeWorld*>(GetWorld());
 	if (SnakeWorldCast)
 		SnakeWorldCast->GameOver();
+}
+
+void CSnakeHead::Victory()
+{
+	Speed = 0.f;
 }
 
 void CSnakeHead::AddSegment()
@@ -118,18 +133,20 @@ void CSnakeHead::AddSegment()
 
 	if (BodySize > 0)
 	{
-		NewSegment->Direction = BodyList[BodySize - 1]->Direction;
-		NewSegment->SetPosition(BodyList[BodySize - 1]->GetPosition() - (BodyList[BodySize - 1]->Direction * TILE_SIZE));
+		NewSegment->SetDirection(BodyList[BodySize - 1]->GetDirection());
+		NewSegment->SetPosition(BodyList[BodySize - 1]->GetPosition() - (BodyList[BodySize - 1]->GetDirection() * TILE_SIZE));
 	}
 
 	else
 	{
-		NewSegment->Direction = CurrentDirection;
+		NewSegment->SetDirection(CurrentDirection);
 		NewSegment->SetPosition(GetPosition() - CurrentDirection * TILE_SIZE);
 	}
 	
-	NewSegment->NextDirection = NewSegment->Direction;
+	NewSegment->SetCurrentTile(SnakeWorld->GetTile(NewSegment->GetPosition()));
 	BodyList.push_back(NewSegment);
+
+	SnakeWorld->OccupyTile(SnakeWorld->GetTile(NewSegment->GetPosition()));
 }
 
 
@@ -138,10 +155,37 @@ void CSnakeHead::AddSegment()
 CSnakeBody::CSnakeBody(CWorld* InWorld, std::string InName) : CObject(InWorld, InName) 
 {
 	Sprites.push_back(TSprite("SnakeBody"));
+	RenderLayerLocation.RenderLayer = 1;
 	SnakeHead = nullptr; 
 
 	BodyCollider = AddScript<CRectangleCollider>("BodyCollider");
-	BodyCollider->SetSize(TVector2D(80, 80));
+	BodyCollider->SetSize(TVector2D(50, 50));
+}
+
+CSnakeBody::~CSnakeBody()
+{
+}
+
+// Direction
+TVector2D CSnakeBody::GetDirection()
+{
+	return Direction;
+}
+
+
+void CSnakeBody::SetDirection(TVector2D& NewDirection)
+{
+	Direction = NewDirection;
+}
+
+// CurrentTile Interface
+TIntVector2D CSnakeBody::GetCurrentTile()
+{
+	return CurrentTile;
+}
+void CSnakeBody::SetCurrentTile(TIntVector2D& NewTile)
+{
+	CurrentTile = NewTile;
 }
 
 void CSnakeBody::SpawnBody(CSnakeHead* InSnakeHead, int InIndex)

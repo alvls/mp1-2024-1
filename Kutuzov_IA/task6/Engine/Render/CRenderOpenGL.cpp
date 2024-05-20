@@ -176,14 +176,14 @@ void CRenderOpenGL::RenderFrame()
 void CRenderOpenGL::RenderObject(CObject* Object)
 {
     for (auto Sprite : Object->GetSprites())
-        RenderSprite(Sprite.SpriteID, Sprite.RelPosition + Object->GetPosition(), Sprite.Scale);
+        RenderSprite(Sprite.SpriteID, Sprite.RelPosition + Object->GetPosition(), Sprite.TargetSize, Sprite.Scale);
 }
 
-void CRenderOpenGL::RenderSprite(string SpriteID, TVector2D WorldPosition, float Scale)
+void CRenderOpenGL::RenderSprite(string SpriteID, TVector2D WorldPosition, TVector2D TargetSize, float Scale)
 {
     TSpriteGL& Sprite = SpritePool[SpriteID];
 
-    TVector2D Sz = Sprite.Size * Scale;
+    TVector2D Sz = Sprite.Size * Scale * TargetSize;
     TVector2D Pos = WorldPosition;
 
     float Positions[] =

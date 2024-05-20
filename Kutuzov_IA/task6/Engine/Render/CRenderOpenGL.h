@@ -59,7 +59,7 @@ public:
 
 	// Rendering
 	void RenderObject(CObject* Object);
-	void RenderSprite(std::string SpriteID, TVector2D WorldPosition, float Scale);
+	void RenderSprite(std::string SpriteID, TVector2D WorldPosition, TVector2D TargetSize, float Scale);
 
 	void InitRender();
 };

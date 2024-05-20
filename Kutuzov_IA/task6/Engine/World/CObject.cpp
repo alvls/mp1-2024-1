@@ -15,9 +15,6 @@ CObject::~CObject()
 {
 	for (auto Script : Scripts)
 		delete Script.second;
-
-	if (GetWorld())
-		GetWorld()->Destroy(this);
 }
 
 
