@@ -22,7 +22,7 @@ int main() {
     cursorInfo.bVisible = false;
     SetConsoleCursorInfo(h, &cursorInfo);
 
-    Game g;
+    Game g(h);
     while (true) {
         
         
@@ -30,7 +30,7 @@ int main() {
         //cout << g.isInBounds(11, 5);
         //g.printmap();
         g.menuloop();
-        g.buildMap(60, 25);
+        g.buildMap();
         g.gameloop();
     }
  

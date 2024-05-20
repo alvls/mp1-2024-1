@@ -23,6 +23,7 @@ void Snake::crawl(int tx, int ty) {
 #endif
 
 			if (target && dynamic_pointer_cast<Food>(target)) {
+				
 				growstate = 1;
 				tail->willgrow = 1; //хвост вырастет, на следующем апдейте голова найдёт новый сегмент
 			}
@@ -70,6 +71,7 @@ void Snake::update() {
 	if (growstate) { //хвост вырос на прошлом апдейте
 		tail = tail->next;
 		growstate = 0;
+		
 	}
 	//cout << "\t\tdx dy " << dx << " " << dy<<endl;
 	next->transmit(x, y);

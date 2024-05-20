@@ -9,16 +9,33 @@ using namespace std;
 
 Setting Game::settings[SETTINGS_COUNT] = {};
 
+//struct Setting {
+//	const char* name;
+//	int minv;
+//	int defaultv;
+//	int maxv;
+//	int* val;
+//	const char* desc;
+//};
+//int sx = 0;
+//int sy = 0;
+//int maxfood = 4;
+//int wallcount;
+//int walldensity;
+//int gamespeed;
+//int targetlen;
 void Game::initSettings()
 {
-	Setting Game::settings[] = {
-		{"maxfood", 1, 1, 100, &maxfood, "max food"},
-		{"wallcount", 0, 5, 100, 5, "wc"}
-	};
+	settings[0] = { "size x", 10, 50, 100, &usersx, "map size x" };
+	settings[1] = { "size y", 10, 24, 50, &usersy, "map size y" };
+	settings[2] = { "max food", 1, 1, 100, &maxfood, "max food" };
+	settings[3] = { "wall count", 0, 5, 100, &wallcount, "random wall obstacle count" };
+	settings[4] = { "wall density", 0, 50, 100, &walldensity, "how dense is wall placement" };
+	settings[5] = { "game speed", 0, 10, 20, &gamespeed, "update rate of the game" };
+	settings[6] = { "target length", 6, 6, 100, &targetlen, "win condition" };
+	for (int i = 0;i < settingscount;i++)
+		*(settings[i].val) = settings[i].defaultv;
 }
-
-
-
 
 template<typename T>
 shared_ptr<T> Game::create(int x, int y)
@@ -32,17 +49,17 @@ shared_ptr<T> Game::create(int x, int y)
 	return obj;
 }
 
-void Game::buildMap(int sizex, int sizey) //матрица - массив строк
+void Game::buildMap() //матрица - массив строк
 {
 	activeObjects.clear();
-	sx = sizex + 2; sy = sizey + 2;
+	sx = usersx + 2; sy = usersy + 2;
 	srand(static_cast<unsigned>(time(nullptr)));
 	gmap.clear();
 	gmap.resize(sy);
 	for (auto& l : gmap) {
 		l.resize(sx);
 	}
-	cout << "resize y = "<<gmap.size()<<" x = "<<gmap[0].size()<<endl;
+	//cout << "resize y = "<<gmap.size()<<" x = "<<gmap[0].size()<<endl;
 
 	for (int i = 0;i < 2;i++) {
 		for (int j = 0;j < sx;j++) {
@@ -55,31 +72,34 @@ void Game::buildMap(int sizex, int sizey) //матрица - массив стр
 			create<Wall>(sx -i-1, j);
 		}
 	}
-	cout << "walls\n";
+	//cout << "walls\n";
 	
 
-	int sx = 11;
-	int sy = 4;
-	auto s = create<Snake>(sx, sy);
+	int snx = 10;
+	int sny = 4;
+	auto s = create<Snake>(snx, sny);
 	
-	auto seg = create<Segment>(sx-1, sy);
-	seg->init(sx-1);
+	auto seg = create<Segment>(snx+1, sny);
+	seg->init(sx+1);
 	s->next = seg;
 	auto prev = seg;
-	for (int i = sx - 2;i > sx - 2-1;i--) {
-		seg = create<Segment>(i, sy);
+	for (int i = snx +2;i < snx +5;i++) {
+		seg = create<Segment>(i, sny);
 		seg->init(i);
 		prev->next = seg;
 		
 		prev = seg;
 	}
+	
 	s->tail = seg;
 	
-	placeRandWalls(50, 50);
+	placeRandWalls(wallcount, walldensity);
+	for (int i = 2;i < snx;i++) //чтобы у змейки на старте не было стены на пути
+		gmap[sny][i] = nullptr;
 
-	create<Food>(12, 4);
+	/*create<Food>(12, 4);
 	create<Food>(14, 4);
-	create<Food>(12, 7);
+	create<Food>(12, 7);*/
 	system("cls");
 }
 
@@ -118,6 +138,8 @@ void Game::update() {
 
 	//cout << endl<<"! END UPD, PRINT\n";
 	printmap();
+	SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << "LENGTH: " << snakelen << endl;
 	
 }
 
@@ -243,8 +265,10 @@ void Game::cursorToZero()
 
 void Game::menuloop()
 {
+	system("cls");
 	int pos = 0;
 	do {
+		
 		Setting& fset = settings[pos];
 		cursorToZero();
 		
@@ -252,6 +276,8 @@ void Game::menuloop()
 		//cout << "KEY " << (int)key << endl;
 		if (key != Controls::NOKEY)
 			system("cls");
+		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		cout << "Use up and down arrows to navigate and left, right to change values\nENTER to start game\n\n";
 
 		if (key == Controls::U)
 			pos--;
@@ -263,12 +289,12 @@ void Game::menuloop()
 			pos = 0;
 
 		if (key == Controls::R) {
-			if (fset.val + 1 <= fset.maxv)
-				fset.val++;
+			if (*fset.val + 1 <= fset.maxv)
+				(*(fset.val))++;
 		}
 		if (key == Controls::L) {
-			if (fset.val - 1 >= fset.minv)
-				fset.val--;
+			if (*fset.val - 1 >= fset.minv)
+				(*(fset.val))--;
 		}
 		for (int i = 0; i < settingscount;i++) {
 			printSetting(settings[i], pos == i);
@@ -282,12 +308,14 @@ void Game::printSetting(Setting s, bool focus)
 {
 	if (!focus) {
 		SetConsoleTextAttribute(handle, FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_RED|FOREGROUND_INTENSITY);
-		cout << s.name << " < " << s.val << " >\n";
+		cout << s.name << " < " << *(s.val) << " >\n";
 	}
 		
 	else {
 		SetConsoleTextAttribute(handle, FOREGROUND_GREEN);
-		cout << s.name << " < " << s.val << " > "<<s.desc<<endl;
+		cout << s.name << " < " << *(s.val) << " > ";
+		SetConsoleTextAttribute(handle, FOREGROUND_GREEN|FOREGROUND_RED);
+		cout<<s.desc << endl;
 	}
 }
 

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#define SETTINGS_COUNT 2
+#define SETTINGS_COUNT 7
 
 #include <vector>
 #include <memory>
@@ -25,19 +25,25 @@ class Game {
     friend class Gobject;
     vector<vector<shared_ptr<Gobject>>> gmap; //shared_ptr лучше использовать? метод s_ptr <GObj> create(x,y)
     vector<shared_ptr<ActiveGobject>> activeObjects;
-    int sx = 0;
-    int sy = 0;
-    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    
+    HANDLE handle;
     int state = 0;
     unsigned framedelay = 100;
     const int settingscount = SETTINGS_COUNT;
     static Setting settings[SETTINGS_COUNT];
-    
-
-    
+    int sx = 0;
+    int sy = 0;
+    //SETTINGS
+    int usersx;
+    int usersy;
+    int maxfood = 4;
+    int wallcount;
+    int walldensity;
+    int gamespeed;
+    int targetlen;
 
 public:
-    int maxfood = 4;
+    Game(HANDLE h) { initSettings(); handle = h; };
     int foodcount = 0;
     int snakelen = 1;
     template<typename T>
@@ -48,7 +54,7 @@ public:
     void placeFood();
     void placeRandWalls(int count, int density);
     bool isInBounds(int x, int y);
-    void buildMap(int sizex, int sizey);
+    void buildMap();
     void renderObj(shared_ptr<Gobject> o);
     void cursorToZero();
     void printmap();
