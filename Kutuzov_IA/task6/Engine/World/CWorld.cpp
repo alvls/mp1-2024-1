@@ -24,6 +24,8 @@ CWorld::CWorld(CGame* InGame)
 		throw (exception("Invalid Game pointer!"));
 }
 
+CWorld::~CWorld() {}
+
 // Initializes the world
 void CWorld::WorldInitCall()
 {
@@ -107,7 +109,7 @@ void CWorld::HandleDestructionList()
 	{
 		if (Entity)
 		{
-			CObject* ObjectCast = static_cast<CObject*>(Entity);
+			CObject* ObjectCast = dynamic_cast<CObject*>(Entity);
 			if (ObjectCast)
 				CallDestroy(ObjectCast);
 

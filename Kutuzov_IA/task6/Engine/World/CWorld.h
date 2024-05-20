@@ -48,6 +48,7 @@ private:
 
 public:
 	CWorld(CGame* InGame);
+	virtual ~CWorld();
 
 	// Initializes the world
 	void WorldInitCall();

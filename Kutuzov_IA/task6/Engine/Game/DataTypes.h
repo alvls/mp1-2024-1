@@ -8,10 +8,14 @@ struct TVector2D
 
 	TVector2D(float X_ = 0.f, float Y_ = 0.f);
 
-	float Length();
+	float Length() const;
 
 	bool operator==(const TVector2D& InVector);
 	bool operator!=(const TVector2D& InVector);
+	bool operator< (const TVector2D& InVector);
+	bool operator<=(const TVector2D& InVector);
+	bool operator> (const TVector2D& InVector);
+	bool operator>=(const TVector2D& InVector);
 
 	TVector2D operator+(const TVector2D& InVector);
 	TVector2D& operator+=(const TVector2D& InVector);
@@ -33,6 +37,44 @@ struct TVector2D
 
 	TVector2D Normalize();
 	float DotProduct(TVector2D& InVector);
+
+};
+
+struct TIntVector2D
+{
+	int X, Y;
+
+	TIntVector2D(int X_ = 0, int Y_ = 0);
+
+	float Length() const;
+
+	bool operator==(const TIntVector2D& InVector);
+	bool operator!=(const TIntVector2D& InVector);
+	bool operator< (const TIntVector2D& InVector);
+	bool operator<=(const TIntVector2D& InVector);
+	bool operator> (const TIntVector2D& InVector);
+	bool operator>=(const TIntVector2D& InVector);
+
+	TIntVector2D operator+(const TIntVector2D& InVector);
+	TIntVector2D& operator+=(const TIntVector2D& InVector);
+
+	TIntVector2D operator-(const TIntVector2D& InVector);
+	TIntVector2D& operator-=(const TIntVector2D& InVector);
+
+	TIntVector2D operator*(const int Scale);
+	TIntVector2D& operator*=(const int Scale);
+
+	TIntVector2D operator*(const TIntVector2D& InVector);
+	TIntVector2D& operator*=(const TIntVector2D& InVector);
+
+	TIntVector2D operator/(const int Scale);
+	TIntVector2D& operator/=(const int Scale);
+
+	TIntVector2D operator/(const TIntVector2D& InVector);
+	TIntVector2D& operator/=(const TIntVector2D& InVector);
+
+	TIntVector2D Normalize();
+	float DotProduct(TIntVector2D& InVector);
 
 };
 
