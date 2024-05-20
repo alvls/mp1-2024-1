@@ -63,7 +63,7 @@ void Game::buildMap() //матрица - массив строк
 
 	for (int i = 0;i < 2;i++) {
 		for (int j = 0;j < sx;j++) {
-			cout << "wall " << i << " " << j << endl;
+			//cout << "wall " << i << " " << j << endl;
 			create<Wall>(j,i);
 			create<Wall>(j, sy - i-1);
 		}
