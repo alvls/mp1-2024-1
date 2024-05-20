@@ -3,7 +3,6 @@
 #include "Game.h"
 #include <memory>
 using namespace std;
-//class Game;
 
 class Gobject {
     friend class Game;
@@ -95,5 +94,4 @@ public:
     void crawl(int tx, int ty);
 
     void update() override;
-    ~Snake() {};
 };

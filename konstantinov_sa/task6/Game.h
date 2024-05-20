@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #define SETTINGS_COUNT 7
-
+//#include"GameObjects.h"
 #include <vector>
 #include <memory>
 #include<string>
@@ -9,6 +9,7 @@
 using namespace std;
 
 class ActiveGobject;
+class Gobject;
 
 enum class Controls{NOKEY, U, R, D, L, E};
 
@@ -22,8 +23,10 @@ struct Setting {
 };
 
 class Game {
-    friend class Gobject;
-    vector<vector<shared_ptr<Gobject>>> gmap; //shared_ptr лучше использовать? метод s_ptr <GObj> create(x,y)
+    friend class Snake;
+    friend class Segment;
+    friend class Food;
+    vector<vector<shared_ptr<Gobject>>> gmap;
     vector<shared_ptr<ActiveGobject>> activeObjects;
     
     HANDLE handle;
@@ -33,6 +36,7 @@ class Game {
     static Setting settings[SETTINGS_COUNT];
     int sx = 0;
     int sy = 0;
+
     //SETTINGS
     int usersx;
     int usersy;
@@ -41,31 +45,30 @@ class Game {
     int walldensity;
     int gamespeed;
     int targetlen;
-
-public:
-    Game(HANDLE h) { initSettings(); handle = h; };
     int foodcount = 0;
     int snakelen = 1;
-    template<typename T>
-    shared_ptr<T> create(int x, int y);
 
     Controls key;
     void initSettings();
     void placeFood();
     void placeRandWalls(int count, int density);
-    bool isInBounds(int x, int y);
-    void buildMap();
+    template<typename T>
+    shared_ptr<T> create(int x, int y);
     void renderObj(shared_ptr<Gobject> o);
     void cursorToZero();
     void printmap();
     void update();
     void getInput();
     void move(int fx, int fy, int tx, int ty, bool validate = false);
-    shared_ptr<Gobject> get(int x, int y) { return gmap[y][x]; }
     void over() { state = 0; }
+    void printSetting(Setting s, bool focus);
+    const shared_ptr<Gobject>& get(int x, int y) { return gmap[y][x]; }
+public:
+    Game(HANDLE h) { initSettings(); handle = h; };
+    const Controls& getKey() { return key; }
+    bool isInBounds(int x, int y);
+    void buildMap();
     void gameloop();
     void menuloop();
-    void printSetting(Setting s, bool focus);
-
 };
 

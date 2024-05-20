@@ -71,7 +71,8 @@ void Snake::update() {
 	if (growstate) { //хвост вырос на прошлом апдейте
 		tail = tail->next;
 		growstate = 0;
-		
+		if (game->snakelen == game->targetlen)
+			game->over();
 	}
 	//cout << "\t\tdx dy " << dx << " " << dy<<endl;
 	next->transmit(x, y);

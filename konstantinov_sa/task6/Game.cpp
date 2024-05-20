@@ -1,10 +1,9 @@
 ﻿#include "Game.h"
 #include <iostream>
 #include "GameObjects.h"
-#include <conio.h> //-
-#include <windows.h> //-
+#include <conio.h>
+#include <windows.h> 
 #include <ctime>
-//#include <random>
 using namespace std;
 
 Setting Game::settings[SETTINGS_COUNT] = {};
@@ -26,13 +25,13 @@ Setting Game::settings[SETTINGS_COUNT] = {};
 //int targetlen;
 void Game::initSettings()
 {
-	settings[0] = { "size x", 10, 50, 100, &usersx, "map size x" };
-	settings[1] = { "size y", 10, 24, 50, &usersy, "map size y" };
-	settings[2] = { "max food", 1, 1, 100, &maxfood, "max food" };
+	settings[0] = { "size x", 15, 50, 100, &usersx, "map size x" };
+	settings[1] = { "size y", 15, 24, 50, &usersy, "map size y" };
+	settings[2] = { "max food", 1, 1, 100, &maxfood, "max food count on the ground" };
 	settings[3] = { "wall count", 0, 5, 100, &wallcount, "random wall obstacle count" };
 	settings[4] = { "wall density", 0, 50, 100, &walldensity, "how dense is wall placement" };
-	settings[5] = { "game speed", 0, 10, 20, &gamespeed, "update rate of the game" };
-	settings[6] = { "target length", 6, 6, 100, &targetlen, "win condition" };
+	settings[5] = { "game speed", 0, 10, 30, &gamespeed, "update rate of the game" };
+	settings[6] = { "target length", 6, 10, 100, &targetlen, "win condition" };
 	for (int i = 0;i < settingscount;i++)
 		*(settings[i].val) = settings[i].defaultv;
 }
@@ -51,6 +50,7 @@ shared_ptr<T> Game::create(int x, int y)
 
 void Game::buildMap() //матрица - массив строк
 {
+	framedelay = 1000 / (gamespeed + 1);
 	activeObjects.clear();
 	sx = usersx + 2; sy = usersy + 2;
 	srand(static_cast<unsigned>(time(nullptr)));
@@ -74,7 +74,7 @@ void Game::buildMap() //матрица - массив строк
 	}
 	//cout << "walls\n";
 	
-
+	snakelen = 1;
 	int snx = 10;
 	int sny = 4;
 	auto s = create<Snake>(snx, sny);
@@ -251,16 +251,27 @@ void Game::gameloop() {
 		update();
 		Sleep(framedelay);
 	}
+	//endloop
+	SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN);
+	cout << "ENTER to return to menu\n";
+	if (snakelen == targetlen) {
+		SetConsoleTextAttribute(handle, FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+		cout << "YOU WON!\n";
+	}
+	else {
+		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
+		cout << "LOSS\n\n| ||\n|| |_\n";
+	}
+	do {
+		getInput();
+	} while (key != Controls::E);
 }
 
 
 
 void Game::cursorToZero()
 {
-	COORD newPosition;
-	newPosition.X = 0; // column coordinate
-	newPosition.Y = 0;  // row coordinate
-	SetConsoleCursorPosition(handle, newPosition);
+	SetConsoleCursorPosition(handle, COORD(0, 0));
 }
 
 void Game::menuloop()

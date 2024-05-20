@@ -24,11 +24,6 @@ int main() {
 
     Game g(h);
     while (true) {
-        
-        
-        //SetConsoleTextAttribute(h, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-        //cout << g.isInBounds(11, 5);
-        //g.printmap();
         g.menuloop();
         g.buildMap();
         g.gameloop();
