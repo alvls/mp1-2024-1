@@ -139,7 +139,6 @@ public:
 
 class EmptyField {
 protected:
-	char* con_field;
 	char empty;
 	char wall;
 	unsigned width;
@@ -149,9 +148,6 @@ public:
 	EmptyField(const unsigned width_, const unsigned height_)
 		: width(width_), height(height_), empty(EMPTY_CHAR), wall(WALL_CHAR) {
 		ui size_ = (width) * (height);
-		con_field = new char[size_];
-		for (int i = 0; i < size_;  i++)
-			con_field[i] = empty;
 	}
 
 	ui GetWidth() {
@@ -162,9 +158,7 @@ public:
 		return height;
 	}
 
-	~EmptyField() {
-		delete[] con_field;
-	}
+	~EmptyField() = default;
 
 	bool CheckCollision(const pui cell, const ui zero_x, const ui zero_y) {
 		if ( (cell.first >= width) || (cell.first < 0) )
@@ -174,7 +168,6 @@ public:
 		return false;
 	}
 
-	// вот это всё в класс "поле" бы 
 	void drawField(HANDLE Console, ui zero_x = 1, ui zero_y = 1) {
 		ui sz = width * height;
 		std::string tab = "", space = "";
@@ -258,7 +251,6 @@ public:
 	}
 
 	bool play(const ui zero_x = 1, const ui zero_y = 1, ui dif = 1) {
-		//ui speed - divider for sleep()
 		char dir = ARROW_LEFT, bcp_dir;
 		pui move, bcp_move;
 		bool movable = true;
@@ -273,6 +265,8 @@ public:
 			if (move == food_pos) { 
 				snake.Eat(move);
 				score += SCORE_PER_FOOD;
+				if (snake.GetSnakeLen() == field.GetHeight() * field.GetWidth())
+					break;
 				GenFood();
 				if (score >= score_goal) {
 					win = true; 
@@ -294,7 +288,6 @@ public:
 				}
 			}
 
-			//можно упротить, если хранить bcp_dir как поле
 			bcp_move = move;
 			if (!snake.PotentialMove(dir, move)) {
 				move = bcp_move;
@@ -334,8 +327,7 @@ public:
 		HANDLE Console = GetConsoleHandle();
 		SetConsoleCursorPosition(Console, pos);
 
-		// this can be replaced by system("cls"), but this one clears only snake_game_area
-		//anyway, there are many long strings below
+		// this can be replaced by system("cls")
 		for (int i = 0; i < field.GetHeight() + zero_y + 2; i++) {
 			for (int j = 0; j < field.GetWidth() + zero_x + 2; j++)
 				std::cout << ' ';
@@ -349,8 +341,7 @@ public:
 
 		//eastern egg
 		if (score == (42 * SCORE_PER_FOOD)) {
-			std::cout << "Not bad, hope you don't see the difference between words 'mouse' and 'food'\n";
-			std::cout << "Despite the fact, they are very smart...\n";
+			std::cout << "The answer is everywhere..\n";
 		}
 	}
 };
