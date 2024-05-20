@@ -7,6 +7,10 @@
 #include <string>
 #include <time.h>
 
+#ifdef max()
+#undef max()
+#endif
+
 #define KB_LEFT 37
 #define KB_UP 38
 #define KB_RIGHT 39
@@ -62,8 +66,9 @@ class SnakeGame
 	short width;
 	short height;
 	int speed; // period between tacts in milliseconds
-	int goal;
+	int goal = 0;
 public:
-	SnakeGame(short n, short m, int goal_, int speed_ = 500): field(n, m), width(m), height(n), goal(goal_), speed(speed_){}
+	SnakeGame(short n, short m, int speed_ = 500): field(n, m), width(m), height(n), speed(speed_){}
+	void SetGoal();
 	void Play();
 };

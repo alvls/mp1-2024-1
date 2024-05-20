@@ -264,7 +264,34 @@ void Food::Hide() {
 	std::cout << char(32);
 }
 
+void SnakeGame::SetGoal() {
+	SetConsoleTextAttribute(hConsole, 15);
+
+	SetConsoleCursorPosition(hConsole, { 0, 0 });
+	for (int i = 0; i < width + 40; i++) std::cout << " ";
+
+	SetConsoleCursorPosition(hConsole, { 0, 0 });
+	std::cout << "Set the goal that is more than 4: ";
+	std::cin >> goal;
+	while (goal < 5) {
+		std::cout << "Set the goal that is more than 4: ";
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cin >> goal;
+	}
+
+	SetConsoleCursorPosition(hConsole, { 0, 0 });
+	for (int i = 0; i < width + 30; i++) {
+		for (int j = 0; j < height + 10; j++) 
+			std::cout << " ";
+		std::cout << std::endl;
+	}
+
+}
+
 void SnakeGame::Play() {
+	SetGoal();
+
 	std::srand(std::time(NULL));
 	short headx = 2 + rand() % (width - 6), heady = 2 + rand() % (height - 2);
 	snake = Snake({ headx, heady });
