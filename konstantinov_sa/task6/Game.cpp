@@ -7,6 +7,19 @@
 //#include <random>
 using namespace std;
 
+Setting Game::settings[SETTINGS_COUNT] = {};
+
+void Game::initSettings()
+{
+	Setting Game::settings[] = {
+		{"maxfood", 1, 1, 100, &maxfood, "max food"},
+		{"wallcount", 0, 5, 100, 5, "wc"}
+	};
+}
+
+
+
+
 template<typename T>
 shared_ptr<T> Game::create(int x, int y)
 {
@@ -19,24 +32,25 @@ shared_ptr<T> Game::create(int x, int y)
 	return obj;
 }
 
-void Game::buildMap(size_t sizex, size_t sizey) //матрица - массив строк
+void Game::buildMap(int sizex, int sizey) //матрица - массив строк
 {
-	
+	activeObjects.clear();
 	sx = sizex + 2; sy = sizey + 2;
 	srand(static_cast<unsigned>(time(nullptr)));
+	gmap.clear();
 	gmap.resize(sy);
 	for (auto& l : gmap) {
 		l.resize(sx);
 	}
 	cout << "resize y = "<<gmap.size()<<" x = "<<gmap[0].size()<<endl;
 
-	for (size_t i = 0;i < 2;i++) {
-		for (size_t j = 0;j < sx;j++) {
+	for (int i = 0;i < 2;i++) {
+		for (int j = 0;j < sx;j++) {
 			cout << "wall " << i << " " << j << endl;
 			create<Wall>(j,i);
 			create<Wall>(j, sy - i-1);
 		}
-		for (size_t j = 2;j < sy - 2;j++) {
+		for (int j = 2;j < sy - 2;j++) {
 			create<Wall>(i, j);
 			create<Wall>(sx -i-1, j);
 		}
@@ -44,7 +58,7 @@ void Game::buildMap(size_t sizex, size_t sizey) //матрица - массив 
 	cout << "walls\n";
 	
 
-	int sx = 10;
+	int sx = 11;
 	int sy = 4;
 	auto s = create<Snake>(sx, sy);
 	
@@ -61,18 +75,19 @@ void Game::buildMap(size_t sizex, size_t sizey) //матрица - массив 
 	}
 	s->tail = seg;
 	
-	placeRandWalls(10, 10);
+	placeRandWalls(50, 50);
 
 	create<Food>(12, 4);
 	create<Food>(14, 4);
 	create<Food>(12, 7);
+	system("cls");
 }
 
 void Game::printmap()
 {
-	cout << endl;
-	for (size_t i = 0;i < sy;i++) {
-		for (size_t j = 0;j < sx;j++) {
+	//cout << endl;
+	for (int i = 0;i < sy;i++) {
+		for (int j = 0;j < sx;j++) {
 			if (gmap[i][j]) {
 				renderObj(gmap[i][j]);
 			}
@@ -87,10 +102,11 @@ void Game::printmap()
 }
 
 void Game::update() {
-	system("cls");
+	//system("cls");
+	cursorToZero();
 	//cout << "! UPDATE\n";
 	getInput();
-	cout << (int)key << endl;
+	//cout << (int)key << endl;
 
 	for (auto& obj : activeObjects) {
 		//cout << " --- ACTIVE UPD\n";
@@ -102,14 +118,11 @@ void Game::update() {
 
 	//cout << endl<<"! END UPD, PRINT\n";
 	printmap();
-	COORD newPosition;
-	newPosition.X = 0; // column coordinate
-	newPosition.Y = 0;  // row coordinate
-	//SetConsoleCursorPosition(handle, newPosition);
+	
 }
 
 void Game::getInput() {
-
+	key = Controls::NOKEY;
 	while (_kbhit()) {
 		char inp;
 		
@@ -168,8 +181,8 @@ void Game::move(int fx, int fy, int tx, int ty, bool validate)
 void Game::placeFood()
 {
 	bool occ = 1;
-	size_t rx;
-	size_t ry;
+	int rx;
+	int ry;
 	while (occ) {
 		rx = rand() % (sx - 4) + 2;
 		ry = rand() % (sy - 4) + 2;
@@ -183,8 +196,8 @@ void Game::placeRandWalls(int count, int density)
 	
 	for (int i = 0;i < count;i++) {
 		bool occ = 1;
-		size_t rx;
-		size_t ry;
+		int rx;
+		int ry;
 		int tries = 0;
 		while (occ) {
 			tries++;
@@ -217,3 +230,65 @@ void Game::gameloop() {
 		Sleep(framedelay);
 	}
 }
+
+
+
+void Game::cursorToZero()
+{
+	COORD newPosition;
+	newPosition.X = 0; // column coordinate
+	newPosition.Y = 0;  // row coordinate
+	SetConsoleCursorPosition(handle, newPosition);
+}
+
+void Game::menuloop()
+{
+	int pos = 0;
+	do {
+		Setting& fset = settings[pos];
+		cursorToZero();
+		
+		getInput();
+		//cout << "KEY " << (int)key << endl;
+		if (key != Controls::NOKEY)
+			system("cls");
+
+		if (key == Controls::U)
+			pos--;
+		if (key == Controls::D)
+			pos++;
+		if (pos < 0)
+			pos = settingscount - 1;
+		if (pos > settingscount-1)
+			pos = 0;
+
+		if (key == Controls::R) {
+			if (fset.val + 1 <= fset.maxv)
+				fset.val++;
+		}
+		if (key == Controls::L) {
+			if (fset.val - 1 >= fset.minv)
+				fset.val--;
+		}
+		for (int i = 0; i < settingscount;i++) {
+			printSetting(settings[i], pos == i);
+		}
+
+	} while (key != Controls::E);
+
+}
+
+void Game::printSetting(Setting s, bool focus)
+{
+	if (!focus) {
+		SetConsoleTextAttribute(handle, FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_RED|FOREGROUND_INTENSITY);
+		cout << s.name << " < " << s.val << " >\n";
+	}
+		
+	else {
+		SetConsoleTextAttribute(handle, FOREGROUND_GREEN);
+		cout << s.name << " < " << s.val << " > "<<s.desc<<endl;
+	}
+}
+
+

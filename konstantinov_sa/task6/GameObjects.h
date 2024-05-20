@@ -3,7 +3,7 @@
 #include "Game.h"
 #include <memory>
 using namespace std;
-class Game;
+//class Game;
 
 class Gobject {
     friend class Game;

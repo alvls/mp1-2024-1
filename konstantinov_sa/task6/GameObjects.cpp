@@ -17,7 +17,7 @@ void Snake::crawl(int tx, int ty) {
 #ifdef DEBUG_PRINT
 		cout << target << endl;
 #endif
-		if ((!target) || (!dynamic_pointer_cast<Wall>(target)) || (!dynamic_pointer_cast<Wall>(target))) {
+		if ((!target) || ((!dynamic_pointer_cast<Wall>(target)) && (!dynamic_pointer_cast<Segment>(target)))) {
 #ifdef DEBUG_PRINT
 			cout << "NO WALL\n";
 #endif
@@ -30,6 +30,8 @@ void Snake::crawl(int tx, int ty) {
 			game->move(x, y, tx, ty);
 		}
 		else {
+			game->move(x, y, tx, ty);
+			symbol = 'X';
 			game->over();
 		}
 	}
@@ -40,7 +42,7 @@ void Snake::update() {
 	std::cout << "SNAKE " << x << ' ' << y << '\n';
 #endif
 	Controls key = game->key;
-	cout << "\t\tKEY " << (int)key << endl;
+	//cout << "\t\tKEY " << (int)key << endl;
 	int nx = 0;
 	int ny = 0;
 	switch (key) {
@@ -60,13 +62,16 @@ void Snake::update() {
 		break;
 	}
 	if (nx || ny) {
-		dx = nx; dy = ny;
+		if ((nx != -dx) && (ny != -dy)) {
+
+			dx = nx; dy = ny;
+		}
 	}
 	if (growstate) { //хвост вырос на прошлом апдейте
 		tail = tail->next;
 		growstate = 0;
 	}
-	cout << "\t\tdx dy " << dx << " " << dy<<endl;
+	//cout << "\t\tdx dy " << dx << " " << dy<<endl;
 	next->transmit(x, y);
 	crawl(x + dx, y + dy);
 }
