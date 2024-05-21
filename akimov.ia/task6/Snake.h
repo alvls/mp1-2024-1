@@ -8,7 +8,6 @@
 using namespace std;
 
 enum Direction { UP, DOWN, LEFT, RIGHT };
-enum SnakeColor { HEAD_COLOR, BODY_COLOR };
 
 class Snake : public GameObject
 {
