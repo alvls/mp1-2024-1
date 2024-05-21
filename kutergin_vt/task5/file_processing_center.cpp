@@ -66,7 +66,7 @@ vector<Credit> Processing_Center::getAvailableCredits(int acc_num)
     return availableCredits;
 }
 
-void Processing_Center::addCreditToClient(int acc_num, Credit& credit) 
+void Processing_Center::addCreditToClient(int acc_num, Credit& credit)
 {
     for (auto& client : clients) // range-based цикл для прохода по контейнеру vector
         if (client.acc_num == acc_num) // клиент существует

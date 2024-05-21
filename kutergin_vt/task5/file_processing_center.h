@@ -43,5 +43,5 @@ public:
     void updateUserBalance(int acc_num, double newBalance); // функция, обновляющая баланс пользователя
 };
 
-#endif 
+#endif
 

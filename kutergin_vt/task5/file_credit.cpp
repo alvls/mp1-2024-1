@@ -16,14 +16,18 @@ double Credit::getInterest_rate() const
     return interest_rate;
 }
 
-bool Credit::authorize(int acc_num, const string& password, Processing_Center& obj)
+bool Credit::authorize(int acc_num, const string& password)
 {
-    return obj.authorizeClient(acc_num, password);
+    if (processingCenter == nullptr)
+        throw runtime_error("The processing center is not installed");
+    return processingCenter->authorizeClient(acc_num, password);
 }
 
-void Credit::showINFO(int acc_num, Processing_Center& obj)
+void Credit::showINFO(int acc_num)
 {
-    vector<Credit> availableCredits = obj.getAvailableCredits(acc_num); // создание вектора доступных клиенту кредитов
+    if (processingCenter == nullptr)
+        throw runtime_error("The processing center is not installed");
+    vector<Credit> availableCredits = processingCenter->getAvailableCredits(acc_num); // создание вектора    доступных клиенту кредитов
     cout << "Available credits for account " << acc_num << ":" << endl;
     int index = 1;
     for (const auto& credit : availableCredits) // range-based цикл для прохода по контейнеру vector
@@ -33,22 +37,26 @@ void Credit::showINFO(int acc_num, Processing_Center& obj)
     }
 }
 
-bool Credit::checkCreditExistence(int acc_num, Processing_Center& obj)
+bool Credit::checkCreditExistence(int acc_num)
 {
-    Client user = obj.getClientInfo(acc_num); // создание объекта структуры Client для получения информации о клиенте из Processing Center
+    if (processingCenter == nullptr)
+        throw runtime_error("The processing center is not installed");
+    Client user = processingCenter->getClientInfo(acc_num); // создание объекта структуры Client для получения информации о клиенте из Processing Center
     if (!user.client_credits.empty()) // проверка на наличие кредитов (вектор не пустой)
         return true;
     else
         return false;
 }
 
-bool Credit::checkCreditAvailability(int acc_num, Processing_Center& obj, int index)
+bool Credit::checkCreditAvailability(int acc_num, int index)
 {
-    vector<Credit> availableCredits = obj.getAvailableCredits(acc_num); // создание вектора доступных клиенту кредитов
+    if (processingCenter == nullptr)
+        throw runtime_error("The processing center is not installed");
+    vector<Credit> availableCredits = processingCenter->getAvailableCredits(acc_num); // создание вектора доступных клиенту кредитов
     if (index >= 1 && index <= availableCredits.size()) // если индекс введен верно
     {
             Credit selectedCredit = availableCredits[index - 1]; // создание объекта класса Credit (выбранный кредит)
-            Client user = obj.getClientInfo(acc_num); // создание объекта структуры Client для получения информации о клиенте из Processing Center
+            Client user = processingCenter->getClientInfo(acc_num); // создание объекта структуры Client для получения информации о клиенте из Processing Center
             double monthlyPayment = selectedCredit.amount / (selectedCredit.term * 12); // расчет ежемесячной выплаты (без учета процентов, т.к. рассматривается первый платеж)
             if (selectedCredit.amount <= 3000000 && user.acc_balance >= monthlyPayment * 6)
                 return true;
@@ -58,27 +66,33 @@ bool Credit::checkCreditAvailability(int acc_num, Processing_Center& obj, int in
         throw out_of_range("Invalid index");
 }
 
-void Credit::getCredit(int acc_num, Processing_Center& obj, int index)
+void Credit::getCredit(int acc_num, int index)
 {
-    vector<Credit> availableCredits = obj.getAvailableCredits(acc_num); // создание вектора доступных клиенту кредитов
-    if (checkCreditAvailability(acc_num, obj, index)) // если кредит доступен для пользователя
+    if (processingCenter == nullptr)
+        throw runtime_error("The processing center is not installed");
+    vector<Credit> availableCredits = processingCenter->getAvailableCredits(acc_num); // создание вектора доступных клиенту кредитов
+    if (checkCreditAvailability(acc_num, index)) // если кредит доступен для пользователя
     {
         Credit& selectedCredit = availableCredits[index - 1];
-        obj.addCreditToClient(acc_num, selectedCredit); // добавляем ссылку на кредит
+        processingCenter->addCreditToClient(acc_num, selectedCredit); // добавляем ссылку на кредит
         
     }
 }
 
-void Credit::showCreditState(int acc_num, Processing_Center& obj) const
+void Credit::showCreditState(int acc_num) const
 {
-    Client user = obj.getClientInfo(acc_num); // создание объекта структуры Client для получения информации о клиенте из Processing Center
+    if (processingCenter == nullptr)
+        throw runtime_error("The processing center is not installed");
+    Client user = processingCenter->getClientInfo(acc_num); // создание объекта структуры Client для получения информации о клиенте из Processing Center
     Credit current_credit = user.client_credits[0]; // у клиента есть только один кредит (для простоты)
     cout << "Term: " << current_credit.term << " years, Amount: " << current_credit.amount << " rubles, Interest rate: " << current_credit.interest_rate << "%" << endl;
 }
 
-void Credit::payInstallment(int acc_num, Processing_Center& obj, double payment)
+void Credit::payInstallment(int acc_num, double payment)
 {
-    Client& user = obj.getClientInfo(acc_num); // создание ссылки на объект структуры Client для получения информации о клиенте из Processing Center
+    if (processingCenter == nullptr)
+        throw runtime_error("The processing center is not installed");
+    Client& user = processingCenter->getClientInfo(acc_num); // создание ссылки на объект структуры Client для получения информации о клиенте из Processing Center
     Credit& current_credit = user.client_credits[0]; // у клиента есть только один кредит (для простоты)
     if (payment < 0)
         throw invalid_argument("Payment amount must be non-negative");
@@ -89,7 +103,7 @@ void Credit::payInstallment(int acc_num, Processing_Center& obj, double payment)
     {
         current_credit.amount = newBalance - payment; // часть кредита выплачена
         double balance_2 = user.acc_balance - payment; // сумма снята со счета пользователя
-        obj.updateUserBalance(acc_num, balance_2);
+        processingCenter->updateUserBalance(acc_num, balance_2);
     }
     else
         throw invalid_argument("Payment amount must not be less than the accrued amount");
@@ -97,9 +111,11 @@ void Credit::payInstallment(int acc_num, Processing_Center& obj, double payment)
         current_credit.amount = 0; // кредит полностью погашен
 }
 
-void Credit::payOffCredit(int acc_num, Processing_Center& obj)
+void Credit::payOffCredit(int acc_num)
 {
-    Client& user = obj.getClientInfo(acc_num); // создание ссылки на объект структуры Client для получения информации о клиенте из Processing Center
+    if (processingCenter == nullptr)
+        throw runtime_error("The processing center is not installed");
+    Client& user = processingCenter->getClientInfo(acc_num); // создание ссылки на объект структуры Client для получения информации о клиенте из Processing Center
     Credit& current_credit = user.client_credits[0]; // у клиента есть только один кредит (для простоты)
     double monthlyInterestRate = current_credit.interest_rate / 100 / 12; // расчет процентов за месяц
     double newBalance = current_credit.amount * (1 + monthlyInterestRate); // новый баланс кредита
@@ -107,7 +123,7 @@ void Credit::payOffCredit(int acc_num, Processing_Center& obj)
     {
         current_credit.amount = 0;
         double balance_2 = user.acc_balance - newBalance; // сумма снята со счета пользователя
-        obj.updateUserBalance(acc_num, balance_2);
+        processingCenter->updateUserBalance(acc_num, balance_2);
     }
     else
         throw runtime_error("Insufficient funds to pay off credit");
