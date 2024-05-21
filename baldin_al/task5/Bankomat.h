@@ -7,16 +7,17 @@
 using namespace std;
 
 struct Client {
+	string card_number;
 	string f_name;
 	string l_name;
 	string m_name;
 	long long sum;
 	string pin_code;
 
-	Client() : f_name(""), l_name(""), m_name(""), sum(0), pin_code("") {};
+	Client() : card_number(""), f_name(""), l_name(""), m_name(""), sum(0), pin_code("") {};
 
-	Client(const string& f_name_, const string& l_name_, const string& m_name_, long long sum_, const string& pin_code_) :
-		f_name(f_name_), l_name(l_name_), m_name(m_name_), sum(sum_), pin_code(pin_code_) {};
+	Client(const string& card_number_, const string& f_name_, const string& l_name_, const string& m_name_, long long sum_, const string& pin_code_) :
+		card_number(card_number_), f_name(f_name_), l_name(l_name_), m_name(m_name_), sum(sum_), pin_code(pin_code_) {};
 
 	bool operator == (const Client& c) const;
 };

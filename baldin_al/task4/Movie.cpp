@@ -29,20 +29,18 @@ void MovieLibrary::addMovie(const vector<Movie>& newMovies) {
 }
 
 void MovieLibrary::modifyMovie(const Movie& lm, const Movie& nm) {
-	for (Movie movie : movies) {
-		if (movie == lm) {
-			Movie tmp = movie;
-			DeleteMovie(movie);
-			tmp.director = nm.director;
-			tmp.screenwriter = nm.screenwriter;
-			tmp.composer = nm.composer;
-			tmp.date.day = nm.date.day;
-			tmp.date.month = nm.date.month;
-			tmp.date.year = nm.date.year;
-			tmp.profit = nm.profit;
-			addMovie(tmp);
-			break;
-		}
+	auto it = movies.find(lm);
+	if (it != movies.end()) {
+		movies.erase(it);
+		Movie tmp = *it;
+		tmp.director = nm.director;
+		tmp.screenwriter = nm.screenwriter;
+		tmp.composer = nm.composer;
+		tmp.date.day = nm.date.day;
+		tmp.date.month = nm.date.month;
+		tmp.date.year = nm.date.year;
+		tmp.profit = nm.profit;
+		addMovie(tmp);
 	}
 }
 

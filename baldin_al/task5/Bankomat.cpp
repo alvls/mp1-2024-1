@@ -6,7 +6,7 @@ bool Client::operator == (const Client& c) const {
 
 void ProcessingCenter::addClient(const string& card_number, const string& f_name, const string& l_name, const string& m_name,
 	long long sum, const string& pin_code) {
-	clients[card_number] = Client(f_name, l_name, m_name, sum, pin_code);
+	clients[card_number] = Client(card_number, f_name, l_name, m_name, sum, pin_code);
 	blockedCards[card_number] = false;
 }
 
