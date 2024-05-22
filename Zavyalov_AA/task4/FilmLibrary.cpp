@@ -149,14 +149,34 @@ void FilmLibrary::changeFilm(const Film& src, const Film& dst) {
 	addFilm(dst); // If such film does not exist yet, add it to the film library
 }
 Film FilmLibrary::findFilm(string title, unsigned int year) {
-	bool found = 0;
-	for (unsigned int i = 0; i < sz; i++) {
-		Film cur = films[i];
-		if (cur.title == title && cur.date.year == year) {
-			found = 1;
-			return cur;
+	int l = 0, r = films.size() - 1;
+	while (l <= r) {
+		int m = (l + r) / 2;
+		Film cur = films[m];
+		if (cur.title == title) {
+			if (cur.date.year == year)
+				return cur;
+			if (cur.date.year < year) {
+				l = m + 1;
+			}
+			else {
+				r = m - 1;
+			}
+		}
+		if (cur.title < title) {
+			l = m + 1;
+		}
+		else
+		{
+			r = m - 1;
 		}
 	}
+	/*for (unsigned int i = 0; i < sz; i++) {
+		Film cur = films[i];
+		if (cur.title == title && cur.date.year == year) {
+			return cur;
+		}
+	}*/
 	return Film("", "", "", "", tDate(0, 0, 0), 0);
 }
 vector<Film> FilmLibrary::filmsByDirector(string director) {
