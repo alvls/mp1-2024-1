@@ -214,10 +214,10 @@ public:
 			mid = (left + right) / 2;
 			if (sngNm == list[mid].songName) {
 				while (true)
-					if (sngrNm == list[mid].singerName)
+					if (sngrID == list[mid].singerID)
 						return mid;
 					else {
-						if (sngrNm < list[mid].singerName)
+						if (sngrID < list[mid].singerID)
 							right = mid - 1;
 						else
 							left = mid + 1;
