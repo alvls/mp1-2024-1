@@ -136,14 +136,23 @@ void FilmLibrary::addFilm(const Film& src) {
 	sort(films.begin(), films.end());
 }
 void FilmLibrary::changeFilm(const Film& src, const Film& dst) {
-	for (unsigned int i = 0; i < sz; i++) {
-		if (films[i] == src) {
+	int l = 0, r = films.size() - 1;
+	while (l <= r) {
+		int m = (l + r) / 2;
+		Film cur = films[m];
+		if (films[m] == src) {
 			films_by_fees.erase(src);
 			films_by_fees.insert(dst);
-			films[i] = dst;
+			films[m] = dst;
 			sort(films.begin(), films.end());
-			
 			return;
+		}
+		if (cur.title < src.title) {
+			l = m + 1;
+		}
+		else
+		{
+			r = m - 1;
 		}
 	}
 	addFilm(dst); // If such film does not exist yet, add it to the film library
@@ -171,12 +180,6 @@ Film FilmLibrary::findFilm(string title, unsigned int year) {
 			r = m - 1;
 		}
 	}
-	/*for (unsigned int i = 0; i < sz; i++) {
-		Film cur = films[i];
-		if (cur.title == title && cur.date.year == year) {
-			return cur;
-		}
-	}*/
 	return Film("", "", "", "", tDate(0, 0, 0), 0);
 }
 vector<Film> FilmLibrary::filmsByDirector(string director) {
@@ -228,12 +231,29 @@ void FilmLibrary::deleteFilm(const Film& f) {
 	exists[f] = 0;
 	sz--;
 	unsigned int ind = 0;
-	for (unsigned int i = 0; i < sz; i++) {
-		if (films[i] == f) {
-			ind = i;
-			break;
+	int l = 0, r = sz - 1, m = (l + r) / 2;
+	while (l <= r) {
+		int m = (l + r) / 2;
+		Film cur = films[m];
+		if (cur.title == f.title) {
+			if (cur.date.year == f.date.year)
+				break;
+			if (cur.date.year < f.date.year) {
+				l = m + 1;
+			}
+			else {
+				r = m - 1;
+			}
+		}
+		if (cur.title < f.title) {
+			l = m + 1;
+		}
+		else
+		{
+			r = m - 1;
 		}
 	}
+	ind = m;
 	films.erase(films.begin() + ind);
 	films_by_fees.erase(f);
 }
