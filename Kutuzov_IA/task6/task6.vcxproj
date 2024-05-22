@@ -18,6 +18,70 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CFruit.h" />
+    <ClInclude Include="CSnake.h" />
+    <ClInclude Include="CSnakeWorld.h" />
+    <ClInclude Include="CWall.h" />
+    <ClInclude Include="Engine\Game\CGame.h" />
+    <ClInclude Include="Engine\Game\CPlayerController.h" />
+    <ClInclude Include="Engine\Game\DataTypes.h" />
+    <ClInclude Include="Engine\Game\KeyCodes.h" />
+    <ClInclude Include="Engine\Libs\stb_image.h" />
+    <ClInclude Include="Engine\Render\CConsoleRender.h" />
+    <ClInclude Include="Engine\Render\CGameRender.h" />
+    <ClInclude Include="Engine\Render\CRenderOpenGL.h" />
+    <ClInclude Include="Engine\Render\CWindow.h" />
+    <ClInclude Include="Engine\Render\OpenGL\CIndexBuffer.h" />
+    <ClInclude Include="Engine\Render\OpenGL\CRenderer.h" />
+    <ClInclude Include="Engine\Render\OpenGL\CShader.h" />
+    <ClInclude Include="Engine\Render\OpenGL\CTexture.h" />
+    <ClInclude Include="Engine\Render\OpenGL\CVertexArray.h" />
+    <ClInclude Include="Engine\Render\OpenGL\CVertexBuffer.h" />
+    <ClInclude Include="Engine\Render\OpenGL\CVertexBufferLayout.h" />
+    <ClInclude Include="Engine\Render\OpenGL\DefOpenGL.h" />
+    <ClInclude Include="Engine\ScarletEngine.h" />
+    <ClInclude Include="Engine\World\CCollider.h" />
+    <ClInclude Include="Engine\World\CEntity.h" />
+    <ClInclude Include="Engine\World\CInputReceiver.h" />
+    <ClInclude Include="Engine\World\CObject.h" />
+    <ClInclude Include="Engine\World\CScript.h" />
+    <ClInclude Include="Engine\World\CWorld.h" />
+    <ClInclude Include="Engine\World\CWorldScriptHandler.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CFruit.cpp" />
+    <ClCompile Include="CSnake.cpp" />
+    <ClCompile Include="CSnakeWorld.cpp" />
+    <ClCompile Include="CWall.cpp" />
+    <ClCompile Include="Engine\Game\CGame.cpp" />
+    <ClCompile Include="Engine\Game\CPlayerController.cpp" />
+    <ClCompile Include="Engine\Game\DataTypes.cpp" />
+    <ClCompile Include="Engine\Libs\stb_image.cpp" />
+    <ClCompile Include="Engine\Render\CConsoleRender.cpp" />
+    <ClCompile Include="Engine\Render\CGameRender.cpp" />
+    <ClCompile Include="Engine\Render\CRenderOpenGL.cpp" />
+    <ClCompile Include="Engine\Render\CWindow.cpp" />
+    <ClCompile Include="Engine\Render\OpenGL\CIndexBuffer.cpp" />
+    <ClCompile Include="Engine\Render\OpenGL\CRenderer.cpp" />
+    <ClCompile Include="Engine\Render\OpenGL\CShader.cpp" />
+    <ClCompile Include="Engine\Render\OpenGL\CTexture.cpp" />
+    <ClCompile Include="Engine\Render\OpenGL\CVertexArray.cpp" />
+    <ClCompile Include="Engine\Render\OpenGL\CVertexBuffer.cpp" />
+    <ClCompile Include="Engine\Render\OpenGL\CVertexBufferLayout.cpp" />
+    <ClCompile Include="Engine\Render\OpenGL\DefOpenGL.cpp" />
+    <ClCompile Include="Engine\World\CCollider.cpp" />
+    <ClCompile Include="Engine\World\CEntity.cpp" />
+    <ClCompile Include="Engine\World\CInputReceiver.cpp" />
+    <ClCompile Include="Engine\World\CObject.cpp" />
+    <ClCompile Include="Engine\World\CScript.cpp" />
+    <ClCompile Include="Engine\World\CWorld.cpp" />
+    <ClCompile Include="Engine\World\CWorldScriptHandler.cpp" />
+    <ClCompile Include="Snake.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\Render\Shaders\Basic.shader" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{8AA13742-C363-4E12-9EE2-FF183CA90535}</ProjectGuid>
@@ -82,7 +146,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2022;$(SolutionDir)Dependencies\GLEW\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -104,14 +174,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2022;$(SolutionDir)Dependencies\GLEW\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

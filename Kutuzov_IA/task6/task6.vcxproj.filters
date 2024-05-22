@@ -9,5 +9,206 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{7bef16dc-2fa3-42b9-92ce-e8a532ef7a49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\World">
+      <UniqueIdentifier>{4dbad3a5-983a-4173-8d92-8fe94e1b8146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render">
+      <UniqueIdentifier>{e4fec7fa-aa5e-4817-89fb-af937a24d8ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Game">
+      <UniqueIdentifier>{95c1e856-bb68-4288-b258-33d1dac2dde8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\Shaders">
+      <UniqueIdentifier>{fb58a9d9-70a1-45a1-a9e0-9300a5827c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Render\OpenGL">
+      <UniqueIdentifier>{0ac142bd-cf08-4e9a-9b13-9e2cc3d4f4fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Libs">
+      <UniqueIdentifier>{cb7f4193-d5a4-4f91-af16-6aafcc2db5f1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\World\CEntity.h">
+      <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World\CObject.h">
+      <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World\CScript.h">
+      <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World\CWorld.h">
+      <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\CGameRender.h">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\CRenderOpenGL.h">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\CWindow.h">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Game\CGame.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Game\DataTypes.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ScarletEngine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World\CCollider.h">
+      <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World\CWorldScriptHandler.h">
+      <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\CConsoleRender.h">
+      <Filter>Engine\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Game\CPlayerController.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\World\CInputReceiver.h">
+      <Filter>Engine\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CVertexBuffer.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\DefOpenGL.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CIndexBuffer.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CVertexArray.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CVertexBufferLayout.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CShader.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CRenderer.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Game\KeyCodes.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Libs\stb_image.h">
+      <Filter>Engine\Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Render\OpenGL\CTexture.h">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="CSnakeWorld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSnake.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CFruit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CWall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine\World\CEntity.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World\CObject.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World\CScript.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World\CWorld.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\CGameRender.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\CRenderOpenGL.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\CWindow.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Game\CGame.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Game\DataTypes.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Snake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World\CCollider.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World\CWorldScriptHandler.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\CConsoleRender.cpp">
+      <Filter>Engine\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Game\CPlayerController.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\World\CInputReceiver.cpp">
+      <Filter>Engine\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CVertexBuffer.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\DefOpenGL.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CIndexBuffer.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CVertexArray.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CVertexBufferLayout.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CShader.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CRenderer.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Libs\stb_image.cpp">
+      <Filter>Engine\Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Render\OpenGL\CTexture.cpp">
+      <Filter>Engine\Render\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="CSnakeWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSnake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CFruit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CWall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\Render\Shaders\Basic.shader">
+      <Filter>Engine\Render\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
