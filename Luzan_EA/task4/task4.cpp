@@ -209,15 +209,31 @@ public:
 				return 0; // Error
 			}
 
-		tmp_size = list.size();
-		for (size_t i = 1; i < tmp_size; i++) 
-			if (sngrID == list[i].singerID) 
-				if (sngNm == list[i].songName) 
-					return i;
-
-		//cout << "NO SUCH SONG\n";
-		return 0; // Error
-		
+		size_t left = 1, right = list.size() - 1, mid = 0;
+		while (true) {
+			mid = (left + right) / 2;
+			if (sngNm == list[mid].songName) {
+				while (true)
+					if (sngrNm == list[mid].singerName)
+						return mid;
+					else {
+						if (sngrNm < list[mid].singerName)
+							right = mid - 1;
+						else
+							left = mid + 1;
+						if (right < left)
+							return 0;
+					}
+			}
+			else {
+			if (sngNm < list[mid].songName)
+				right = mid - 1;
+			else
+				left = mid + 1;
+			if (right < left)
+				return 0;
+			}
+		}
 	}
 	
 	TSong getSong(size_t songNum) {
@@ -226,7 +242,7 @@ public:
 
 	bool editSongFast(size_t songNum, const TSong& edited_song) {
 		// !doesnt check if new author exist in the list
-		if (songNum < 0)
+		if (songNum <= 0)
 			return false;
 
 		list[songNum] = edited_song;
@@ -234,7 +250,7 @@ public:
 	}
 	
 	bool editSong(size_t songNum, const TSong& edited_song) {
-		if (songNum < 0)
+		if (songNum <= 0)
 			return false;
 
 		//if new singer check
@@ -415,8 +431,8 @@ int main() {
 	lib.addSong("Песня2", "42", "Певец2", "Поэт22", "Композитор2", "11", "12", "1923");
 	lib.addSong("Песня3", "42", "Певец1", "Поэт22", "Композитор3", "11", "12", "2023");
 	lib.addSong("Песня4", "42", "Певец3", "Поэт22", "Композитор1", "11", "12", "2023");
-	lib.addSong("Песня4", "42", "Певец3", "Поэт22", "Композитор1", "11", "12", "2023");
-	cout << lib.findSong("Песня3", "Певец1") << " ---- " << lib.getSong(lib.findSong("Песня3", "Певец1")).kompName;
+	lib.addSong("Песня4", "42", "Певец2", "Поэт22", "Композитор1122", "11", "12", "2023");
+	cout << lib.findSong("Песня4", "Певец2") << " ---- " << lib.getSong(lib.findSong("Песня4", "Певец2")).kompName;
 	
 	//lib.printBySinger("Певец3");
 	//cout << "\n-------------------------------------------\n";
