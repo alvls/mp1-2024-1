@@ -79,7 +79,7 @@ public:
 void main()
 {
 	TextRedactor ex;
-	ex.SetLen(15);
+	ex.SetLen(5);
 	ex.SetPos({ 10,4 });
 	ex.PlaceCursor();
 	COORD getter = ex.GetPos();
