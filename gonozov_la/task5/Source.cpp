@@ -7,85 +7,86 @@
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable : 4996)
 using namespace std;
+#define ARRAY_SIZE 10.
 
-class Deposit {
+class Processing_center {
+private:
+	string* salary_account = new string[ARRAY_SIZE]; //зарплатные счета
+	unsigned actual_number; //количество зарплатных счетов
+	unsigned find_number; //индекс номера зарплатного счёта, присвоенного при успешной проверке авторизации
+	string* FIO = new string[ARRAY_SIZE]; //ФИО
+	string* information_of_deposit = new string[ARRAY_SIZE];
+	unsigned long* amount_account = new unsigned long[ARRAY_SIZE]; //суммы на зарплатном счету
+	string* password = new std::string[ARRAY_SIZE];
+	bool check = false;
+public:
+	Processing_center() {
+		//здесь должно совершаться обращение к серверу, который бы и возвращал информауию для формирования массивов
+		//в данной реализации я просто поставил заглушку
+		salary_account[0] = "1325"; salary_account[1] = "2356"; salary_account[2] = "7685";
+		amount_account[0] = 35900; amount_account[2] = 500002; amount_account[2] = 3101786;
+		FIO[0] = "Иванов Николай Александрович"; FIO[1] = "Фахрутдинова Евгения Вячеславовна"; FIO[2] = "Смолов Анатолий Олегович";
+		password[0] = "r4t5e3"; password[1] = "asdfgh"; password[2] = "0o0o0o0o";
+		actual_number = 3;
+	}
+	unsigned long get_amount(string salary_account_enter) {
+		return amount_account[find_number];
+	}
+	void change_amount(unsigned long amount_account_enter) {
+		amount_account[find_number] = amount_account_enter;
+	}
+	void sum_amount(unsigned long amount_account_enter) {
+		amount_account[find_number] += amount_account_enter;
+	}
+	bool check_authoriz(string salary_account_enter, string password_enter) {
+		if (password_enter.size() < 4) {
+			check = false;
+			return false;
+		}
+		int target = stoi(salary_account_enter);
+		int i = (actual_number + 1) / 2;
+		int counter = 0;
+		while (target != stoi(salary_account[i])) {
+			if (stoi(salary_account[i]) > target) {
+				i /= 2;
+				counter++;
+			}
+			else if (stoi(salary_account[i]) < target) {
+				i += i / 2;
+				counter++;
+			}
+			if (counter == 15) {
+				check = false;
+				return false;
+			}
+		}
+		if (password[i] == password_enter && salary_account[i] == salary_account_enter) {
+			find_number = i;
+			check = true;
+			return true;
+		}
+		else {
+			check = false;
+			return false;
+		}
+	}
+};
+
+class Deposit  {
 	string salary_account_recieved; //полученный от процессингого центра зарплатный счёт
 	unsigned long amount_account_recieved; //полученная от процессингого центра сумма на зарплатном счету
 	bool authorization_status = false;
-	string* salary_account = new string[10];
-	unsigned long* amount_deposit = new unsigned long[10];
-	unsigned long* amount_percent = new unsigned long[10];
-	time_t* t = new time_t[10];
-	unsigned* period_deposit = new unsigned[10];
+	string* salary_account = new string[ARRAY_SIZE];
+	unsigned long* amount_deposit = new unsigned long[ARRAY_SIZE];
+	unsigned long* amount_percent = new unsigned long[ARRAY_SIZE];
+	time_t* t = new time_t[ARRAY_SIZE];
+	unsigned* period_deposit = new unsigned[ARRAY_SIZE];
 	unsigned current_position; //позиция последнего добавленного элемента
-	size_t size_arrays = 10;
-
-	class Processing_center {
-		string* salary_account = new string[10]; //зарплатные счета
-		unsigned actual_number; //количество зарплатных счетов
-		unsigned find_number; //индекс номера зарплатного счёта, присвоенного при успешной проверке авторизации
-		string* FIO = new string[10]; //ФИО
-		string* information_of_deposit = new string[10];
-		unsigned long* amount_account = new unsigned long[10]; //суммы на зарплатном счету
-		string* password = new std::string[10];
-		bool check = false;
-	public:
-		Processing_center() { 
-			//здесь должно совершаться обращение к серверу, который бы и возвращал информауию для формирования массивов
-			//в данной реализации я просто поставил заглушку
-			salary_account[0] = "1325"; salary_account[1] = "2356"; salary_account[2] = "7685";
-			amount_account[0] = 35900; amount_account[2] = 500002; amount_account[2] = 3101786;
-			FIO[0] = "Иванов Николай Александрович"; FIO[1] = "Фахрутдинова Евгения Вячеславовна"; FIO[2] = "Смолов Анатолий Олегович";
-			password[0] = "r4t5e3"; password[1] = "asdfgh"; password[2] = "0o0o0o0o";
-			actual_number = 3;
-		}
-		unsigned long get_amount(string salary_account_enter) {
-			return amount_account[find_number];
-		}
-		void change_amount(unsigned long amount_account_enter) {
-			amount_account[find_number] = amount_account_enter;
-		}
-		void sum_amount(unsigned long amount_account_enter) {
-			amount_account[find_number] += amount_account_enter;
-		}
-		bool check_authoriz(string salary_account_enter, string password_enter) {
-			if (password_enter.size() < 4) {
-				check = false;
-				return false;
-			}
-			int target = stoi(salary_account_enter);
-			int i = (actual_number+1) / 2;
-			int counter = 0;
-			while (target != stoi(salary_account[i])) {
-				if (stoi(salary_account[i]) > target) {
-					i /= 2;
-					counter++;
-				}
-				else if (stoi(salary_account[i]) < target) {
-					i += i / 2;
-					counter++;
-				}
-				if (counter == 15) {
-					check = false;
-					return false;
-				}
-			}
-			if (password[i] == password_enter && salary_account[i] == salary_account_enter) {
-				find_number = i;
-				check = true;
-				return true;
-			}
-			else {
-				check = false;
-				return false;
-			}
-		}
-	};
-	Processing_center proc_center;
+	size_t size_arrays = ARRAY_SIZE;
+	Processing_center& proc_center;
 public:
-	Deposit()
+	Deposit(Processing_center& proc_center_): proc_center (proc_center_)
 	{
-		proc_center = Processing_center();
 		//здесь должно совершаться обращение к серверу, который бы и возвращал информауию для формирования массивов
 		//в данной реализации я просто поставил заглушку
 		salary_account[0] = "1325"; amount_deposit[0] = 300000; amount_percent[0] = 3000;
@@ -93,7 +94,7 @@ public:
 		current_position = 0; 
 
 	}
-	void authorization(string salary_account_enter, string password_enter) {
+	bool authorization(string salary_account_enter, string password_enter) {
 		if (proc_center.check_authoriz(salary_account_enter, password_enter) == true) {
 			salary_account_recieved = salary_account_enter;
 			amount_account_recieved = proc_center.get_amount(salary_account_enter);
@@ -102,8 +103,8 @@ public:
 		}
 		else {
 			authorization_status = false;
-			cout << "Авторизация не завершилась успешно" << endl;
 		}
+		return authorization_status;
 	}
 	void get_information_about_deposits() {
 		if (authorization_status == true) {
@@ -139,10 +140,11 @@ public:
 			return false;
 		}
 	}
-	void open_deposit(unsigned long amount_account_enter, unsigned period_deposit_enter) { //было бы очень хорошо сразу обновлять изменения и на сервере
+	bool open_deposit(unsigned long amount_account_enter, unsigned period_deposit_enter) { //было бы очень хорошо сразу обновлять изменения и на сервере
 		if (authorization_status == true) {
 			if (amount_account_enter > amount_account_recieved) {
 				cout << "Введена недопустимо большая сумма" << endl;
+				return false;
 			}
 			else if (period_deposit_enter == 3 || period_deposit_enter == 6 || period_deposit_enter == 12 || period_deposit_enter == 24 || period_deposit_enter == 36) {
 				amount_account_recieved -= amount_account_enter;
@@ -157,7 +159,7 @@ public:
 					unsigned long* amount_deposit_help = new unsigned long[sz_array_help];
 					unsigned long* amount_percent_help = new unsigned long[sz_array_help];
 					time_t* t_help = new time_t[sz_array_help];
-					unsigned* period_deposit_help = new unsigned[10];
+					unsigned* period_deposit_help = new unsigned[ARRAY_SIZE];
 					for (int i = 0; i <= current_position; i++) {
 						salary_account_help[i] = salary_account[i];
 						amount_deposit_help[i] = amount_deposit[i];
@@ -191,11 +193,14 @@ public:
 			}
 			else {
 				cout << "Введено количество месяцев, на которое нельзя открыть кредит" << endl;
+				return false;
 			}
 		}
 		else {
 			cout << "Пройдите авторизацию" << endl;
+			return false;
 		}
+		return true;
 	}
 	void check_status_deposit() {
 		if (authorization_status == true) {
@@ -223,7 +228,7 @@ public:
 			cout << "Пройдите авторизацию" << endl;
 		}
 	}
-	void withdraw_percent() { //вывести проценты с депозита
+	bool withdraw_percent() { //вывести проценты с депозита
 		if (authorization_status == true) {
 			unsigned find_number;
 			bool flug = false;
@@ -240,13 +245,16 @@ public:
 			}
 			else {
 				cout << "Депозит ещё не открыт" << endl;
+				return false;
 			}
 		}
 		else {
 			cout << "Пройдите авторизацию" << endl;
+			return false;
 		}
+		return true;
 	}
-	void close_deposit() {
+	bool close_deposit() {
 		if (authorization_status == true) {
 			unsigned find_number;
 			bool flug = false;
@@ -274,17 +282,21 @@ public:
 			}
 			else {
 				cout << "Депозит ещё не открыт" << endl;
+				return false;
 			}
 		}
 		else {
 			cout << "Пройдите авторизацию" << endl;
+			return false;
 		}
+		return true;
 	}
 };
 
 void main() {
 	setlocale(LC_ALL, "rus");
-	Deposit Ff;
+	Processing_center A;
+	Deposit Ff(A);
 	Ff.get_information_about_deposits();
 	Ff.authorization("1325", "r4t5e3");
 	Ff.get_information_about_deposits();
