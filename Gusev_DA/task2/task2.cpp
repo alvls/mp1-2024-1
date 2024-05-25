@@ -1,164 +1,211 @@
 #include <iostream>
-#include <string>
-#include <unordered_set>
-#include <algorithm>
-#include <cstdlib>
+#include <cstring> // Для использования функций strncpy_s и strcpy_s
+#include <algorithm> // Для использования функции reverse
 
-class String {
+#define _CRT_SECURE_NO_WARNINGS // Для отключения предупреждений о небезопасности
+
+using namespace std;
+
+#ifdef _WIN32
+#include <windows.h>
+void clearConsole() {
+    system("cls");
+}
+#else
+void clearConsole() {
+    system("clear");
+}
+#endif
+
+class MyString {
 private:
-    std::string str;
-public:
-    String() : str("") {}
+    char str[41]; // Массив символов для хранения строки (плюс один символ для '\0')
 
-    void setString(const std::string& s) {
-        if (s.length() <= 40) {
-            str = s;
+public:
+    MyString() {
+        str[0] = '\0'; // Инициализируем строку пустым символом
+    }
+
+    void setString(const char* s) {
+        if (strlen(s) <= 40) { // Проверяем длину строки
+            strncpy_s(str, sizeof(str), s, sizeof(str) - 1); // Копируем строку в массив str
         }
         else {
-            std::cout << "The length of the string exceeds 40 characters. Shorten the line.\n";
+            cout << "The length of the string exceeds 40 characters. Shorten the line.\n";
         }
     }
 
     void inputString() {
-        std::cout << "Enter a string (no more than 40 characters): ";
-        std::cin.ignore();
-        std::getline(std::cin, str);
-        if (str.length() > 40) {
-            std::cout << "The length of the string exceeds 40 characters. Shorten the line.\n";
-            str = "";
+        cout << "Enter a string (no more than 40 characters): ";
+        cin.ignore();
+        cin.getline(str, sizeof(str)); // Считываем строку с учетом длины
+        if (strlen(str) == 40) { // Добавляем проверку на максимальную длину
+            cout << "The length of the string reaches 40 characters.\n";
+        }
+        else if (strlen(str) > 40) {
+            cout << "The length of the string exceeds 40 characters. Shorten the line.\n";
+            str[0] = '\0'; // Обнуляем строку
         }
     }
 
     int length() const {
-        return str.length();
+        return strlen(str);
     }
 
     char getCharAt(int index) const {
-        if (index >= 0 && index < str.length()) {
+        if (index >= 0 && index < strlen(str)) {
             return str[index];
         }
         else {
-            std::cout << "The index goes beyond the line boundaries.\n";
-            return '0';
+            cout << "The index goes beyond the line boundaries.\n";
+            return '\0';
         }
     }
 
     void setCharAt(int index, char c) {
-        if (index >= 0 && index < str.length()) {
+        if (index >= 0 && index < strlen(str)) {
             str[index] = c;
         }
         else {
-            std::cout << "The index goes beyond the line boundaries.\n";
+            cout << "The index goes beyond the line boundaries.\n";
         }
     }
 
-    std::string substring(int start, int end) const {
-        if (start >= 0 && start < end && end <= str.length()) {
-            return str.substr(start, end - start);
+    string substring(int start, int end) const {
+        if (start >= 0 && start < end && end <= strlen(str)) {
+            char substr[41]; // Временный массив для подстроки
+            strncpy_s(substr, sizeof(substr), str + start, end - start); // Копируем подстроку во временный массив
+            substr[end - start] = '\0'; // Добавляем завершающий символ
+            return substr;
         }
         else {
-            std::cout << "Going beyond the line boundaries when selecting a substring.\n";
+            cout << "Going beyond the line boundaries when selecting a substring.\n";
             return "";
         }
     }
 
     bool isPalindrome() const {
-        std::string revStr = str;
-        std::reverse(revStr.begin(), revStr.end());
-        return str == revStr;
+        int len = strlen(str);
+        for (int i = 0; i < len / 2; ++i) {
+            if (str[i] != str[len - 1 - i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     int countUniqueLatinChars() const {
-        std::unordered_set<char> latinChars;
-        for (char c : str) {
-            if (isalpha(c) && islower(c)) {
-                latinChars.insert(c);
+        bool latinChars[26] = { false }; // Массив флагов для латинских символов
+        int count = 0;
+        for (int i = 0; i < strlen(str); ++i) {
+            char c = tolower(str[i]); // Преобразуем символ в нижний регистр
+            if (c >= 'a' && c <= 'z') {
+                if (!latinChars[c - 'a']) { // Если символ еще не встречался
+                    latinChars[c - 'a'] = true; // Помечаем его как встреченный
+                    ++count; // Увеличиваем счетчик уникальных символов
+                }
             }
         }
-        return latinChars.size();
+        return count;
     }
 
     void print() const {
-        std::cout << str << std::endl;
+        cout << str << endl;
     }
 
-    ~String() {}
+    ~MyString() {}
 };
 
+unsigned long long factorial(unsigned long long n) {
+    if (n == 0) {
+        return 1;
+    }
+    else {
+        return n * factorial(n - 1);
+    }
+}
+
 int main() {
-    String myString;
+    MyString myString;
     int choice;
 
     do {
-        std::cout << "Entered line: ";
+        cout << "Entered line: ";
         myString.print();
 
-        std::cout << "\nChoose an option:\n";
-        std::cout << "1. Input string\n";
-        std::cout << "2. Length of the string\n";
-        std::cout << "3. Character by the index\n";
-        std::cout << "4. Replacing a character by the index\n";
-        std::cout << "5. Substring from a string\n";
-        std::cout << "6. Check if the string is a palindrome\n";
-        std::cout << "7. Number of different characters in a string\n";
-        std::cout << "0. Exit\n";
-        std::cout << "Enter your choice: ";
+        cout << "\nChoose an option:\n";
+        cout << "1. Input string\n";
+        cout << "2. Length of the string\n";
+        cout << "3. Character by the index\n";
+        cout << "4. Replacing a character by the index\n";
+        cout << "5. Substring from a string\n";
+        cout << "6. Check if the string is a palindrome\n";
+        cout << "7. Number of different characters in a string\n";
+        cout << "8. Factorial calculation\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
 
-        std::cin >> choice;
+        cin >> choice;
 
         switch (choice) {
         case 1:
             myString.inputString();
-            system("cls");
+            clearConsole(); // Используем функцию для очистки консоли
             break;
         case 2:
-            system("cls");
-            std::cout << "Length of the string: " << myString.length() << std::endl;
+            clearConsole();
+            cout << "Length of the string: " << myString.length() << endl;
             break;
         case 3:
-            system("cls");
+            clearConsole();
             int index;
-            std::cout << "Select index: ";
-            std::cin >> index;
-            std::cout << "Symbol be the index " << index << ": " << myString.getCharAt(index) << std::endl;
+            cout << "Select index: ";
+            cin >> index;
+            cout << "Symbol be the index " << index << ": " << myString.getCharAt(index) << endl;
             break;
         case 4:
-            system("cls");
+            clearConsole();
             int indexToReplace;
             char newChar;
-            std::cout << "Input index to replace: ";
-            std::cin >> indexToReplace;
-            std::cout << "Input new symbol: ";
-            std::cin >> newChar;
+            cout << "Input index to replace: ";
+            cin >> indexToReplace;
+            cout << "Input new symbol: ";
+            cin >> newChar;
             myString.setCharAt(indexToReplace, newChar);
             break;
         case 5:
-            system("cls");
+            clearConsole();
             int start, end;
-            std::cout << "Set start and end indexes of the substring: ";
-            std::cin >> start >> end;
-            std::cout << "Substring: " << myString.substring(start, end) << std::endl;
+            cout << "Set start and end indexes of the substring: ";
+            cin >> start >> end;
+            cout << "Substring: " << myString.substring(start, end) << endl;
             break;
         case 6:
-            system("cls");
+            clearConsole();
             if (myString.isPalindrome()) {
-                std::cout << "String is a palindrom.\n";
+                cout << "String is a palindrome.\n";
             }
             else {
-                std::cout << "String isn't a palindrom.\n";
+                cout << "String isn't a palindrome.\n";
             }
             break;
         case 7:
-            system("cls");
-            std::cout << "Number of different characters in a string: " << myString.countUniqueLatinChars() << std::endl;
+            clearConsole();
+            cout << "Number of different characters in a string: " << myString.countUniqueLatinChars() << endl;
+            break;
+        case 8:
+            clearConsole();
+            unsigned long long num;
+            cout << "Enter a number to calculate factorial: ";
+            cin >> num;
+            cout << "Factorial of " << num << " is: " << factorial(num) << endl;
             break;
         case 0:
             break;
         default:
-            system("cls");
-            std::cout << "Incorrect option. Try again.\n";
+            clearConsole();
+            cout << "Incorrect option. Try again.\n";
         }
-
     } while (choice != 0);
 
     return 0;
