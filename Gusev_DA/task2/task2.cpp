@@ -1,8 +1,8 @@
 #include <iostream>
-#include <cstring> // Для использования функций strncpy_s и strcpy_s
-#include <algorithm> // Для использования функции reverse
+#include <cstring> // Р”Р»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ С„СѓРЅРєС†РёР№ strncpy_s Рё strcpy_s
+#include <algorithm> // Р”Р»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ С„СѓРЅРєС†РёРё reverse
 
-#define _CRT_SECURE_NO_WARNINGS // Для отключения предупреждений о небезопасности
+#define _CRT_SECURE_NO_WARNINGS // Р”Р»СЏ РѕС‚РєР»СЋС‡РµРЅРёСЏ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёР№ Рѕ РЅРµР±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё
 
 using namespace std;
 
@@ -19,16 +19,16 @@ void clearConsole() {
 
 class MyString {
 private:
-    char str[41]; // Массив символов для хранения строки (плюс один символ для '\0')
+    char str[41]; // РњР°СЃСЃРёРІ СЃРёРјРІРѕР»РѕРІ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ СЃС‚СЂРѕРєРё (РїР»СЋСЃ РѕРґРёРЅ СЃРёРјРІРѕР» РґР»СЏ '\0')
 
 public:
     MyString() {
-        str[0] = '\0'; // Инициализируем строку пустым символом
+        str[0] = '\0'; // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЃС‚СЂРѕРєСѓ РїСѓСЃС‚С‹Рј СЃРёРјРІРѕР»РѕРј
     }
 
     void setString(const char* s) {
-        if (strlen(s) <= 40) { // Проверяем длину строки
-            strncpy_s(str, sizeof(str), s, sizeof(str) - 1); // Копируем строку в массив str
+        if (strlen(s) <= 40) { // РџСЂРѕРІРµСЂСЏРµРј РґР»РёРЅСѓ СЃС‚СЂРѕРєРё
+            strncpy_s(str, sizeof(str), s, sizeof(str) - 1); // РљРѕРїРёСЂСѓРµРј СЃС‚СЂРѕРєСѓ РІ РјР°СЃСЃРёРІ str
         }
         else {
             cout << "The length of the string exceeds 40 characters. Shorten the line.\n";
@@ -38,13 +38,13 @@ public:
     void inputString() {
         cout << "Enter a string (no more than 40 characters): ";
         cin.ignore();
-        cin.getline(str, sizeof(str)); // Считываем строку с учетом длины
-        if (strlen(str) == 40) { // Добавляем проверку на максимальную длину
+        cin.getline(str, sizeof(str)); // РЎС‡РёС‚С‹РІР°РµРј СЃС‚СЂРѕРєСѓ СЃ СѓС‡РµС‚РѕРј РґР»РёРЅС‹
+        if (strlen(str) == 40) { // Р”РѕР±Р°РІР»СЏРµРј РїСЂРѕРІРµСЂРєСѓ РЅР° РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РґР»РёРЅСѓ
             cout << "The length of the string reaches 40 characters.\n";
         }
         else if (strlen(str) > 40) {
             cout << "The length of the string exceeds 40 characters. Shorten the line.\n";
-            str[0] = '\0'; // Обнуляем строку
+            str[0] = '\0'; // РћР±РЅСѓР»СЏРµРј СЃС‚СЂРѕРєСѓ
         }
     }
 
@@ -73,9 +73,9 @@ public:
 
     string substring(int start, int end) const {
         if (start >= 0 && start < end && end <= strlen(str)) {
-            char substr[41]; // Временный массив для подстроки
-            strncpy_s(substr, sizeof(substr), str + start, end - start); // Копируем подстроку во временный массив
-            substr[end - start] = '\0'; // Добавляем завершающий символ
+            char substr[41]; // Р’СЂРµРјРµРЅРЅС‹Р№ РјР°СЃСЃРёРІ РґР»СЏ РїРѕРґСЃС‚СЂРѕРєРё
+            strncpy_s(substr, sizeof(substr), str + start, end - start); // РљРѕРїРёСЂСѓРµРј РїРѕРґСЃС‚СЂРѕРєСѓ РІРѕ РІСЂРµРјРµРЅРЅС‹Р№ РјР°СЃСЃРёРІ
+            substr[end - start] = '\0'; // Р”РѕР±Р°РІР»СЏРµРј Р·Р°РІРµСЂС€Р°СЋС‰РёР№ СЃРёРјРІРѕР»
             return substr;
         }
         else {
@@ -95,14 +95,14 @@ public:
     }
 
     int countUniqueLatinChars() const {
-        bool latinChars[26] = { false }; // Массив флагов для латинских символов
+        bool latinChars[26] = { false }; // РњР°СЃСЃРёРІ С„Р»Р°РіРѕРІ РґР»СЏ Р»Р°С‚РёРЅСЃРєРёС… СЃРёРјРІРѕР»РѕРІ
         int count = 0;
         for (int i = 0; i < strlen(str); ++i) {
-            char c = tolower(str[i]); // Преобразуем символ в нижний регистр
+            char c = tolower(str[i]); // РџСЂРµРѕР±СЂР°Р·СѓРµРј СЃРёРјРІРѕР» РІ РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ
             if (c >= 'a' && c <= 'z') {
-                if (!latinChars[c - 'a']) { // Если символ еще не встречался
-                    latinChars[c - 'a'] = true; // Помечаем его как встреченный
-                    ++count; // Увеличиваем счетчик уникальных символов
+                if (!latinChars[c - 'a']) { // Р•СЃР»Рё СЃРёРјРІРѕР» РµС‰Рµ РЅРµ РІСЃС‚СЂРµС‡Р°Р»СЃСЏ
+                    latinChars[c - 'a'] = true; // РџРѕРјРµС‡Р°РµРј РµРіРѕ РєР°Рє РІСЃС‚СЂРµС‡РµРЅРЅС‹Р№
+                    ++count; // РЈРІРµР»РёС‡РёРІР°РµРј СЃС‡РµС‚С‡РёРє СѓРЅРёРєР°Р»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ
                 }
             }
         }
@@ -150,7 +150,7 @@ int main() {
         switch (choice) {
         case 1:
             myString.inputString();
-            clearConsole(); // Используем функцию для очистки консоли
+            clearConsole(); // РСЃРїРѕР»СЊР·СѓРµРј С„СѓРЅРєС†РёСЋ РґР»СЏ РѕС‡РёСЃС‚РєРё РєРѕРЅСЃРѕР»Рё
             break;
         case 2:
             clearConsole();
