@@ -4,6 +4,8 @@
 #include <iostream>
 #include "Cell.h"
 
+#define BOARD_SIZE 10 
+
 class Board 
 {
 public:
