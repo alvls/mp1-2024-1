@@ -118,11 +118,23 @@
     <ClCompile Include="ScreenBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIPlayer.h" />
     <ClInclude Include="BattleshipGame.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameLoop.h" />
-    <ClInclude Include="MainGameState.h" />
+    <ClInclude Include="BattleshipGameData.h" />
+    <ClInclude Include="BattleshipGameStates.h" />
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="IEngine.h" />
+    <ClInclude Include="IHumanMoveInput.h" />
+    <ClInclude Include="BattleState.h" />
+    <ClInclude Include="MoveResult.h" />
+    <ClInclude Include="PlacementState.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="ScreenBuffer.h" />
+    <ClInclude Include="Ship.h" />
+    <ClInclude Include="ShipsRandomPlacement.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

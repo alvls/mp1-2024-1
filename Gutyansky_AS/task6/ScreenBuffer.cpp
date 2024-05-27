@@ -75,3 +75,18 @@ int ScreenBuffer::Write(int x, int y, char const* data, size_t len) {
     std::memcpy(end, data, count);
     return count;
 }
+
+int ScreenBuffer::Write(int x, int y, const std::vector<std::string>& sprite) {
+    size_t total = 0;
+    for (size_t i = 0; i < sprite.size(); ++i) {
+        if (y + i < 0 || y + i >= m_Height) continue;
+
+        for (size_t j = 0; j < sprite[i].size(); ++j) {
+            if (x + j < 0 || x + j >= m_Width) continue;
+
+            m_Screen[(x + j) + (i + y) * m_Width] = sprite[i][j];
+            ++total;
+        }
+    }
+    return total;
+}
