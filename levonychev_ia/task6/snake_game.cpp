@@ -141,7 +141,7 @@ void SnakeGame::gameplay()
             {
                 field.field_string[snake.snake_coord[length].y * WIDTH + snake.snake_coord[length].x] = 'o';
             }
-            for (int i = 0; i < field.field_string.length(); ++i)
+            /*for (int i = 0; i < field.field_string.length(); ++i)
             {
                 if ((field.field_string[i] == snake.snake_char or field.field_string[i] == 'o') and i != (snake.snake_coord[0].y * WIDTH + snake.snake_coord[0].x))
                     std::cout << "\033[92m" << field.field_string[i] << "\033[0m";
@@ -151,8 +151,8 @@ void SnakeGame::gameplay()
                     std::cout << "\033[96m" << field.field_string[i] << "\033[0m";
                 else
                     std::cout << "\033[91m" << field.field_string[i] << "\033[0m";
-            }
-                
+            }*/
+            std::cout << field.field_string;
             for (int i = 0; i < snake.snake_len; ++i)
             {
                 field.field_string[snake.snake_coord[i].y * WIDTH + snake.snake_coord[i].x] = ' ';
